@@ -278,7 +278,8 @@ nav {
 }
 
 .btn-ghost:hover { color: white; }
-.btn-ghost::after { content: '→'; font-size: 16px; }
+.btn-ghost svg { transition: transform 0.2s; }
+.btn-ghost:hover svg { transform: translateX(3px); }
 
 .hero-proof {
   display: flex;
@@ -455,7 +456,8 @@ nav {
   gap: 6px;
 }
 
-.trust-item::before { content: '✦'; font-size: 9px; color: var(--gold-dark); }
+/* diamond SVG replaces ✦ */
+.trust-item svg { flex-shrink: 0; }
 
 /* ── SECTION SHARED ──────────────────────────────── */
 .section {
@@ -591,9 +593,6 @@ nav {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: #ff6b6b;
 }
 
 .pain-item-text strong {
@@ -659,7 +658,6 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
   margin-bottom: 18px;
 }
 
@@ -806,7 +804,6 @@ nav {
 }
 
 .portfolio-link:hover { gap: 8px; }
-.portfolio-link::after { content: '↗'; }
 
 /* ── TESTIMONIALS ────────────────────────────────── */
 .testimonials-wrap {
@@ -849,7 +846,6 @@ nav {
 }
 
 .testimonial-stars { display: flex; gap: 3px; margin-bottom: 16px; }
-.star { color: var(--gold); font-size: 14px; }
 
 .testimonial-quote {
   font-family: var(--serif);
@@ -1000,14 +996,7 @@ nav {
   line-height: 1.5;
 }
 
-.price-features li::before {
-  content: '✓';
-  color: var(--teal);
-  font-weight: 700;
-  font-size: 12px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
+.price-features li svg { flex-shrink: 0; margin-top: 2px; }
 
 .price-cta {
   display: block;
@@ -1130,7 +1119,6 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
 }
@@ -1223,8 +1211,6 @@ nav {
   gap: 6px;
 }
 
-.teaser-pkg::before { content: '✦'; font-size: 9px; color: var(--gold-dark); }
-
 .teaser-note {
   font-size: 12px;
   color: var(--text-muted);
@@ -1233,8 +1219,6 @@ nav {
   justify-content: center;
   gap: 6px;
 }
-
-.teaser-note::before { content: '🔒'; }
 
 /* ── FOOTER ──────────────────────────────────────── */
 footer {
@@ -1401,48 +1385,13 @@ footer {
       <p class="hero-sub">We build clean, fast, and conversion-focused websites for small businesses, service providers, and organizations — no bloat, no fluff, just results.</p>
       <div class="hero-actions">
         <a href="#contact" class="btn-primary">Request Preview</a>
-        <a href="#work" class="btn-ghost">See our work</a>
-        <!-- ── MOTHER'S DAY PROMO BANNER — ADD INSIDE .hero-actions div, after existing buttons ── -->
-<!-- Paste this right after the closing </div> of hero-actions, before hero-proof -->
-<!--
-<div style="
-  margin-top: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255,255,255,0.15);
-  border: 1.5px solid rgba(255,255,255,0.35);
-  border-radius: 50px;
-  padding: 10px 22px 10px 14px;
-  backdrop-filter: blur(6px);
-  animation: fadeUp 0.6s ease 0.55s both;
-">
-  <span style="
-    background: #f5e0d8;
-    color: #a05040;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 30px;
-    white-space: nowrap;
-  ">Mother's Day</span>
-  <a href="/mothers-day.html" style="
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: gap 0.2s;
-  " onmouseover="this.style.gap='10px'" onmouseout="this.style.gap='6px'">
-    Gift Mom her own memory page — 10% off this week
-    <span style="font-size: 16px;">→</span>
-  </a>
-</div>
-        -->
+        <a href="#work" class="btn-ghost">
+          See our work
+          <!-- Arrow right SVG -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
       <div class="hero-proof">
         <div class="proof-avatars">
@@ -1510,12 +1459,31 @@ footer {
   <div class="trust-inner">
     <span class="trust-label">Trusted by</span>
     <div class="trust-logos">
-      <span class="trust-item">Education</span>
-      <span class="trust-item">Therapy &amp; Wellness</span>
-      <span class="trust-item">Contractors</span>
-      <span class="trust-item">Home Services</span>
-      <span class="trust-item">Professional Services</span>
-      <span class="trust-item">Non-Profits</span>
+      <!-- Diamond SVG replaces ✦ -->
+      <span class="trust-item">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Education
+      </span>
+      <span class="trust-item">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Therapy &amp; Wellness
+      </span>
+      <span class="trust-item">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Contractors
+      </span>
+      <span class="trust-item">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Home Services
+      </span>
+      <span class="trust-item">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Professional Services
+      </span>
+      <span class="trust-item">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Non-Profits
+      </span>
     </div>
   </div>
 </div>
@@ -1544,21 +1512,34 @@ footer {
     </div>
     <ul class="pain-list">
       <li class="pain-item">
-        <div class="pain-icon">✕</div>
+        <div class="pain-icon">
+          <!-- X / close SVG -->
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2L2 12" stroke="#ff6b6b" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="pain-item-text">
           <strong>Outdated or amateur-looking design</strong>
           <span>Visitors judge your business in seconds. A poor website signals poor work — even when your actual work is excellent.</span>
         </div>
       </li>
       <li class="pain-item">
-        <div class="pain-icon">✕</div>
+        <div class="pain-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2L2 12" stroke="#ff6b6b" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="pain-item-text">
           <strong>Not showing up on Google</strong>
           <span>When someone searches for your service locally, you're not appearing. Your competitors are getting those calls instead.</span>
         </div>
       </li>
       <li class="pain-item">
-        <div class="pain-icon">✕</div>
+        <div class="pain-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2L2 12" stroke="#ff6b6b" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="pain-item-text">
           <strong>No clear path to contact you</strong>
           <span>Visitors come, browse, then leave without reaching out. Without a conversion-focused layout, you're invisible.</span>
@@ -1576,19 +1557,40 @@ footer {
 
   <div class="services-grid">
     <div class="service-card">
-      <div class="service-icon">🎨</div>
+      <div class="service-icon">
+        <!-- Paintbrush / design SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.1 0 2-.9 2-2 0-.54-.21-1.03-.54-1.4-.32-.36-.52-.85-.52-1.35 0-1.1.9-2 2-2h2.35C19.9 15.25 22 12.81 22 9.87 22 5.52 17.52 2 12 2z" fill="#6AABB0" opacity="0.25"/>
+          <circle cx="6.5" cy="11.5" r="1.5" fill="#6AABB0"/>
+          <circle cx="9.5" cy="7.5" r="1.5" fill="#6AABB0"/>
+          <circle cx="14.5" cy="7.5" r="1.5" fill="#6AABB0"/>
+          <circle cx="17.5" cy="11.5" r="1.5" fill="#6AABB0"/>
+        </svg>
+      </div>
       <p class="service-number">01 — Design</p>
       <h3>Website Design</h3>
       <p>Clean, professional websites built around your business and your customers. No generic templates — every site is tailored to reflect your brand and build trust immediately.</p>
     </div>
     <div class="service-card">
-      <div class="service-icon">⚡</div>
+      <div class="service-icon">
+        <!-- Lightning bolt / speed SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M13 2L4.5 13.5H11L10 22L20.5 10H14L13 2Z" fill="#6AABB0" stroke="#6AABB0" stroke-width="1" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <p class="service-number">02 — Technical</p>
       <h3>Mobile &amp; Speed Optimization</h3>
       <p>Over 60% of local searches happen on mobile. Your site will load fast and look great on every device — because slow, broken sites lose customers before they even read a word.</p>
     </div>
     <div class="service-card">
-      <div class="service-icon">📈</div>
+      <div class="service-icon">
+        <!-- Chart / growth SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 17l4-5 4 3 4-6 4 3" stroke="#6AABB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 20h18" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="19" cy="12" r="2" fill="#6AABB0"/>
+        </svg>
+      </div>
       <p class="service-number">03 — Growth</p>
       <h3>Lead Generation Setup</h3>
       <p>Strategic contact forms, click-to-call buttons, and clear calls to action — designed to turn visitors into inquiries. Plus local SEO so you show up when people search.</p>
@@ -1616,28 +1618,16 @@ footer {
         <p class="portfolio-tag">Education &amp; Professional Development</p>
         <h3>The Conscious Connection Group</h3>
         <p>A multi-page site for an educator support organization offering programs, resources, and community tools. Clean navigation across complex content, with a resource library, program pages, and lead capture throughout.</p>
-        <a href="https://www.theconsciousconnectiongroup.com" target="_blank" rel="noopener" class="portfolio-link">theconsciousconnectiongroup.com</a>
+        <a href="https://www.theconsciousconnectiongroup.com" target="_blank" rel="noopener" class="portfolio-link">
+          theconsciousconnectiongroup.com
+          <!-- External link arrow SVG -->
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
-<!-- HIDDEN - Update in progress
-    <div class="portfolio-card">
-      <div class="portfolio-img type-2" style="height:260px;padding:0;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;left:0;right:0;background:#f0f2f0;padding:8px 12px;display:flex;align-items:center;gap:6px;z-index:2;border-bottom:1px solid #e0e4e0;">
-          <span style="width:9px;height:9px;border-radius:50%;background:#e0604a;display:inline-block;"></span>
-          <span style="width:9px;height:9px;border-radius:50%;background:#e5a24b;display:inline-block;"></span>
-          <span style="width:9px;height:9px;border-radius:50%;background:#5dba5d;display:inline-block;"></span>
-          <span style="flex:1;background:white;border:1px solid #e0e4e0;border-radius:4px;height:20px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:#888;margin-left:6px;">sdwtherapy.com</span>
-        </div>
-        <img src="SDW_therapy.png" alt="SDW Therapy website" style="position:absolute;top:33px;left:0;width:100%;height:calc(100% - 33px);object-fit:cover;object-position:top;">
-      </div>
-      <div class="portfolio-info">
-        <p class="portfolio-tag">Therapy &amp; Mental Health</p>
-        <h3>SDW Therapy</h3>
-        <p>A calm, welcoming website for a therapy practice — built to establish immediate trust and make it easy for prospective clients to reach out. Thoughtful layout, clear service descriptions, and a frictionless contact experience.</p>
-        <a href="https://www.sdwtherapy.com" target="_blank" rel="noopener" class="portfolio-link">sdwtherapy.com</a>
-      </div>
-    </div>
--->
+
     <div class="portfolio-card">
       <div class="portfolio-img type-1" style="height:260px;padding:0;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;background:#f0f2f0;padding:8px 12px;display:flex;align-items:center;gap:6px;z-index:2;border-bottom:1px solid #e0e4e0;">
@@ -1652,7 +1642,12 @@ footer {
         <p class="portfolio-tag">Personal Portfolio &amp; Brand</p>
         <h3>Mawuli Pomary</h3>
         <p>A bold, story-driven personal site for an engineer, Erasmus Mundus scholar, and global nomad. Built to showcase a multi-disciplinary career across continents — with a dynamic hero, interactive journey timeline, and a design that reflects the personality behind the work.</p>
-        <a href="https://www.mawulipomary.com" target="_blank" rel="noopener" class="portfolio-link">mawulipomary.com</a>
+        <a href="https://www.mawulipomary.com" target="_blank" rel="noopener" class="portfolio-link">
+          mawulipomary.com
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
 
@@ -1670,7 +1665,12 @@ footer {
         <p class="portfolio-tag">Catering &amp; Event Services</p>
         <h3>Xindies Amazing Hands LLC</h3>
         <p>A polished, all-in-one service site for a trusted provider of catering, hair styling, event coordination, childcare, and home organizing. Designed to build instant credibility, highlight the breadth of services, and make booking effortless for new clients.</p>
-        <a href="https://www.xindiesamazinghandsllc.com" target="_blank" rel="noopener" class="portfolio-link">xindiesamazinghandsllc.com</a>
+        <a href="https://www.xindiesamazinghandsllc.com" target="_blank" rel="noopener" class="portfolio-link">
+          xindiesamazinghandsllc.com
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
@@ -1684,7 +1684,12 @@ footer {
     <div class="testimonials-grid">
       <div class="testimonial-card">
         <div class="testimonial-stars">
-          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <!-- Star SVG x5 -->
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
         </div>
         <p class="testimonial-quote">"Within two weeks of launching, we had three new customers reach out through the site. It basically paid for itself immediately."</p>
         <div class="testimonial-author">
@@ -1697,7 +1702,11 @@ footer {
       </div>
       <div class="testimonial-card">
         <div class="testimonial-stars">
-          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
         </div>
         <p class="testimonial-quote">"We were so embarrassed to share our old website. Now we actually send it to customers when they ask. It looks exactly like we hoped and I'm so grateful that TEC Web Studio presented me with such reasonable pricing. That was one of my biggest concerns with getting a professionally made website. Im so grateful and love sharing my site with everyone I meet!"</p>
         <div class="testimonial-author">
@@ -1710,7 +1719,11 @@ footer {
       </div>
       <div class="testimonial-card">
         <div class="testimonial-stars">
-          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
         </div>
         <p class="testimonial-quote">"Straightforward, no nonsense. They did what they said, on time, at the price quoted. The site looks professional. Happy customer."</p>
         <div class="testimonial-author">
@@ -1723,7 +1736,11 @@ footer {
       </div>
       <div class="testimonial-card">
         <div class="testimonial-stars">
-          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
         </div>
         <p class="testimonial-quote">"TEC Web Studio works quickly and offers reasonable pricing. They understood my vision and didn't just build a website, but they brought my ideas to life in a way that felt authentic to our brand. It was a professional, responsive, smooth and a stress-free process. Highly recommend!"</p>
         <div class="testimonial-author">
@@ -1744,12 +1761,32 @@ footer {
     <h3>Transparent Pricing — After Your Complimentary Preview</h3>
     <p>We believe in showing you exactly what your site will look like before talking numbers. Submit your inquiry below and chat with us live. Qualified clients receive a complimentary mock-up!</p>
     <div class="teaser-packages">
-      <span class="teaser-pkg">Glow-Up</span>
-      <span class="teaser-pkg">Quick Fixes</span>
-      <span class="teaser-pkg">Done-for-You</span>
-      <span class="teaser-pkg">All-Inclusive</span>
+      <span class="teaser-pkg">
+        <!-- Diamond SVG -->
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Glow-Up
+      </span>
+      <span class="teaser-pkg">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Quick Fixes
+      </span>
+      <span class="teaser-pkg">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        Done-for-You
+      </span>
+      <span class="teaser-pkg">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
+        All-Inclusive
+      </span>
     </div>
-    <p class="teaser-note">Pricing details revealed after your free inquiry — no spam, no pressure</p>
+    <p class="teaser-note">
+      <!-- Lock SVG -->
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2.5" y="6" width="9" height="7" rx="1.5" stroke="#557070" stroke-width="1.4"/>
+        <path d="M4.5 6V4.5a2.5 2.5 0 015 0V6" stroke="#557070" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      Pricing details revealed after your free inquiry — no spam, no pressure
+    </p>
   </div>
 </section>
 
@@ -1758,12 +1795,19 @@ footer {
   <div class="section">
     <p class="section-eyebrow">Straightforward Pricing</p>
     <h2 class="section-title">Straightforward pricing.<br><em>No surprises.</em></h2>
-    <p class="section-sub" style="margin-top:12px;">Our packages start at <strong>$100</strong> — your personalized recommendation and full pricing details will arrive to your inbox in the next 24 hours.</p>
+    <p class="section-sub" style="margin-top:12px;">Our packages start at <strong>$100</strong> — your personalized recommendation and full pricing details will arrive to your inbox shortly.</p>
 
     <!-- Thank you banner -->
     <div class="pricing-reveal-banner" style="margin-bottom:48px;">
       <div>
-        <h3>🎉 Thanks for reaching out!</h3>
+        <h3 style="display:flex;align-items:center;gap:10px;">
+          <!-- Sparkle / celebration SVG -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M11 2v3M11 17v3M2 11h3M17 11h3M4.93 4.93l2.12 2.12M14.95 14.95l2.12 2.12M4.93 17.07l2.12-2.12M14.95 7.05l2.12-2.12" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="3.5" fill="#F5C842"/>
+          </svg>
+          Thanks for reaching out!
+        </h3>
         <p>We'll follow up in the next 24 hours with your personalized package recommendation.</p>
         <p>In the meantime, if you'd like to chat live about your project — we're here!</p>
       </div>
@@ -1777,34 +1821,50 @@ footer {
           style="display:flex;align-items:center;gap:10px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 24px;text-decoration:none;color:var(--teal-dark);font-weight:600;font-size:14px;transition:all 0.2s;box-shadow:var(--shadow-sm);"
           onmouseover="this.style.borderColor='var(--teal)';this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-2px)'"
           onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-sm)';this.style.transform='translateY(0)'">
-          <span style="font-size:20px;">🌐</span>
+          <!-- Globe SVG -->
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
+            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
           <div style="text-align:left;">
             <div style="font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Education &amp; Community</div>
             <div>theconsciousconnectiongroup.com</div>
           </div>
-          <span style="margin-left:8px;color:var(--teal);font-size:16px;">↗</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px;color:var(--teal);">
+            <path d="M3 13L13 3M13 3H8M13 3v5" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </a>
         <a href="https://www.mawulipomary.com" target="_blank" rel="noopener"
           style="display:flex;align-items:center;gap:10px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 24px;text-decoration:none;color:var(--teal-dark);font-weight:600;font-size:14px;transition:all 0.2s;box-shadow:var(--shadow-sm);"
           onmouseover="this.style.borderColor='var(--teal)';this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-2px)'"
           onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-sm)';this.style.transform='translateY(0)'">
-          <span style="font-size:20px;">🌐</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
+            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
           <div style="text-align:left;">
             <div style="font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Personal Portfolio &amp; Brand</div>
             <div>mawulipomary.com</div>
           </div>
-          <span style="margin-left:8px;color:var(--teal);font-size:16px;">↗</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px;">
+            <path d="M3 13L13 3M13 3H8M13 3v5" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </a>
         <a href="https://www.xindiesamazinghandsllc.com" target="_blank" rel="noopener"
           style="display:flex;align-items:center;gap:10px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 24px;text-decoration:none;color:var(--teal-dark);font-weight:600;font-size:14px;transition:all 0.2s;box-shadow:var(--shadow-sm);"
           onmouseover="this.style.borderColor='var(--teal)';this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-2px)'"
           onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-sm)';this.style.transform='translateY(0)'">
-          <span style="font-size:20px;">🌐</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
+            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
           <div style="text-align:left;">
             <div style="font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Catering &amp; Event Services</div>
             <div>xindiesamazinghandsllc.com</div>
           </div>
-          <span style="margin-left:8px;color:var(--teal);font-size:16px;">↗</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px;">
+            <path d="M3 13L13 3M13 3H8M13 3v5" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </a>
       </div>
     </div>
@@ -1821,27 +1881,50 @@ footer {
 
       <div class="contact-info-items">
         <div class="contact-info-item">
-          <div class="info-icon">✉</div>
+          <div class="info-icon">
+            <!-- Envelope SVG -->
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#6AABB0" stroke-width="1.5"/>
+              <path d="M2 5.5l7 5 7-5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
           <div class="info-text">
             <strong>Email</strong>
           </div>
         </div>
         <div class="contact-info-item">
-          <div class="info-icon">⏱</div>
+          <div class="info-icon">
+            <!-- Clock SVG -->
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="9" cy="9" r="7" stroke="#6AABB0" stroke-width="1.5"/>
+              <path d="M9 5.5V9l2.5 2.5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <div class="info-text">
             <strong>Response time</strong>
-            <span>We typically reply within a 24 hours</span>
+            <span>We typically reply within 24 hours</span>
           </div>
         </div>
         <div class="contact-info-item">
-          <div class="info-icon">★</div>
+          <div class="info-icon">
+            <!-- Star SVG -->
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M9 2l1.9 4.4L16 7.2l-3.5 3.3.9 5L9 13.2l-4.4 2.3.9-5L2 7.2l5.1-.8L9 2z" fill="#F5C842"/>
+            </svg>
+          </div>
           <div class="info-text">
             <strong>Complimentary preview for ready clients</strong>
             <span>Ready to move forward? Fill out the form and chat with us live — qualified clients receive a complimentary mock-up.*</span>
           </div>
         </div>
         <div class="contact-info-item">
-          <div class="info-icon">🔒</div>
+          <div class="info-icon">
+            <!-- Lock SVG -->
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="3.5" y="8" width="11" height="8" rx="1.5" stroke="#6AABB0" stroke-width="1.5"/>
+              <path d="M6 8V6a3 3 0 016 0v2" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
           <div class="info-text">
             <strong>Pricing revealed after inquiry</strong>
             <span>We'll send your personalized package recommendation along with your requested preview</span>
@@ -1929,7 +2012,7 @@ footer {
           @keyframes ifs-spin { to { transform: rotate(360deg); } }
           .ifs-success { display: none; text-align: center; padding: 32px 16px; }
           .ifs-success.show { display: block; }
-          .ifs-success-icon { font-size: 40px; margin-bottom: 14px; }
+          .ifs-success-icon { margin-bottom: 14px; }
           .ifs-success h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: #1a2e2e; margin-bottom: 8px; }
           .ifs-success p { font-size: 13px; color: #557070; line-height: 1.7; }
           @media (max-width: 540px) {
@@ -1947,7 +2030,14 @@ footer {
 
         <!-- Success state -->
         <div class="ifs-success" id="ifsSuccess">
-          <div class="ifs-success-icon">✨</div>
+          <div class="ifs-success-icon">
+            <!-- Sparkle SVG -->
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M22 4v6M22 34v6M4 22h6M34 22h6M9.64 9.64l4.24 4.24M30.12 30.12l4.24 4.24M9.64 34.36l4.24-4.24M30.12 13.88l4.24-4.24" stroke="#6AABB0" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="22" cy="22" r="7" fill="#6AABB0"/>
+              <circle cx="22" cy="22" r="4" fill="white"/>
+            </svg>
+          </div>
           <h3>We've received your inquiry!</h3>
           <p>Check your inbox — we've sent you a personalized package recommendation. We'll follow up shortly with your free preview!</p>
         </div>
@@ -2188,19 +2278,11 @@ footer {
           setTimeout(function() {
             document.getElementById('ifsForm').style.display = 'none';
             document.getElementById('ifsSuccess').classList.add('show');
-            // Reveal pricing section
             var pricing = document.getElementById('pricing');
             if (pricing) {
               pricing.style.display = 'block';
               pricing.scrollIntoView({ behavior: 'smooth' });
-              // ── TAWK: show and open chat only after form submit ──
-              // TEMPORARILY DISABLED — re-enable with the Tawk.to script block
-              // if (typeof Tawk_API !== 'undefined') {
-              //   Tawk_API.showWidget();
-              //   Tawk_API.maximize();
-              // }
             }
-            // Show toast
             var toast = document.getElementById('toast');
             if (toast) { toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 4000); }
           }, 1500);
@@ -2246,28 +2328,13 @@ footer {
 
 <!-- ── TOAST ──────────────────────────────────────────── -->
 <div class="toast" id="toast">
-  Form submitted! Check your email for your recommended package. 📧
+  <!-- Envelope SVG -->
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#F5C842" stroke-width="1.5"/>
+    <path d="M2 5.5l7 5 7-5" stroke="#F5C842" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  Form submitted! Check your email for your recommended package.
 </div>
-
-<!-- ── TAWK.TO CHAT (hidden until form submitted) ──────── -->
-<!-- TEMPORARILY DISABLED — re-enable when back from vacation by removing these comment tags
-<script type="text/javascript">
-var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-(function(){
-  var s1 = document.createElement("script"),
-      s0 = document.getElementsByTagName("script")[0];
-  s1.async = true;
-  s1.src = 'https://embed.tawk.to/69d064378153c41c3b4dd63f/1jlb0eu0v';
-  s1.charset = 'UTF-8';
-  s1.setAttribute('crossorigin', '*');
-  s0.parentNode.insertBefore(s1, s0);
-})();
-// Hide the widget on load — only show after form submission
-Tawk_API.onLoad = function() {
-  Tawk_API.hideWidget();
-};
-</script>
--->
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
