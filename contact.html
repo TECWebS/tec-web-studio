@@ -152,85 +152,6 @@ nav {
 }
 .mobile-menu a:last-child { border-bottom: none; }
 
-/* ── PAGE HERO ───────────────────────────────────── */
-.page-hero {
-  background: linear-gradient(160deg, #6AABB0 0%, #5a9fa4 60%, #7abbbf 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.page-hero::before {
-  content: '';
-  position: absolute;
-  top: -100px; right: -100px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(245,200,66,0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.page-hero-inner {
-  max-width: 1080px;
-  margin: auto;
-  padding: 72px 24px 64px;
-  position: relative;
-  z-index: 1;
-}
-
-.page-hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(245,200,66,0.15);
-  border: 1px solid rgba(245,200,66,0.3);
-  border-radius: 50px;
-  padding: 5px 14px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 20px;
-}
-
-.page-hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(32px, 4vw, 50px);
-  font-weight: 400;
-  line-height: 1.15;
-  color: var(--white);
-  margin-bottom: 16px;
-  letter-spacing: -0.5px;
-}
-
-.page-hero h1 em {
-  font-style: italic;
-  color: var(--gold);
-}
-
-.page-hero-sub {
-  font-size: 17px;
-  color: rgba(255,255,255,0.92);
-  line-height: 1.8;
-  max-width: 560px;
-}
-
-/* breadcrumb */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  margin-bottom: 28px;
-}
-.breadcrumb a {
-  color: rgba(255,255,255,0.75);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.breadcrumb a:hover { color: white; }
-.breadcrumb-sep { color: rgba(255,255,255,0.4); font-size: 11px; }
-.breadcrumb-current { color: rgba(255,255,255,0.95); font-weight: 500; }
-
 /* ── MAIN CONTACT LAYOUT ─────────────────────────── */
 .contact-wrap {
   background: var(--teal-light);
@@ -663,20 +584,6 @@ footer {
   <a href="index.html#work" onclick="toggleMenu()">Work</a>
   <a href="index.html#about" onclick="toggleMenu()">About</a>
   <a href="contact.html" onclick="toggleMenu()">Request Preview</a>
-</div>
-
-<!-- ── PAGE HERO ─────────────────────────────────────── -->
-<div class="page-hero">
-  <div class="page-hero-inner">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="index.html">Home</a>
-      <span class="breadcrumb-sep">›</span>
-      <span class="breadcrumb-current">Request a Preview</span>
-    </nav>
-    <div class="page-hero-eyebrow">Free — No Commitment</div>
-    <h1>Request your<br><em>complimentary preview</em></h1>
-    <p class="page-hero-sub">Tell us about your business and we'll put together a complimentary mock-up of what your new website could look like — no payment, no pressure.</p>
-  </div>
 </div>
 
 <!-- ── MAIN CONTACT SECTION ──────────────────────────── -->
@@ -1141,8 +1048,8 @@ function toggleMenu() {
       var pricingReveal = document.getElementById('pricing-reveal');
       if (pricingReveal) {
         pricingReveal.style.display = 'block';
-        pricingReveal.scrollIntoView({ behavior: 'smooth' });
       }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       var toast = document.getElementById('toast');
       if (toast) { toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 4000); }
     }, 1500);
