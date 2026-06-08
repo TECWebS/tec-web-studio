@@ -456,7 +456,6 @@ nav {
   gap: 6px;
 }
 
-/* diamond SVG replaces ✦ */
 .trust-item svg { flex-shrink: 0; }
 
 /* ── SECTION SHARED ──────────────────────────────── */
@@ -671,58 +670,6 @@ nav {
 
 .service-card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
 
-/* ── PROCESS ─────────────────────────────────────── */
-.process-wrap {
-  background: var(--teal-light);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.process-steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  margin-top: 52px;
-  position: relative;
-}
-
-.process-steps::before {
-  content: '';
-  position: absolute;
-  top: 22px;
-  left: 60px; right: 60px;
-  height: 1px;
-  background: var(--border);
-  z-index: 0;
-}
-
-.process-step { position: relative; z-index: 1; }
-
-.step-number {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--teal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--serif);
-  font-size: 17px;
-  color: white;
-  font-weight: 400;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(106,171,176,0.3);
-}
-
-.process-step h4 {
-  font-family: var(--serif);
-  font-size: 17px;
-  font-weight: 400;
-  color: var(--teal-deep);
-  margin-bottom: 10px;
-}
-
-.process-step p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-
 /* ── PORTFOLIO ───────────────────────────────────── */
 .portfolio-grid {
   display: grid;
@@ -755,20 +702,6 @@ nav {
 
 .portfolio-img.type-1 { background: linear-gradient(135deg, #eef1f8, #dde4f4); }
 .portfolio-img.type-2 { background: linear-gradient(135deg, #eef5ee, #d8ead8); }
-
-.portfolio-mockup {
-  width: 78%;
-  background: white;
-  border-radius: 8px 8px 0 0;
-  padding: 14px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.10);
-}
-
-.pm-bar { display: flex; gap: 4px; margin-bottom: 9px; }
-.pm-dot { width: 7px; height: 7px; border-radius: 50%; }
-.pm-dot-r { background: #e0604a; }
-.pm-dot-y { background: #e5a24b; }
-.pm-dot-g { background: #5dba5d; }
 
 .portfolio-info { padding: 24px 26px; }
 
@@ -878,157 +811,6 @@ nav {
 .author-name { font-size: 13px; font-weight: 600; color: white; }
 .author-biz { font-size: 12px; color: rgba(255,255,255,0.90); margin-top: 1px; }
 
-/* ── PRICING — HIDDEN, REVEALED AFTER INQUIRY ───── */
-#pricing {
-  display: none;
-  background: var(--warm);
-  border-top: 1px solid var(--border);
-}
-
-#pricing.visible { display: block; }
-
-.pricing-reveal-banner {
-  background: linear-gradient(135deg, #6AABB0, #7abbbf);
-  border-radius: 14px;
-  padding: 28px 32px;
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.pricing-reveal-banner h3 {
-  font-family: var(--serif);
-  font-size: 22px;
-  color: white;
-  margin-bottom: 6px;
-}
-
-.pricing-reveal-banner p { font-size: 14px; color: rgba(255,255,255,0.95); }
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.price-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 32px 28px;
-  position: relative;
-  transition: all 0.25s;
-}
-
-.price-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.price-card.featured {
-  border: 2px solid var(--teal);
-  background: linear-gradient(160deg, #f0fbfc, var(--white));
-}
-
-.price-badge {
-  position: absolute;
-  top: -13px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--teal);
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 4px 16px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-
-.price-tier {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 10px;
-}
-
-.price-amount {
-  font-family: var(--serif);
-  font-size: 48px;
-  font-weight: 400;
-  color: var(--teal-deep);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.price-amount sup {
-  font-size: 22px;
-  font-family: var(--sans);
-  vertical-align: top;
-  margin-top: 8px;
-  display: inline-block;
-  color: var(--teal-dark);
-}
-
-.price-period { font-size: 13px; color: var(--text-muted); margin-bottom: 22px; }
-.price-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 22px; }
-
-.price-features {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-
-.price-features li {
-  font-size: 14px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  line-height: 1.5;
-}
-
-.price-features li svg { flex-shrink: 0; margin-top: 2px; }
-
-.price-cta {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: 13px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-  cursor: pointer;
-  font-family: var(--sans);
-  letter-spacing: 0.2px;
-}
-
-.price-cta-outline {
-  background: transparent;
-  border: 2px solid var(--border);
-  color: var(--text);
-}
-
-.price-cta-outline:hover { background: var(--teal-light); border-color: var(--teal); color: var(--teal-dark); }
-
-.price-cta-filled {
-  background: var(--teal);
-  border: 2px solid var(--teal);
-  color: white;
-}
-
-.price-cta-filled:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
-
 /* ── ABOUT ───────────────────────────────────────── */
 .about-wrap {
   background: var(--white);
@@ -1082,90 +864,7 @@ nav {
 .about-body p:last-child { margin-bottom: 0; }
 .about-body strong { color: var(--teal-deep); font-weight: 600; }
 
-/* ── CONTACT ───────────────────────────────────── */
-.contact-wrap {
-  background: var(--teal-light);
-  border-top: 1px solid var(--border);
-}
-
-.contact-inner {
-  max-width: 1080px;
-  margin: auto;
-  padding: 88px 24px;
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 64px;
-  align-items: start;
-}
-
-.contact-info-items {
-  margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.contact-info-item {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-
-.info-icon {
-  width: 38px; height: 38px;
-  border-radius: 10px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
-}
-
-.info-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--teal-deep); margin-bottom: 2px; }
-.info-text span { font-size: 13px; color: var(--text-muted); }
-.info-text a { color: var(--teal-dark); text-decoration: none; }
-.info-text a:hover { text-decoration: underline; }
-
-/* ── FORM CONTAINER ─────────────────────────── */
-.form-embed-wrap {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  min-width: 0;
-  width: 100%;
-}
-
-#inquiry-form-container {
-  padding: 28px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-#inquiry-form-container .ifs-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-#inquiry-form-container .ifs-input,
-#inquiry-form-container .ifs-textarea,
-#inquiry-form-container .ifs-select {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-@media (max-width: 600px) {
-  #inquiry-form-container { padding: 20px; }
-  #inquiry-form-container .ifs-row { grid-template-columns: 1fr; }
-  #inquiry-form-container .ifs-opts { grid-template-columns: 1fr; }
-}
-
-/* ── PRICING TEASER (shown before inquiry) ───────── */
+/* ── PRICING TEASER ──────────────────────────────── */
 .pricing-teaser {
   background: var(--white);
   border: 1px solid var(--border);
@@ -1218,6 +917,112 @@ nav {
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+
+/* ── CTA SECTION ─────────────────────────────────── */
+.cta-section {
+  background: linear-gradient(160deg, #6AABB0 0%, #5a9fa4 60%, #7abbbf 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(245,200,66,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-inner {
+  max-width: 1080px;
+  margin: auto;
+  padding: 88px 24px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245,200,66,0.15);
+  border: 1px solid rgba(245,200,66,0.3);
+  border-radius: 50px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.cta-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 50px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: white;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+}
+
+.cta-title em { font-style: italic; color: var(--gold); }
+
+.cta-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.90);
+  line-height: 1.8;
+  max-width: 520px;
+  margin: 0 auto 40px;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary-lg {
+  background: var(--gold);
+  color: #111;
+  padding: 16px 36px;
+  border-radius: 50px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  letter-spacing: 0.2px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.btn-primary-lg:hover {
+  background: #ffd54f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245,200,66,0.4);
+}
+
+.cta-reassurance {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cta-re-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.88);
 }
 
 /* ── FOOTER ──────────────────────────────────────── */
@@ -1286,31 +1091,6 @@ footer {
 .footer-bottom a { color: var(--gold); text-decoration: none; }
 .footer-bottom a:hover { text-decoration: underline; }
 
-/* ── SUCCESS TOAST ───────────────────────────────── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: var(--teal-deep);
-  color: white;
-  padding: 16px 22px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 999;
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-  pointer-events: none;
-  border-left: 4px solid var(--gold);
-}
-
-.toast.show { transform: translateY(0); opacity: 1; }
-
 /* ── ANIMATIONS ──────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
@@ -1333,18 +1113,15 @@ footer {
   .hero-visual { display: none; }
   .pain-inner { grid-template-columns: 1fr; gap: 40px; }
   .services-grid { grid-template-columns: 1fr; }
-  .process-steps { grid-template-columns: 1fr 1fr; }
-  .process-steps::before { display: none; }
   .portfolio-grid { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .contact-inner { grid-template-columns: 1fr; gap: 40px; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
   .footer-inner { flex-direction: column; }
   .footer-links { flex-direction: column; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .cta-actions { flex-direction: column; }
 }
 </style>
 </head>
@@ -1353,14 +1130,14 @@ footer {
 <!-- ── NAV ─────────────────────────────────────────── -->
 <header>
   <nav>
-    <a href="#" class="logo">
+    <a href="index.html" class="logo">
       <img src="TEC_Web_Studio_logo.png" alt="TEC Web Studio" class="logo-img">
     </a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#work">Work</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#contact" class="nav-cta">Request Preview</a></li>
+      <li><a href="contact.html" class="nav-cta">Request Preview</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()">
       <span></span><span></span><span></span>
@@ -1373,7 +1150,7 @@ footer {
   <a href="#services" onclick="toggleMenu()">Services</a>
   <a href="#work" onclick="toggleMenu()">Work</a>
   <a href="#about" onclick="toggleMenu()">About</a>
-  <a href="#contact" onclick="toggleMenu()">Get a Free Preview</a>
+  <a href="contact.html" onclick="toggleMenu()">Get a Free Preview</a>
 </div>
 
 <!-- ── HERO ─────────────────────────────────────────── -->
@@ -1384,10 +1161,9 @@ footer {
       <h1>Your business deserves a website that <em>actually works</em></h1>
       <p class="hero-sub">We build clean, fast, and conversion-focused websites for small businesses, service providers, and organizations — no bloat, no fluff, just results.</p>
       <div class="hero-actions">
-        <a href="#contact" class="btn-primary">Request Preview</a>
+        <a href="contact.html" class="btn-primary">Request Preview</a>
         <a href="#work" class="btn-ghost">
           See our work
-          <!-- Arrow right SVG -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -1459,7 +1235,6 @@ footer {
   <div class="trust-inner">
     <span class="trust-label">Trusted by</span>
     <div class="trust-logos">
-      <!-- Diamond SVG replaces ✦ -->
       <span class="trust-item">
         <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
         Education
@@ -1496,7 +1271,7 @@ footer {
     <div class="about-body" style="max-width:720px;">
       <p>At TEC Web Studio, we're focused on one thing: helping small businesses, service providers, and organizations get a professional online presence that actually brings in customers.</p>
       <p>We got into this work because we kept seeing great professionals and passionate business owners lose customers to competitors who simply had a better-looking website — not better work, just a better online presence.</p>
-      <p>Our approach is deliberately <strong>simple and focused</strong>:no bloated agency upsells, no mysterious monthly retainers. Just a professional website built to bring in real customer inquiries, delivered fast<strong>— starting at $200.</strong></p>
+      <p>Our approach is deliberately <strong>simple and focused</strong>: no bloated agency upsells, no mysterious monthly retainers. Just a professional website built to bring in real customer inquiries, delivered fast<strong> — starting at $200.</strong></p>
       <p>When you work with us, you're working directly with the people building your site. That means <strong>faster communication, fewer misunderstandings, and a site that actually reflects your business.</strong></p>
     </div>
   </div>
@@ -1513,7 +1288,6 @@ footer {
     <ul class="pain-list">
       <li class="pain-item">
         <div class="pain-icon">
-          <!-- X / close SVG -->
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M2 2l10 10M12 2L2 12" stroke="#ff6b6b" stroke-width="2.2" stroke-linecap="round"/>
           </svg>
@@ -1558,7 +1332,6 @@ footer {
   <div class="services-grid">
     <div class="service-card">
       <div class="service-icon">
-        <!-- Paintbrush / design SVG -->
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.1 0 2-.9 2-2 0-.54-.21-1.03-.54-1.4-.32-.36-.52-.85-.52-1.35 0-1.1.9-2 2-2h2.35C19.9 15.25 22 12.81 22 9.87 22 5.52 17.52 2 12 2z" fill="#6AABB0" opacity="0.25"/>
           <circle cx="6.5" cy="11.5" r="1.5" fill="#6AABB0"/>
@@ -1573,7 +1346,6 @@ footer {
     </div>
     <div class="service-card">
       <div class="service-icon">
-        <!-- Lightning bolt / speed SVG -->
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M13 2L4.5 13.5H11L10 22L20.5 10H14L13 2Z" fill="#6AABB0" stroke="#6AABB0" stroke-width="1" stroke-linejoin="round"/>
         </svg>
@@ -1584,7 +1356,6 @@ footer {
     </div>
     <div class="service-card">
       <div class="service-icon">
-        <!-- Chart / growth SVG -->
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M3 17l4-5 4 3 4-6 4 3" stroke="#6AABB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M3 20h18" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
@@ -1620,7 +1391,6 @@ footer {
         <p>A multi-page site for an educator support organization offering programs, resources, and community tools. Clean navigation across complex content, with a resource library, program pages, and lead capture throughout.</p>
         <a href="https://www.theconsciousconnectiongroup.com" target="_blank" rel="noopener" class="portfolio-link">
           theconsciousconnectiongroup.com
-          <!-- External link arrow SVG -->
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -1684,7 +1454,6 @@ footer {
     <div class="testimonials-grid">
       <div class="testimonial-card">
         <div class="testimonial-stars">
-          <!-- Star SVG x5 -->
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
@@ -1759,10 +1528,9 @@ footer {
 <section class="section" style="padding-bottom:40px;">
   <div class="pricing-teaser">
     <h3>Transparent Pricing — After Your Complimentary Preview</h3>
-    <p>We believe in showing you exactly what your site will look like before talking numbers. Submit your inquiry below and chat with us live. Qualified clients receive a complimentary mock-up!</p>
+    <p>We believe in showing you exactly what your site will look like before talking numbers. Submit your inquiry and chat with us live. Qualified clients receive a complimentary mock-up!</p>
     <div class="teaser-packages">
       <span class="teaser-pkg">
-        <!-- Diamond SVG -->
         <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.5 0L6 3.5H9L6.5 5.5L7.5 9L4.5 7L1.5 9L2.5 5.5L0 3.5H3Z" fill="#c9a020"/></svg>
         Glow-Up
       </span>
@@ -1780,7 +1548,6 @@ footer {
       </span>
     </div>
     <p class="teaser-note">
-      <!-- Lock SVG -->
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <rect x="2.5" y="6" width="9" height="7" rx="1.5" stroke="#557070" stroke-width="1.4"/>
         <path d="M4.5 6V4.5a2.5 2.5 0 015 0V6" stroke="#557070" stroke-width="1.4" stroke-linecap="round"/>
@@ -1790,505 +1557,34 @@ footer {
   </div>
 </section>
 
-<!-- ── PRICING (Hidden — revealed after form submit) ── -->
-<section id="pricing" style="display:none;">
-  <div class="section">
-    <p class="section-eyebrow">Straightforward Pricing</p>
-    <h2 class="section-title">Straightforward pricing.<br><em>No surprises.</em></h2>
-    <p class="section-sub" style="margin-top:12px;">Our packages start at <strong>$100</strong> — your personalized recommendation and full pricing details will arrive to your inbox shortly.</p>
-
-    <!-- Thank you banner -->
-    <div class="pricing-reveal-banner" style="margin-bottom:48px;">
-      <div>
-        <h3 style="display:flex;align-items:center;gap:10px;">
-          <!-- Sparkle / celebration SVG -->
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M11 2v3M11 17v3M2 11h3M17 11h3M4.93 4.93l2.12 2.12M14.95 14.95l2.12 2.12M4.93 17.07l2.12-2.12M14.95 7.05l2.12-2.12" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-            <circle cx="11" cy="11" r="3.5" fill="#F5C842"/>
-          </svg>
-          Thanks for reaching out!
-        </h3>
-        <p>We'll follow up shortly with your personalized package recommendation.</p>
-        <p>In the meantime, if you'd like to chat live about your project — we're here!</p>
-      </div>
+<!-- ── CTA SECTION ──────────────────────────────────── -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Free — No Commitment</div>
+    <h2 class="cta-title">Ready to get a website that<br><em>actually works for you?</em></h2>
+    <p class="cta-sub">Tell us about your business and we'll put together a complimentary mock-up — no payment, no pressure, just a preview of what's possible.</p>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn-primary-lg">Request Your Free Preview</a>
     </div>
-
-    <!-- Portfolio links -->
-    <div style="text-align:center;margin-bottom:16px;">
-      <p class="section-eyebrow" style="margin-bottom:20px;">View Other TEC Web Studio Sites</p>
-      <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;">
-        <a href="https://www.theconsciousconnectiongroup.com" target="_blank" rel="noopener"
-          style="display:flex;align-items:center;gap:10px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 24px;text-decoration:none;color:var(--teal-dark);font-weight:600;font-size:14px;transition:all 0.2s;box-shadow:var(--shadow-sm);"
-          onmouseover="this.style.borderColor='var(--teal)';this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-2px)'"
-          onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-sm)';this.style.transform='translateY(0)'">
-          <!-- Globe SVG -->
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
-            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <div style="text-align:left;">
-            <div style="font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Education &amp; Community</div>
-            <div>theconsciousconnectiongroup.com</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px;color:var(--teal);">
-            <path d="M3 13L13 3M13 3H8M13 3v5" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <a href="https://www.mawulipomary.com" target="_blank" rel="noopener"
-          style="display:flex;align-items:center;gap:10px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 24px;text-decoration:none;color:var(--teal-dark);font-weight:600;font-size:14px;transition:all 0.2s;box-shadow:var(--shadow-sm);"
-          onmouseover="this.style.borderColor='var(--teal)';this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-2px)'"
-          onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-sm)';this.style.transform='translateY(0)'">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
-            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <div style="text-align:left;">
-            <div style="font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Personal Portfolio &amp; Brand</div>
-            <div>mawulipomary.com</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px;">
-            <path d="M3 13L13 3M13 3H8M13 3v5" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <a href="https://www.xindiesamazinghandsllc.com" target="_blank" rel="noopener"
-          style="display:flex;align-items:center;gap:10px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 24px;text-decoration:none;color:var(--teal-dark);font-weight:600;font-size:14px;transition:all 0.2s;box-shadow:var(--shadow-sm);"
-          onmouseover="this.style.borderColor='var(--teal)';this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-2px)'"
-          onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-sm)';this.style.transform='translateY(0)'">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
-            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <div style="text-align:left;">
-            <div style="font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Catering &amp; Event Services</div>
-            <div>xindiesamazinghandsllc.com</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px;">
-            <path d="M3 13L13 3M13 3H8M13 3v5" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CONTACT ──────────────────────────────────────── -->
-<div id="contact" class="contact-wrap">
-  <div class="contact-inner">
-    <div>
-      <p class="section-eyebrow">Get in Touch</p>
-      <h2 class="section-title">Request your<br><em>complimentary preview</em></h2>
-      <p style="font-size:16px;color:var(--text-muted);line-height:1.8;margin-top:16px;">Tell us a bit about your business and we'll put together a complimentary mockup of what your new website could look like — no payment, no commitment.</p>
-
-      <div class="contact-info-items">
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <!-- Envelope SVG -->
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#6AABB0" stroke-width="1.5"/>
-              <path d="M2 5.5l7 5 7-5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Email</strong>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <!-- Clock SVG -->
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="9" cy="9" r="7" stroke="#6AABB0" stroke-width="1.5"/>
-              <path d="M9 5.5V9l2.5 2.5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Response time</strong>
-            <span>We typically reply within 24 hours</span>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <!-- Star SVG -->
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M9 2l1.9 4.4L16 7.2l-3.5 3.3.9 5L9 13.2l-4.4 2.3.9-5L2 7.2l5.1-.8L9 2z" fill="#F5C842"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Complimentary preview for ready clients</strong>
-            <span>Ready to move forward? Fill out the form and chat with us live — qualified clients receive a complimentary mock-up.*</span>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <!-- Lock SVG -->
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="3.5" y="8" width="11" height="8" rx="1.5" stroke="#6AABB0" stroke-width="1.5"/>
-              <path d="M6 8V6a3 3 0 016 0v2" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Pricing revealed after inquiry</strong>
-            <span>We'll send your personalized package recommendation along with your requested preview</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CUSTOM FORM EMBED -->
-    <div class="form-embed-wrap">
-      <div id="inquiry-form-container">
-        <style>
-          #inquiry-form-container { font-family: 'DM Sans', sans-serif; }
-          .ifs-field { margin-bottom: 18px; }
-          .ifs-field.hidden { display: none; }
-          .ifs-label { display: block; font-size: 13px; font-weight: 600; color: #2d3e3e; margin-bottom: 7px; }
-          .ifs-label .req { color: #6aabb0; margin-left: 2px; }
-          .ifs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-          .ifs-input, .ifs-textarea, .ifs-select {
-            width: 100%; padding: 11px 14px; border: 1.5px solid #d0e4e6;
-            border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px;
-            color: #2d3e3e; background: #fff; outline: none; appearance: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-          }
-          .ifs-input::placeholder, .ifs-textarea::placeholder { color: #aabcbc; }
-          .ifs-input:focus, .ifs-textarea:focus, .ifs-select:focus {
-            border-color: #6aabb0; box-shadow: 0 0 0 3px rgba(106,171,176,0.15);
-          }
-          .ifs-input.err, .ifs-textarea.err, .ifs-select.err { border-color: #e05252; }
-          .ifs-errmsg { font-size: 11.5px; color: #e05252; margin-top: 4px; display: none; }
-          .ifs-errmsg.show { display: block; }
-          .ifs-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
-          .ifs-select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236aabb0' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer;
-          }
-          .ifs-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-          .ifs-opts.single { grid-template-columns: 1fr; }
-          .ifs-opt { position: relative; }
-          .ifs-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-          .ifs-opt label {
-            display: flex; align-items: center; gap: 10px; padding: 10px 13px;
-            border: 1.5px solid #d0e4e6; border-radius: 10px; cursor: pointer;
-            font-size: 13px; color: #2d3e3e; transition: all 0.18s; user-select: none; margin: 0;
-          }
-          .ifs-opt label::before {
-            content: ''; width: 16px; height: 16px; min-width: 16px;
-            border: 2px solid #d0e4e6; border-radius: 50%; background: #fff;
-            transition: all 0.18s;
-          }
-          .ifs-opt input[type="checkbox"] + label::before { border-radius: 4px; }
-          .ifs-opt input:checked + label { border-color: #6aabb0; background: #e8f4f5; color: #3d7a80; font-weight: 500; }
-          .ifs-opt input:checked + label::before {
-            border-color: #6aabb0; background: #6aabb0; box-shadow: inset 0 0 0 3px #fff;
-          }
-          .ifs-opt input[type="checkbox"]:checked + label::before {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: center; box-shadow: none;
-          }
-          .ifs-ts-banner {
-            display: none; background: linear-gradient(135deg,#fffbea,#fff8d6);
-            border: 1.5px solid #f5c842; border-radius: 10px; padding: 13px 16px;
-            margin-bottom: 16px; font-size: 12px; color: #8a6a00; line-height: 1.5;
-          }
-          .ifs-ts-banner.show { display: block; }
-          .ifs-sig-caption {
-            display: none; margin-top: 10px; background: linear-gradient(135deg,#1a3d3d,#2a5a5a);
-            border-radius: 10px; padding: 12px 15px; font-size: 13px; color: #f5c842;
-            font-weight: 500; line-height: 1.6;
-          }
-          .ifs-sig-caption.show { display: block; }
-          .ifs-btn {
-            width: 100%; padding: 15px; background: #f5c842; color: #111; font-family: 'DM Sans', sans-serif;
-            font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-            border: none; border-radius: 50px; cursor: pointer; margin-top: 6px;
-            box-shadow: 0 4px 16px rgba(245,200,66,0.35); transition: background 0.2s, transform 0.15s;
-          }
-          .ifs-btn:hover { background: #e0b020; transform: translateY(-1px); }
-          .ifs-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-          .ifs-spinner {
-            display: inline-block; width: 15px; height: 15px; border: 2px solid rgba(0,0,0,0.2);
-            border-top-color: #111; border-radius: 50%; animation: ifs-spin 0.7s linear infinite;
-            vertical-align: middle; margin-right: 6px;
-          }
-          @keyframes ifs-spin { to { transform: rotate(360deg); } }
-          .ifs-success { display: none; text-align: center; padding: 32px 16px; }
-          .ifs-success.show { display: block; }
-          .ifs-success-icon { margin-bottom: 14px; }
-          .ifs-success h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: #1a2e2e; margin-bottom: 8px; }
-          .ifs-success p { font-size: 13px; color: #557070; line-height: 1.7; }
-          @media (max-width: 540px) {
-            .ifs-row { grid-template-columns: 1fr; }
-            .ifs-opts { grid-template-columns: 1fr; }
-          }
-        </style>
-
-        <!-- Form header -->
-        <div style="background:#6aabb0;padding:24px 28px;border-radius:0;">
-          <div style="display:inline-block;background:#f5c842;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:10px;">TEC Web Studio</div>
-          <h3 style="font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:0 0 4px;">Service Inquiry Form</h3>
-          <p style="font-size:12px;color:rgba(255,255,255,0.82);margin:0;">Please provide your details and specific needs for your website project.</p>
-        </div>
-
-        <!-- Success state -->
-        <div class="ifs-success" id="ifsSuccess">
-          <div class="ifs-success-icon">
-            <!-- Sparkle SVG -->
-            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M22 4v6M22 34v6M4 22h6M34 22h6M9.64 9.64l4.24 4.24M30.12 30.12l4.24 4.24M9.64 34.36l4.24-4.24M30.12 13.88l4.24-4.24" stroke="#6AABB0" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="22" cy="22" r="7" fill="#6AABB0"/>
-              <circle cx="22" cy="22" r="4" fill="white"/>
-            </svg>
-          </div>
-          <h3>We've received your inquiry!</h3>
-          <p>Check your inbox — we've sent you a personalized package recommendation. We'll follow up shortly with your free preview!</p>
-        </div>
-
-        <form id="ifsForm" novalidate>
-          <!-- Name row -->
-          <div class="ifs-row">
-            <div class="ifs-field">
-              <label class="ifs-label" for="ifsFirst">First Name <span class="req">*</span></label>
-              <input class="ifs-input" type="text" id="ifsFirst" placeholder="Jane" />
-              <div class="ifs-errmsg" id="ifsFirstErr">Please enter your first name.</div>
-            </div>
-            <div class="ifs-field">
-              <label class="ifs-label" for="ifsLast">Last Name <span class="req">*</span></label>
-              <input class="ifs-input" type="text" id="ifsLast" placeholder="Smith" />
-              <div class="ifs-errmsg" id="ifsLastErr">Please enter your last name.</div>
-            </div>
-          </div>
-
-          <!-- Email -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsEmail">Email Address <span class="req">*</span></label>
-            <input class="ifs-input" type="email" id="ifsEmail" placeholder="example@example.com" />
-            <div class="ifs-errmsg" id="ifsEmailErr">Please enter a valid email.</div>
-          </div>
-
-          <!-- Company -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsCompany">Company or Organization Name <span class="req">*</span></label>
-            <input class="ifs-input" type="text" id="ifsCompany" placeholder="Your business name" />
-            <div class="ifs-errmsg" id="ifsCompanyErr">Please enter your company name.</div>
-          </div>
-
-          <!-- Existing site question -->
-          <div class="ifs-field">
-            <label class="ifs-label">Do you already have an existing website? <span class="req">*</span></label>
-            <div class="ifs-opts single">
-              <div class="ifs-opt"><input type="radio" name="ifsExisting" id="ifsExistingY" value="Yes"><label for="ifsExistingY">Yes</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsExisting" id="ifsExistingN" value="No"><label for="ifsExistingN">No</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsExistingErr">Please select an option.</div>
-          </div>
-
-          <!-- Service -->
-          <div class="ifs-field" id="ifsSvcGroup">
-            <label class="ifs-label">What kind of service do you need? <span class="req">*</span></label>
-            <div class="ifs-opts">
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc1" value="Business Website"><label for="ifsSvc1">Business Website</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc2" value="Portfolio/Personal Site"><label for="ifsSvc2">Portfolio/Personal Site</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc3" value="E-commerce Store"><label for="ifsSvc3">E-commerce Store</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc4" value="The Signature Build"><label for="ifsSvc4">The Signature Build</label></div>
-            </div>
-            <div class="ifs-sig-caption" id="ifsSigCaption">We handle everything from your brand identity to your final launch — content, SEO, brand alignment, name &amp; logo creation, and more.</div>
-            <div class="ifs-errmsg" id="ifsSvcErr">Please select a service.</div>
-          </div>
-
-          <!-- Description -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsDesc">Briefly describe your project and any specific requirements. <span class="req">*</span></label>
-            <textarea class="ifs-textarea" id="ifsDesc" placeholder="Tell us about your project..."></textarea>
-            <div class="ifs-errmsg" id="ifsDescErr">Please describe your project.</div>
-          </div>
-
-          <!-- Timeline -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsTl">Preferred Timeline <span class="req">*</span></label>
-            <select class="ifs-select" id="ifsTl">
-              <option value="">Please Select</option>
-              <option value="As soon as possible">As soon as possible</option>
-              <option value="1-3 months">1–3 months</option>
-              <option value="3-6 months">3–6 months</option>
-              <option value="Just exploring">Just exploring</option>
-            </select>
-            <div class="ifs-errmsg" id="ifsTlErr">Please select a timeline.</div>
-          </div>
-
-          <!-- Time sensitive banner -->
-          <div class="ifs-ts-banner" id="ifsTsBanner"><strong>Time Sensitive!</strong> If you need the completed work as soon as possible, an additional $75 expedited fee will apply.</div>
-
-          <!-- Content written -->
-          <div class="ifs-field hidden" id="ifsContentGroup">
-            <label class="ifs-label">Do you need content written? <span class="req">*</span></label>
-            <div class="ifs-opts single">
-              <div class="ifs-opt"><input type="radio" name="ifsContent" id="ifsContentY" value="Yes"><label for="ifsContentY">Yes</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsContent" id="ifsContentN" value="No"><label for="ifsContentN">No</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsContentErr">Please select an option.</div>
-          </div>
-
-          <!-- Pages needed -->
-          <div class="ifs-field hidden" id="ifsPagesGroup">
-            <label class="ifs-label">Pages needed <span class="req">*</span></label>
-            <div class="ifs-opts single">
-              <div class="ifs-opt"><input type="radio" name="ifsPages" id="ifsPages1" value="1-4"><label for="ifsPages1">1–4</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsPages" id="ifsPages2" value="5-8"><label for="ifsPages2">5–8</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsPages" id="ifsPages3" value="Not sure"><label for="ifsPages3">Not sure</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsPagesErr">Please select an option.</div>
-          </div>
-
-          <!-- Special features -->
-          <div class="ifs-field hidden" id="ifsFeaturesGroup">
-            <label class="ifs-label">Any special features or enhancements? <span class="req">*</span></label>
-            <div class="ifs-opts">
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat1" value="Animations"><label for="ifsFeat1">Animations</label></div>
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat2" value="E-commerce"><label for="ifsFeat2">E-commerce</label></div>
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat3" value="Branding"><label for="ifsFeat3">Branding</label></div>
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat4" value="Other"><label for="ifsFeat4">Other</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsFeatErr">Please select at least one.</div>
-          </div>
-
-          <button type="submit" class="ifs-btn" id="ifsBtn">Submit</button>
-        </form>
-      </div>
-
-      <script>
-      (function() {
-        var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
-
-        document.querySelectorAll('input[name="ifsExisting"]').forEach(function(r) {
-          r.addEventListener('change', updateCond);
-        });
-        document.querySelectorAll('input[name="ifsSvc"]').forEach(function(r) {
-          r.addEventListener('change', updateCond);
-        });
-        document.getElementById('ifsTl').addEventListener('change', function() {
-          document.getElementById('ifsTsBanner').classList.toggle('show', this.value === 'As soon as possible');
-        });
-
-        function updateCond() {
-          var existing = document.querySelector('input[name="ifsExisting"]:checked');
-          var hasExisting = existing && existing.value === 'Yes';
-          var svc = document.querySelector('input[name="ifsSvc"]:checked');
-          var isSig = svc && svc.value === 'The Signature Build';
-
-          var svcGroup = document.getElementById('ifsSvcGroup');
-          var showSvcGroup = existing && existing.value === 'No';
-          svcGroup.classList.toggle('hidden', !showSvcGroup);
-          if (hasExisting) {
-            document.querySelectorAll('input[name="ifsSvc"]').forEach(function(r){ r.checked=false; });
-          }
-
-          var showSubQ = existing && !isSig;
-          document.getElementById('ifsContentGroup').classList.toggle('hidden', !showSubQ);
-          document.getElementById('ifsPagesGroup').classList.toggle('hidden', !showSubQ);
-          document.getElementById('ifsFeaturesGroup').classList.toggle('hidden', !showSubQ);
-
-          document.getElementById('ifsSigCaption').classList.toggle('show', isSig && !hasExisting);
-
-          if (!showSubQ) {
-            document.querySelectorAll('input[name="ifsContent"]').forEach(function(r){ r.checked=false; });
-            document.querySelectorAll('input[name="ifsPages"]').forEach(function(r){ r.checked=false; });
-            document.querySelectorAll('input[name="ifsFeat"]').forEach(function(c){ c.checked=false; });
-          }
-        }
-
-        function showErr(id, errId, show) {
-          var el = document.getElementById(id);
-          var er = document.getElementById(errId);
-          if (el) el.classList.toggle('err', show);
-          if (er) er.classList.toggle('show', show);
-        }
-        function showGroupErr(errId, show) {
-          var er = document.getElementById(errId);
-          if (er) er.classList.toggle('show', show);
-        }
-
-        function validate() {
-          var ok = true;
-          var fn = document.getElementById('ifsFirst').value.trim();
-          showErr('ifsFirst','ifsFirstErr',!fn); if(!fn) ok=false;
-          var ln = document.getElementById('ifsLast').value.trim();
-          showErr('ifsLast','ifsLastErr',!ln); if(!ln) ok=false;
-          var em = document.getElementById('ifsEmail').value.trim();
-          var emOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
-          showErr('ifsEmail','ifsEmailErr',!emOk); if(!emOk) ok=false;
-          var co = document.getElementById('ifsCompany').value.trim();
-          showErr('ifsCompany','ifsCompanyErr',!co); if(!co) ok=false;
-          var existing = document.querySelector('input[name="ifsExisting"]:checked');
-          showGroupErr('ifsExistingErr',!existing); if(!existing) ok=false;
-          var hasExisting = existing && existing.value === 'Yes';
-          var svc = document.querySelector('input[name="ifsSvc"]:checked');
-          if (!hasExisting) {
-            showGroupErr('ifsSvcErr',!svc); if(!svc) ok=false;
-          }
-          var desc = document.getElementById('ifsDesc').value.trim();
-          showErr('ifsDesc','ifsDescErr',!desc); if(!desc) ok=false;
-          var tl = document.getElementById('ifsTl').value;
-          showErr('ifsTl','ifsTlErr',!tl); if(!tl) ok=false;
-          var isSig = svc && svc.value === 'The Signature Build';
-          if (existing && !isSig) {
-            var cw = document.querySelector('input[name="ifsContent"]:checked');
-            showGroupErr('ifsContentErr',!cw); if(!cw) ok=false;
-            var pg = document.querySelector('input[name="ifsPages"]:checked');
-            showGroupErr('ifsPagesErr',!pg); if(!pg) ok=false;
-            var ft = document.querySelectorAll('input[name="ifsFeat"]:checked');
-            showGroupErr('ifsFeatErr',ft.length===0); if(ft.length===0) ok=false;
-          }
-          return ok;
-        }
-
-        document.getElementById('ifsForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          if (!validate()) return;
-          var btn = document.getElementById('ifsBtn');
-          btn.disabled = true;
-          btn.innerHTML = '<span class="ifs-spinner"></span>Sending...';
-          var existing = document.querySelector('input[name="ifsExisting"]:checked');
-          var hasExisting = existing && existing.value === 'Yes';
-          var svc = document.querySelector('input[name="ifsSvc"]:checked');
-          var isSig = svc && svc.value === 'The Signature Build';
-          var showSubQ = existing && !isSig;
-          var feats = showSubQ ? [...document.querySelectorAll('input[name="ifsFeat"]:checked')].map(function(c){return c.value;}) : [];
-          var payload = {
-            formType: 'Service Inquiry',
-            firstName: document.getElementById('ifsFirst').value.trim(),
-            lastName: document.getElementById('ifsLast').value.trim(),
-            email: document.getElementById('ifsEmail').value.trim(),
-            company: document.getElementById('ifsCompany').value.trim(),
-            existingSite: existing ? existing.value : 'No',
-            serviceType: hasExisting ? '' : (svc ? svc.value : ''),
-            description: document.getElementById('ifsDesc').value.trim(),
-            timeline: document.getElementById('ifsTl').value,
-            contentWritten: showSubQ ? (document.querySelector('input[name="ifsContent"]:checked') ? document.querySelector('input[name="ifsContent"]:checked').value : '') : 'N/A',
-            pagesNeeded: showSubQ ? (document.querySelector('input[name="ifsPages"]:checked') ? document.querySelector('input[name="ifsPages"]:checked').value : '') : 'N/A',
-            features: feats.join(', ') || 'N/A'
-          };
-          var formData = new FormData();
-          Object.keys(payload).forEach(function(key) {
-            formData.append(key, payload[key]);
-          });
-          fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formData
-          }).catch(function(err) { console.log('Fetch error:', err); });
-          setTimeout(function() {
-            document.getElementById('ifsForm').style.display = 'none';
-            document.getElementById('ifsSuccess').classList.add('show');
-            var pricing = document.getElementById('pricing');
-            if (pricing) {
-              pricing.style.display = 'block';
-              pricing.scrollIntoView({ behavior: 'smooth' });
-            }
-            var toast = document.getElementById('toast');
-            if (toast) { toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 4000); }
-          }, 1500);
-        });
-      })();
-      </script>
+    <div class="cta-reassurance">
+      <span class="cta-re-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M2 7.5l3.5 3.5 6.5-7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        No credit card required
+      </span>
+      <span class="cta-re-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M2 7.5l3.5 3.5 6.5-7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Reply within 24 hours
+      </span>
+      <span class="cta-re-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M2 7.5l3.5 3.5 6.5-7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Starting at $200
+      </span>
     </div>
   </div>
 </div>
@@ -2314,7 +1610,7 @@ footer {
         <ul>
           <li><a href="#work">Portfolio</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="contact.html">Contact</a></li>
           <li><a href="/cdn-cgi/l/email-protection#5831363e37182c3d3b2f3d3a2b2c2d3c3137763b3735">Email</a></li>
         </ul>
       </div>
@@ -2325,16 +1621,6 @@ footer {
     <img src="TEC_Web_Studio_logo.png" alt="TEC Web Studio" style="height:48px;width:auto;opacity:0.85;">
   </div>
 </footer>
-
-<!-- ── TOAST ──────────────────────────────────────────── -->
-<div class="toast" id="toast">
-  <!-- Envelope SVG -->
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#F5C842" stroke-width="1.5"/>
-    <path d="M2 5.5l7 5 7-5" stroke="#F5C842" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>
-  Form submitted! Check your email for your recommended package.
-</div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
