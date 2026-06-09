@@ -465,23 +465,28 @@ footer {
 .footer-inner {
   max-width: 1080px;
   margin: auto;
-  padding: 56px 24px 36px;
+  padding: 32px 24px 24px;
   display: flex;
-  flex-direction: column;
-  gap: 32px;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
 .footer-brand p {
   font-size: 13px;
   color: rgba(255,255,255,0.90);
-  max-width: 340px;
+  max-width: 200px;
   line-height: 1.7;
+  flex-shrink: 0;
 }
 
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .footer-row {
@@ -507,7 +512,7 @@ footer {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 20px;
+  gap: 4px 18px;
 }
 
 .footer-row-items li {
@@ -527,7 +532,7 @@ footer {
 .footer-bottom {
   max-width: 1080px;
   margin: auto;
-  padding: 20px 24px;
+  padding: 16px 24px;
   border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   justify-content: space-between;
@@ -566,6 +571,8 @@ footer {
   .contact-inner { grid-template-columns: 1fr; gap: 40px; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .footer-brand p { max-width: 100%; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 }
 
@@ -895,19 +902,7 @@ footer {
 <!-- ── FOOTER ─────────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-brand">
-      <p>Professional websites for small businesses and organizations. Simple pricing, fast delivery, real results.</p>
-    </div>
     <div class="footer-links">
-      <div class="footer-row">
-        <h5 class="footer-row-label">Services</h5>
-        <ul class="footer-row-items">
-          <li>Website Design</li>
-          <li>Mobile Optimization</li>
-          <li>Lead Generation</li>
-          <li>Maintenance Plans</li>
-        </ul>
-      </div>
       <div class="footer-row">
         <h5 class="footer-row-label">Company</h5>
         <ul class="footer-row-items">
@@ -917,6 +912,18 @@ footer {
           <li><a href="/cdn-cgi/l/email-protection#5831363e37182c3d3b2f3d3a2b2c2d3c3137763b3735">Email</a></li>
         </ul>
       </div>
+      <div class="footer-row">
+        <h5 class="footer-row-label">Services</h5>
+        <ul class="footer-row-items">
+          <li>Website Design</li>
+          <li>Mobile Optimization</li>
+          <li>Lead Generation</li>
+          <li>Maintenance Plans</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-brand">
+      <p>Professional websites for small businesses and organizations. Simple pricing, fast delivery, real results.</p>
     </div>
   </div>
   <div class="footer-bottom">
