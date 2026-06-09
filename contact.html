@@ -467,42 +467,62 @@ footer {
   margin: auto;
   padding: 56px 24px 36px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 40px;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .footer-brand p {
   font-size: 13px;
   color: rgba(255,255,255,0.90);
-  margin-top: 10px;
-  max-width: 240px;
+  max-width: 340px;
   line-height: 1.7;
 }
 
-.footer-links { display: flex; gap: 64px; }
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-.footer-col h5 {
+.footer-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.footer-row-label {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.97);
-  margin-bottom: 16px;
+  white-space: nowrap;
+  padding-right: 16px;
+  border-right: 1px solid rgba(255,255,255,0.25);
+  margin-right: 16px;
+  min-width: 80px;
 }
 
-.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.footer-col li { font-size: 14px; color: rgba(255,255,255,0.5); }
+.footer-row-items {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
 
-.footer-col a {
-  font-size: 14px;
+.footer-row-items li {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
+
+.footer-row-items a {
+  font-size: 13px;
   color: rgba(255,255,255,0.90);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.footer-col a:hover { color: white; }
+.footer-row-items a:hover { color: white; }
 
 .footer-bottom {
   max-width: 1080px;
@@ -546,8 +566,6 @@ footer {
   .contact-inner { grid-template-columns: 1fr; gap: 40px; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
-  .footer-inner { flex-direction: column; }
-  .footer-links { flex-direction: column; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 }
 
@@ -881,18 +899,18 @@ footer {
       <p>Professional websites for small businesses and organizations. Simple pricing, fast delivery, real results.</p>
     </div>
     <div class="footer-links">
-      <div class="footer-col">
-        <h5>Services</h5>
-        <ul>
+      <div class="footer-row">
+        <h5 class="footer-row-label">Services</h5>
+        <ul class="footer-row-items">
           <li>Website Design</li>
           <li>Mobile Optimization</li>
           <li>Lead Generation</li>
           <li>Maintenance Plans</li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h5>Company</h5>
-        <ul>
+      <div class="footer-row">
+        <h5 class="footer-row-label">Company</h5>
+        <ul class="footer-row-items">
           <li><a href="index.html#work">Portfolio</a></li>
           <li><a href="index.html#about">About</a></li>
           <li><a href="contact.html">Contact</a></li>
