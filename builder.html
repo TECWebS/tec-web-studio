@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Site — TEC Web Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFBF8;
+    --ink:#1F2E2B;
+    --ink-soft:#5B6B68;
+    --teal:#3F8C84;
+    --teal-deep:#2D6E68;
+    --accent:#F0B429;
+    --accent-deep:#D89E1F;
+    --accent-soft:#FCEEC6;
+    --line:#E1E8E4;
+    --surface:#FFFFFF;
+    --success:#3F8C84;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;}
+  h1,h2,h3{font-family:'Playfair Display',serif; margin:0; letter-spacing:-0.01em; color:var(--teal-deep);}
+
+  .hero-band{
+    background:linear-gradient(135deg, #4F9C94 0%, #2D6E68 100%);
+    padding:50px 32px 58px; text-align:center;
+  }
+  .hero-band-inner{max-width:640px; margin:0 auto;}
+  .hero-badge{
+    display:inline-block; border:1px solid rgba(240,180,41,0.5); color:var(--accent);
+    font-family:'Inter'; font-weight:700; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    padding:7px 16px; border-radius:999px; margin-bottom:18px; background:rgba(255,255,255,0.06);
+  }
+  .hero-title{
+    font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(24px,3.6vw,34px);
+    color:#fff; line-height:1.3; margin:0 0 12px;
+  }
+  .hero-title em{color:var(--accent); font-style:italic;}
+  .hero-sub{font-family:'Inter'; font-size:14.5px; color:rgba(255,255,255,0.85); line-height:1.6; margin:0; max-width:480px; margin:0 auto;}
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,0.7); backdrop-filter:blur(6px);
+    position:sticky; top:0; z-index:20;
+  }
+  .topbar .brand{display:flex; align-items:center; gap:10px;}
+  .brand .mark{
+    width:34px; height:34px; border-radius:7px; border:1.5px solid var(--accent);
+    background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; padding-top:4px;
+  }
+  .brand .mark .dots{position:absolute; top:3px; left:4px; display:flex; gap:2px;}
+  .brand .mark .dots span{width:3px; height:3px; border-radius:50%; background:var(--accent);}
+  .brand .mark .code{font-family:'Inter'; font-weight:700; font-size:11px; color:var(--teal);}
+  .brand .name .t1{font-family:'Inter'; font-weight:800; font-size:15px; color:var(--accent-deep); letter-spacing:0.01em;}
+  .brand .name .t2{font-family:'Inter'; font-weight:600; font-size:9.5px; color:var(--teal); letter-spacing:0.12em; display:block; margin-top:-2px;}
+  .topbar .price{
+    font-family:'Inter'; font-weight:700; font-size:13px; background:var(--accent); color:var(--ink);
+    padding:8px 16px; border-radius:999px;
+  }
+
+  .layout{
+    display:grid; grid-template-columns:380px 1fr; gap:28px;
+    max-width:1280px; margin:0 auto; padding:28px 32px 80px;
+    align-items:start;
+  }
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr; padding:20px 16px 60px;}
+  }
+
+  /* STEP RAIL */
+  .rail{display:flex; flex-direction:column; gap:0; margin-bottom:22px;}
+  .rail-step{
+    display:flex; gap:12px; align-items:flex-start; padding:10px 0; cursor:pointer;
+    opacity:0.45; transition:opacity .2s;
+  }
+  .rail-step.active, .rail-step.done{opacity:1;}
+  .rail-step .num{
+    font-family:'Inter'; font-size:12px; width:26px; height:26px; border-radius:50%;
+    border:1.5px solid var(--ink); display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; background:#fff;
+  }
+  .rail-step.active .num{background:var(--accent); border-color:var(--accent); color:var(--ink); font-weight:700;}
+  .rail-step.done .num{background:var(--success); border-color:var(--success); color:#fff;}
+  .rail-step .label{font-size:13.5px; font-weight:600; padding-top:4px;}
+  .rail-connector{width:1px; height:16px; background:var(--line); margin-left:13px;}
+
+  .panel-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:24px; margin-bottom:16px;
+  }
+  .panel-card h2{font-size:18px; margin-bottom:6px;}
+  .eyebrow{display:flex; align-items:center; gap:8px; font-family:'Inter'; font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
+  .eyebrow::before{content:''; width:14px; height:2px; background:var(--accent); display:inline-block; flex-shrink:0;}
+  .panel-card .sub{font-size:13px; color:var(--ink-soft); margin-bottom:18px;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  /* Section toggles */
+  .section-option{
+    display:flex; align-items:center; justify-content:space-between;
+    border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:8px;
+    cursor:pointer; transition:border-color .15s;
+  }
+  .section-option.locked{opacity:0.55; cursor:default;}
+  .section-option:not(.locked):hover{border-color:var(--accent);}
+  .section-option .meta .t{font-weight:600; font-size:14px;}
+  .section-option .meta .d{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .toggle{
+    width:38px; height:22px; border-radius:20px; background:var(--line); position:relative; flex-shrink:0; margin-left:12px;
+    transition:background .15s;
+  }
+  .toggle::after{
+    content:''; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%;
+    background:#fff; transition:left .15s; box-shadow:0 1px 2px rgba(0,0,0,0.2);
+  }
+  .toggle.on{background:var(--success);}
+  .toggle.on::after{left:18px;}
+  .tag-required{font-family:'Inter'; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; font-size:10px; background:#EAF4F2; color:var(--teal-deep); padding:3px 8px; border-radius:10px;}
+
+  /* Theme & font pickers */
+  .swatch-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .swatch{
+    border:1.5px solid var(--line); border-radius:8px; padding:10px; cursor:pointer; text-align:left;
+  }
+  .swatch.selected{border-color:var(--ink); box-shadow:0 0 0 2px var(--ink-soft) inset;}
+  .swatch .dots{display:flex; gap:5px; margin-bottom:8px;}
+  .swatch .dot{width:16px; height:16px; border-radius:50%; border:1px solid rgba(0,0,0,0.1);}
+  .swatch .label{font-size:12.5px; font-weight:600;}
+  .font-option{
+    border:1.5px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:8px; cursor:pointer;
+  }
+  .font-option.selected{border-color:var(--ink); box-shadow:0 0 0 2px var(--ink-soft) inset;}
+  .font-option .label{font-size:11px; color:var(--ink-soft); font-family:'Inter';}
+
+  /* Content form */
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:12.5px; font-weight:600; margin-bottom:5px;}
+  .field input, .field textarea{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:7px;
+    font-family:'Inter'; font-size:13.5px; background:#FAFBFD;
+  }
+  .field input:focus, .field textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .subgroup{border-left:2px solid var(--accent-soft); padding-left:12px; margin-bottom:16px;}
+  .subgroup-title{font-family:'Inter'; font-size:11px; color:var(--ink-soft); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em;}
+  .file-btn{
+    display:inline-block; font-size:12.5px; font-weight:600; padding:8px 12px; border:1px dashed var(--line);
+    border-radius:7px; cursor:pointer; background:#FAFBFD;
+  }
+
+  .nav-row{display:flex; justify-content:space-between; gap:10px; margin-top:4px;}
+  button{font-family:'Inter'; font-weight:600; cursor:pointer; border:none;}
+  .btn-primary{
+    background:var(--teal-deep); color:#fff; padding:11px 20px; border-radius:999px; font-size:13.5px;
+  }
+  .btn-primary:hover{background:var(--ink);}
+  .btn-ghost{
+    background:transparent; color:var(--ink-soft); padding:11px 16px; border-radius:999px; font-size:13.5px;
+    border:1px solid var(--line);
+  }
+  .btn-accent{
+    background:var(--accent); color:var(--ink); padding:14px 22px; border-radius:999px; font-size:15px; width:100%; font-weight:700;
+  }
+  .btn-accent:hover{background:var(--accent-deep);}
+  .btn-accent:disabled{background:var(--line); color:var(--ink-soft); cursor:not-allowed;}
+
+  /* Preview */
+  .preview-col{position:sticky; top:90px;}
+  .preview-frame-wrap{
+    position:relative; border-radius:14px; padding:14px;
+  }
+  .crop{position:absolute; width:14px; height:14px; border:1.5px solid var(--accent); opacity:0.7;}
+  .crop.tl{top:0; left:0; border-right:none; border-bottom:none;}
+  .crop.tr{top:0; right:0; border-left:none; border-bottom:none;}
+  .crop.bl{bottom:0; left:0; border-right:none; border-top:none;}
+  .crop.br{bottom:0; right:0; border-left:none; border-top:none;}
+  .browser-chrome{
+    background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    box-shadow:0 18px 40px -18px rgba(31,46,43,0.35);
+  }
+  .browser-bar{
+    background:#F1F3F7; padding:9px 12px; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--line);
+  }
+  .browser-bar .dot{width:9px; height:9px; border-radius:50%; background:#D7DCE5;}
+  .browser-bar .url{
+    flex:1; background:#fff; border-radius:5px; padding:4px 10px; font-size:11px; color:var(--ink-soft);
+    font-family:'Inter'; margin-left:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  iframe#previewFrame{width:100%; height:560px; border:none; display:block;}
+  .preview-caption{text-align:center; font-size:11px; color:var(--accent-deep); margin-top:12px; font-family:'Inter'; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;}
+
+  /* Modal */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(31,46,43,0.55); display:none; align-items:center; justify-content:center; z-index:50;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal{background:#fff; border-radius:12px; padding:28px; max-width:380px; width:90%;}
+  .modal h3{font-size:17px; margin-bottom:6px;}
+  .modal p{font-size:13px; color:var(--ink-soft); margin:0 0 18px;}
+  .modal .price-line{display:flex; justify-content:space-between; padding:10px 0; border-top:1px dashed var(--line); border-bottom:1px dashed var(--line); margin-bottom:18px; font-weight:600;}
+
+  .checklist{display:none; font-size:13px; color:var(--success); font-weight:600; align-items:center; gap:6px; margin-top:8px;}
+  .checklist.show{display:flex;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="code">&lt;/&gt;</div>
+    </div>
+    <div class="name"><span class="t1">TEC</span><span class="t2">WEB STUDIO</span></div>
+  </div>
+  <div class="price">$17 · instant download</div>
+</div>
+
+<div class="hero-band">
+  <div class="hero-band-inner">
+    <span class="hero-badge">DIY Website Builder</span>
+    <h1 class="hero-title">Build a site that <em>actually works</em> — yourself.</h1>
+    <p class="hero-sub">Pick your sections, pick your style, add your content — get a finished, ready-to-use website in minutes. No waiting, no back-and-forth.</p>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT: WIZARD -->
+  <div class="wizard-col">
+
+    <div class="rail" id="rail"></div>
+
+    <!-- STEP 1 -->
+    <div class="panel active" data-step="1">
+      <div class="panel-card">
+        <div class="eyebrow">Step 1</div>
+        <h2>Choose your sections</h2>
+        <div class="sub">Hero and Contact are included on every site. Turn on whatever else you need.</div>
+
+        <div class="section-option locked">
+          <div class="meta"><div class="t">Hero</div><div class="d">Your business name, tagline, and main call to action.</div></div>
+          <span class="tag-required">Included</span>
+        </div>
+        <div class="section-option" data-key="about">
+          <div class="meta"><div class="t">About</div><div class="d">A short paragraph on who you are and what you do.</div></div>
+          <div class="toggle"></div>
+        </div>
+        <div class="section-option" data-key="services">
+          <div class="meta"><div class="t">Services</div><div class="d">Three things you offer, side by side.</div></div>
+          <div class="toggle"></div>
+        </div>
+        <div class="section-option" data-key="testimonials">
+          <div class="meta"><div class="t">Testimonials</div><div class="d">Two quotes from happy customers.</div></div>
+          <div class="toggle"></div>
+        </div>
+        <div class="section-option" data-key="gallery">
+          <div class="meta"><div class="t">Gallery</div><div class="d">A row of up to three photos of your work.</div></div>
+          <div class="toggle"></div>
+        </div>
+        <div class="section-option locked">
+          <div class="meta"><div class="t">Contact</div><div class="d">Phone, email, address, and hours.</div></div>
+          <span class="tag-required">Included</span>
+        </div>
+      </div>
+      <div class="nav-row"><span></span><button class="btn-primary" onclick="goStep(2)">Next: Pick a style →</button></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="panel" data-step="2">
+      <div class="panel-card">
+        <div class="eyebrow">Step 2</div>
+        <h2>Pick your style</h2>
+        <div class="sub">Color palette</div>
+        <div class="swatch-grid" id="themeGrid"></div>
+        <div class="sub" style="margin-top:18px;">Font pairing</div>
+        <div id="fontList"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-ghost" onclick="goStep(1)">← Back</button>
+        <button class="btn-primary" onclick="goStep(3)">Next: Add your content →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="panel" data-step="3">
+      <div class="panel-card" id="contentForm"></div>
+      <div class="nav-row">
+        <button class="btn-ghost" onclick="goStep(2)">← Back</button>
+        <button class="btn-primary" onclick="goStep(4)">Next: Preview →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="panel" data-step="4">
+      <div class="panel-card">
+        <div class="eyebrow">Step 4</div>
+        <h2>Looks good?</h2>
+        <div class="sub">Check the preview on the right. You can go back and change anything before you download.</div>
+        <button class="btn-accent" id="downloadBtn" onclick="openCheckout()">Continue to checkout — $17</button>
+        <div class="checklist" id="checklistOk">✓ Business name set</div>
+      </div>
+      <div class="nav-row"><button class="btn-ghost" onclick="goStep(3)">← Back</button><span></span></div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: LIVE PREVIEW -->
+  <div class="preview-col">
+    <div class="preview-frame-wrap">
+      <div class="crop tl"></div><div class="crop tr"></div><div class="crop bl"></div><div class="crop br"></div>
+      <div class="browser-chrome">
+        <div class="browser-bar">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="url" id="urlBar">yourbusiness.com</div>
+        </div>
+        <iframe id="previewFrame"></iframe>
+      </div>
+    </div>
+    <div class="preview-caption">live preview — updates as you type</div>
+  </div>
+
+</div>
+
+<!-- CHECKOUT MODAL (placeholder — see note in code) -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Get your website</h3>
+    <p>One-time payment, instant download. No subscription.</p>
+    <div class="price-line"><span>1-page custom site</span><span>$17.00</span></div>
+    <button class="btn-primary" style="width:100%; margin-bottom:8px;" onclick="completeCheckout()">Pay & download</button>
+    <button class="btn-ghost" style="width:100%;" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const THEMES = {
+  signature: { name:"Studio Signature", bg:"#FFFFFF", surface:"#EEF6F4", text:"#1F2E2B", textSoft:"#5B6B68", accent:"#F0B429", accentText:"#1F2E2B", dots:["#FFFFFF","#3F8C84","#F0B429"] },
+  modern: { name:"Modern Clean", bg:"#FFFFFF", surface:"#F7F8FA", text:"#1A1A1A", textSoft:"#5B5F66", accent:"#0E7C7B", accentText:"#FFFFFF", dots:["#FFFFFF","#0E7C7B","#1A1A1A"] },
+  warm:   { name:"Warm & Approachable", bg:"#FBF6EF", surface:"#F3ECE0", text:"#3A2E22", textSoft:"#6B5C4D", accent:"#D9714E", accentText:"#FFFFFF", dots:["#FBF6EF","#D9714E","#3A2E22"] },
+  bold:   { name:"Bold Minimal", bg:"#121212", surface:"#1C1C1C", text:"#F5F5F5", textSoft:"#AFAFAF", accent:"#C7F03B", accentText:"#121212", dots:["#121212","#C7F03B","#F5F5F5"] },
+  soft:   { name:"Soft Professional", bg:"#F4F6F9", surface:"#FFFFFF", text:"#222B3A", textSoft:"#5A6478", accent:"#3B6EE0", accentText:"#FFFFFF", dots:["#F4F6F9","#3B6EE0","#222B3A"] }
+};
+const FONTS = {
+  modernsans: { name:"Modern Sans", display:"'Poppins',sans-serif", body:"'Inter',sans-serif", google:"Poppins:wght@600;700&family=Inter:wght@400;500;600" },
+  classic:    { name:"Classic Serif", display:"'Playfair Display',serif", body:"'Source Sans Pro',sans-serif", google:"Playfair+Display:wght@600;700&family=Source+Sans+Pro:wght@400;600" },
+  friendly:   { name:"Friendly Rounded", display:"'Quicksand',sans-serif", body:"'Nunito',sans-serif", google:"Quicksand:wght@600;700&family=Nunito:wght@400;600" }
+};
+const STEP_LABELS = ["Choose sections","Pick your style","Add your content","Preview & get your site"];
+
+let state = {
+  sections:{about:true, services:true, testimonials:false, gallery:false},
+  theme:'signature', font:'modernsans',
+  content:{
+    businessName:'', tagline:'', ctaText:'Get a Free Quote', phone:'', email:'', address:'', hours:'',
+    heroImage:null,
+    aboutText:'',
+    services:[{name:'',desc:''},{name:'',desc:''},{name:'',desc:''}],
+    testimonials:[{quote:'',name:''},{quote:'',name:''}],
+    gallery:[null,null,null]
+  }
+};
+let currentStep = 1;
+
+/* ---------- RAIL ---------- */
+function renderRail(){
+  const rail = document.getElementById('rail');
+  rail.innerHTML = '';
+  STEP_LABELS.forEach((label,i)=>{
+    const n = i+1;
+    const cls = n===currentStep ? 'active' : (n<currentStep ? 'done' : '');
+    rail.innerHTML += `<div class="rail-step ${cls}" onclick="goStep(${n})">
+        <div class="num mono">${n<currentStep?'✓':String(n).padStart(2,'0')}</div>
+        <div class="label">${label}</div>
+      </div>` + (n<STEP_LABELS.length ? '<div class="rail-connector"></div>' : '');
+  });
+}
+function goStep(n){
+  currentStep = n;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', +p.dataset.step===n));
+  renderRail();
+  if(n===4) updateChecklist();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ---------- STEP 1: sections ---------- */
+document.querySelectorAll('.section-option[data-key]').forEach(el=>{
+  const key = el.dataset.key;
+  const toggle = el.querySelector('.toggle');
+  toggle.classList.toggle('on', state.sections[key]);
+  el.addEventListener('click', ()=>{
+    state.sections[key] = !state.sections[key];
+    toggle.classList.toggle('on', state.sections[key]);
+    renderContentForm();
+    updatePreview();
+  });
+});
+
+/* ---------- STEP 2: theme + font ---------- */
+function renderThemeGrid(){
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = '';
+  Object.entries(THEMES).forEach(([key,t])=>{
+    const sel = state.theme===key ? 'selected' : '';
+    grid.innerHTML += `<div class="swatch ${sel}" onclick="selectTheme('${key}')">
+      <div class="dots">${t.dots.map(c=>`<div class="dot" style="background:${c}"></div>`).join('')}</div>
+      <div class="label">${t.name}</div>
+    </div>`;
+  });
+}
+function selectTheme(key){ state.theme = key; renderThemeGrid(); updatePreview(); }
+
+function renderFontList(){
+  const list = document.getElementById('fontList');
+  list.innerHTML = '';
+  Object.entries(FONTS).forEach(([key,f])=>{
+    const sel = state.font===key ? 'selected' : '';
+    list.innerHTML += `<div class="font-option ${sel}" onclick="selectFont('${key}')">
+      <div style="font-family:${f.display}; font-size:16px; font-weight:600;">${f.name}</div>
+      <div class="label">${f.display.split(',')[0].replace(/'/g,'')} + ${f.body.split(',')[0].replace(/'/g,'')}</div>
+    </div>`;
+  });
+}
+function selectFont(key){ state.font = key; renderFontList(); updatePreview(); }
+
+/* ---------- STEP 3: content form ---------- */
+function renderContentForm(){
+  const c = state.content;
+  let html = `<div class="eyebrow">Step 3</div><h2>Add your content</h2><div class="sub">Fill in what you have — anything left blank uses placeholder text so the preview never looks broken.</div>`;
+
+  html += `<div class="subgroup"><div class="subgroup-title">Hero</div>
+    <div class="field"><label>Business name</label><input id="f_businessName" value="${esc(c.businessName)}" oninput="updateField('businessName', this.value)" placeholder="Riverside Plumbing Co."></div>
+    <div class="field"><label>Tagline</label><input id="f_tagline" value="${esc(c.tagline)}" oninput="updateField('tagline', this.value)" placeholder="Fast, honest plumbing — same-day service."></div>
+    <div class="field"><label>Button text</label><input id="f_ctaText" value="${esc(c.ctaText)}" oninput="updateField('ctaText', this.value)"></div>
+    <div class="field"><label>Hero photo (optional)</label><label class="file-btn">Choose file<input type="file" accept="image/*" style="display:none" onchange="handleImage(this,'heroImage')"></label></div>
+  </div>`;
+
+  if(state.sections.about){
+    html += `<div class="subgroup"><div class="subgroup-title">About</div>
+      <div class="field"><label>About paragraph</label><textarea rows="3" oninput="updateField('aboutText', this.value)" placeholder="Tell visitors who you are and why they should trust you.">${esc(c.aboutText)}</textarea></div>
+    </div>`;
+  }
+  if(state.sections.services){
+    html += `<div class="subgroup"><div class="subgroup-title">Services</div>`;
+    c.services.forEach((s,i)=>{
+      html += `<div class="field-row" style="margin-bottom:6px;">
+        <input value="${esc(s.name)}" oninput="updateService(${i},'name',this.value)" placeholder="Service ${i+1} name">
+        <input value="${esc(s.desc)}" oninput="updateService(${i},'desc',this.value)" placeholder="One line description">
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  if(state.sections.testimonials){
+    html += `<div class="subgroup"><div class="subgroup-title">Testimonials</div>`;
+    c.testimonials.forEach((t,i)=>{
+      html += `<div class="field" style="margin-bottom:6px;">
+        <input value="${esc(t.quote)}" oninput="updateTestimonial(${i},'quote',this.value)" placeholder="Quote ${i+1}">
+        <input style="margin-top:5px;" value="${esc(t.name)}" oninput="updateTestimonial(${i},'name',this.value)" placeholder="Customer name">
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  if(state.sections.gallery){
+    html += `<div class="subgroup"><div class="subgroup-title">Gallery</div>`;
+    for(let i=0;i<3;i++){
+      html += `<label class="file-btn" style="margin:0 6px 6px 0;">Photo ${i+1}<input type="file" accept="image/*" style="display:none" onchange="handleGalleryImage(this,${i})"></label>`;
+    }
+    html += `</div>`;
+  }
+
+  html += `<div class="subgroup"><div class="subgroup-title">Contact</div>
+    <div class="field-row">
+      <div class="field"><label>Phone</label><input value="${esc(c.phone)}" oninput="updateField('phone', this.value)" placeholder="(555) 555-1234"></div>
+      <div class="field"><label>Email</label><input value="${esc(c.email)}" oninput="updateField('email', this.value)" placeholder="hello@yourbusiness.com"></div>
+    </div>
+    <div class="field"><label>Address (optional)</label><input value="${esc(c.address)}" oninput="updateField('address', this.value)" placeholder="123 Main St, Norwich, CT"></div>
+    <div class="field"><label>Hours (optional)</label><input value="${esc(c.hours)}" oninput="updateField('hours', this.value)" placeholder="Mon–Fri, 8am–6pm"></div>
+  </div>`;
+
+  document.getElementById('contentForm').innerHTML = html;
+}
+function updateField(key,val){ state.content[key]=val; updatePreview(); updateUrlBar(); }
+function updateService(i,key,val){ state.content.services[i][key]=val; updatePreview(); }
+function updateTestimonial(i,key,val){ state.content.testimonials[i][key]=val; updatePreview(); }
+function handleImage(input,key){
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { state.content[key] = e.target.result; updatePreview(); };
+  reader.readAsDataURL(file);
+}
+function handleGalleryImage(input,i){
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { state.content.gallery[i] = e.target.result; updatePreview(); };
+  reader.readAsDataURL(file);
+}
+function updateUrlBar(){
+  const slug = (state.content.businessName || 'yourbusiness').toLowerCase().replace(/[^a-z0-9]+/g,'') || 'yourbusiness';
+  document.getElementById('urlBar').textContent = slug + '.com';
+}
+
+/* ---------- helpers ---------- */
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function or(s,fallback){ return (s && s.trim()) ? s : fallback; }
+
+/* ---------- SITE GENERATION ---------- */
+function buildSiteHTML(){
+  const t = THEMES[state.theme];
+  const f = FONTS[state.font];
+  const c = state.content;
+  const name = esc(or(c.businessName,'Your Business Name'));
+  const tagline = esc(or(c.tagline,'A short, clear line about what you do and who you do it for.'));
+  const cta = esc(or(c.ctaText,'Get a Free Quote'));
+
+  let body = `
+  <header style="padding:80px 24px 70px; text-align:center; background:${t.bg}; ${c.heroImage?`background-image:linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)),url('${c.heroImage}'); background-size:cover; background-position:center;`:''}">
+    <h1 style="font-family:${f.display}; font-size:clamp(28px,5vw,46px); color:${c.heroImage?'#fff':t.text}; margin:0 0 14px;">${name}</h1>
+    <p style="font-family:${f.body}; font-size:17px; color:${c.heroImage?'#f1f1f1':t.textSoft}; max-width:520px; margin:0 auto 28px;">${tagline}</p>
+    <a href="#contact" style="display:inline-block; background:${t.accent}; color:${t.accentText}; font-family:${f.body}; font-weight:600; padding:13px 28px; border-radius:8px; text-decoration:none;">${cta}</a>
+  </header>`;
+
+  if(state.sections.about){
+    body += `<section style="padding:60px 24px; background:${t.surface}; text-align:center;">
+      <h2 style="font-family:${f.display}; color:${t.text}; font-size:26px; margin-bottom:14px;">About Us</h2>
+      <p style="font-family:${f.body}; color:${t.textSoft}; max-width:600px; margin:0 auto; line-height:1.7;">${esc(or(c.aboutText,'Share a few sentences about your business, your story, and what makes you the right choice for your customers.'))}</p>
+    </section>`;
+  }
+  if(state.sections.services){
+    body += `<section style="padding:60px 24px; background:${t.bg};">
+      <h2 style="font-family:${f.display}; color:${t.text}; font-size:26px; text-align:center; margin-bottom:34px;">What We Offer</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; max-width:900px; margin:0 auto;">
+      ${c.services.map((s,i)=>`<div style="flex:1; min-width:220px; max-width:280px; background:${t.surface}; border-radius:10px; padding:24px;">
+        <h3 style="font-family:${f.display}; color:${t.text}; font-size:18px; margin-bottom:8px;">${esc(or(s.name,'Service '+(i+1)))}</h3>
+        <p style="font-family:${f.body}; color:${t.textSoft}; font-size:14px; line-height:1.6;">${esc(or(s.desc,'A short description of this service and the value it brings.'))}</p>
+      </div>`).join('')}
+      </div>
+    </section>`;
+  }
+  if(state.sections.testimonials){
+    body += `<section style="padding:60px 24px; background:${t.surface};">
+      <h2 style="font-family:${f.display}; color:${t.text}; font-size:26px; text-align:center; margin-bottom:34px;">What Customers Say</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; max-width:760px; margin:0 auto;">
+      ${c.testimonials.map((q,i)=>`<div style="flex:1; min-width:260px; background:${t.bg}; border-radius:10px; padding:22px;">
+        <p style="font-family:${f.body}; color:${t.text}; font-style:italic; line-height:1.6; margin-bottom:10px;">“${esc(or(q.quote,'Great service from start to finish — highly recommend.'))}”</p>
+        <p style="font-family:${f.body}; color:${t.textSoft}; font-size:13px; font-weight:600;">— ${esc(or(q.name,'Happy Customer'))}</p>
+      </div>`).join('')}
+      </div>
+    </section>`;
+  }
+  if(state.sections.gallery){
+    const imgs = c.gallery.filter(Boolean);
+    body += `<section style="padding:60px 24px; background:${t.bg};">
+      <h2 style="font-family:${f.display}; color:${t.text}; font-size:26px; text-align:center; margin-bottom:30px;">Our Work</h2>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; max-width:900px; margin:0 auto;">
+      ${(imgs.length?imgs:[null,null,null]).map(img=>`<div style="width:260px; height:180px; border-radius:8px; background:${img?`url('${img}') center/cover`:t.surface}; display:flex; align-items:center; justify-content:center; color:${t.textSoft}; font-family:${f.body}; font-size:12px;">${img?'':'Photo'}</div>`).join('')}
+      </div>
+    </section>`;
+  }
+
+  body += `<section id="contact" style="padding:60px 24px; background:${t.text}; text-align:center;">
+    <h2 style="font-family:${f.display}; color:${t.bg}; font-size:26px; margin-bottom:16px;">Get In Touch</h2>
+    <p style="font-family:${f.body}; color:${t.bg}; opacity:0.85; font-size:15px; margin:4px 0;">${esc(or(c.phone,'(555) 555-1234'))} &nbsp;·&nbsp; ${esc(or(c.email,'hello@yourbusiness.com'))}</p>
+    ${c.address?`<p style="font-family:${f.body}; color:${t.bg}; opacity:0.7; font-size:14px; margin:4px 0;">${esc(c.address)}</p>`:''}
+    ${c.hours?`<p style="font-family:${f.body}; color:${t.bg}; opacity:0.7; font-size:14px; margin:4px 0;">${esc(c.hours)}</p>`:''}
+  </section>
+  <footer style="padding:18px; text-align:center; font-family:${f.body}; font-size:12px; color:${t.textSoft}; background:${t.bg};">© ${new Date().getFullYear()} ${name}. All rights reserved.</footer>`;
+
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${name}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=${f.google}&display=swap" rel="stylesheet">
+  <style>*{box-sizing:border-box; margin:0;} body{font-family:${f.body};}</style>
+  </head><body>${body}</body></html>`;
+}
+
+function updatePreview(){
+  document.getElementById('previewFrame').srcdoc = buildSiteHTML();
+}
+
+/* ---------- Step 4 / checkout (prototype placeholder) ---------- */
+function updateChecklist(){
+  document.getElementById('checklistOk').classList.toggle('show', !!state.content.businessName.trim());
+}
+function openCheckout(){
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+function completeCheckout(){
+  // PRODUCTION NOTE: replace this function with a real Stripe Checkout redirect
+  // (Stripe Payment Link or Checkout Session). On successful payment, Stripe
+  // redirects back here with a session ID — verify it server-side (a small
+  // serverless function), THEN trigger the download below. As written, this
+  // demo skips real payment and downloads immediately so you can test the flow.
+  closeModal();
+  const html = buildSiteHTML();
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const slug = (state.content.businessName||'my-website').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  a.href = url; a.download = `${slug}.html`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- init ---------- */
+renderRail();
+renderThemeGrid();
+renderFontList();
+renderContentForm();
+updatePreview();
+updateUrlBar();
+</script>
+</body>
+</html>
