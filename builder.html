@@ -160,6 +160,20 @@
     display:inline-block; font-size:12.5px; font-weight:600; padding:8px 12px; border:1px dashed var(--line);
     border-radius:7px; cursor:pointer; background:#FAFBFD;
   }
+  .upload-tip{ font-size:11px; color:var(--ink-soft); margin-top:5px; }
+  .reposition-wrap{ margin-top:8px; }
+  .reposition-box{
+    position:relative; width:100%; height:90px; border-radius:7px; overflow:hidden;
+    background-size:cover; background-repeat:no-repeat; cursor:grab; border:1px solid var(--line);
+    touch-action:none; user-select:none;
+  }
+  .reposition-box::after{
+    content:'↕ drag'; position:absolute; bottom:6px; right:8px; background:rgba(22,33,62,0.55); color:#fff;
+    font-family:'Inter'; font-size:9.5px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+    padding:3px 8px; border-radius:999px; pointer-events:none;
+  }
+  .reposition-box.dragging{ cursor:grabbing; }
+  .reposition-hint{ font-size:11px; color:var(--ink-soft); margin-top:5px; }
 
   .nav-row{display:flex; justify-content:space-between; gap:10px; margin-top:4px;}
   button{font-family:'Inter'; font-weight:600; cursor:pointer; border:none;}
@@ -368,6 +382,7 @@ let state = {
   content:{
     businessName:'', tagline:'', ctaText:'Get a Free Quote', phone:'', email:'', address:'', hours:'',
     heroImage:null,
+    heroImagePosition:50,
     aboutText:'',
     services:[{name:'',desc:''},{name:'',desc:''},{name:'',desc:''}],
     testimonials:[{quote:'',name:''},{quote:'',name:''}],
@@ -446,7 +461,17 @@ function renderContentForm(){
     <div class="field"><label>Business name</label><input id="f_businessName" value="${esc(c.businessName)}" oninput="updateField('businessName', this.value)" placeholder="Riverside Plumbing Co."></div>
     <div class="field"><label>Tagline</label><input id="f_tagline" value="${esc(c.tagline)}" oninput="updateField('tagline', this.value)" placeholder="Fast, honest plumbing — same-day service."></div>
     <div class="field"><label>Button text</label><input id="f_ctaText" value="${esc(c.ctaText)}" oninput="updateField('ctaText', this.value)"></div>
-    <div class="field"><label>Hero photo (optional)</label><label class="file-btn">Choose file<input type="file" accept="image/*" style="display:none" onchange="handleImage(this,'heroImage')"></label></div>
+    <div class="field">
+      <label>Hero photo (optional)</label>
+      <label class="file-btn">Choose file<input type="file" accept="image/*" style="display:none" onchange="handleImage(this,'heroImage')"></label>
+      <div class="upload-tip">Tip: wide, landscape photos work best — square or portrait photos will need more cropping.</div>
+      ${c.heroImage ? `
+        <div class="reposition-wrap">
+          <div class="reposition-box" id="heroRepoBox" style="background-image:url('${c.heroImage}'); background-position:center ${c.heroImagePosition}%;"></div>
+          <div class="reposition-hint">Drag the photo above up or down to adjust what's visible</div>
+        </div>
+      ` : ''}
+    </div>
   </div>`;
 
   if(state.sections.about){
@@ -479,7 +504,7 @@ function renderContentForm(){
     for(let i=0;i<3;i++){
       html += `<label class="file-btn" style="margin:0 6px 6px 0;">Photo ${i+1}<input type="file" accept="image/*" style="display:none" onchange="handleGalleryImage(this,${i})"></label>`;
     }
-    html += `</div>`;
+    html += `<div class="upload-tip">Tip: square or landscape photos display best in these tiles.</div></div>`;
   }
 
   html += `<div class="subgroup"><div class="subgroup-title">Contact</div>
@@ -492,6 +517,36 @@ function renderContentForm(){
   </div>`;
 
   document.getElementById('contentForm').innerHTML = html;
+  attachRepositionDrag();
+}
+function attachRepositionDrag(){
+  const box = document.getElementById('heroRepoBox');
+  if(!box) return;
+  let dragging = false, startY = 0, startPos = 50;
+  box.addEventListener('pointerdown', (e)=>{
+    dragging = true;
+    startY = e.clientY;
+    startPos = state.content.heroImagePosition;
+    box.classList.add('dragging');
+    box.setPointerCapture(e.pointerId);
+  });
+  box.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    const deltaY = e.clientY - startY;
+    let newPos = startPos - deltaY * 0.6;
+    newPos = Math.max(0, Math.min(100, newPos));
+    state.content.heroImagePosition = newPos;
+    box.style.backgroundPosition = `center ${newPos}%`;
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    box.classList.remove('dragging');
+    updatePreview();
+  }
+  box.addEventListener('pointerup', endDrag);
+  box.addEventListener('pointercancel', endDrag);
+  box.addEventListener('pointerleave', endDrag);
 }
 function updateField(key,val){ state.content[key]=val; updatePreview(); updateUrlBar(); }
 function updateService(i,key,val){ state.content.services[i][key]=val; updatePreview(); }
@@ -499,7 +554,14 @@ function updateTestimonial(i,key,val){ state.content.testimonials[i][key]=val; u
 function handleImage(input,key){
   const file = input.files[0]; if(!file) return;
   const reader = new FileReader();
-  reader.onload = e => { state.content[key] = e.target.result; updatePreview(); };
+  reader.onload = e => {
+    state.content[key] = e.target.result;
+    if(key === 'heroImage'){
+      state.content.heroImagePosition = 50;
+      renderContentForm();
+    }
+    updatePreview();
+  };
   reader.readAsDataURL(file);
 }
 function handleGalleryImage(input,i){
@@ -527,7 +589,7 @@ function buildSiteHTML(){
   const cta = esc(or(c.ctaText,'Get a Free Quote'));
 
   let body = `
-  <header style="padding:80px 24px 70px; text-align:center; background:${t.bg}; ${c.heroImage?`background-image:linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)),url('${c.heroImage}'); background-size:cover; background-position:center;`:''}">
+  <header style="padding:80px 24px 70px; text-align:center; background:${t.bg}; ${c.heroImage?`background-image:linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)),url('${c.heroImage}'); background-size:cover; background-position:center ${c.heroImagePosition || 50}%;`:''}">
     <h1 style="font-family:${f.display}; font-size:clamp(28px,5vw,46px); color:${c.heroImage?'#fff':t.text}; margin:0 0 14px;">${name}</h1>
     <p style="font-family:${f.body}; font-size:17px; color:${c.heroImage?'#f1f1f1':t.textSoft}; max-width:520px; margin:0 auto 28px;">${tagline}</p>
     <a href="#contact" style="display:inline-block; background:${t.accent}; color:${t.accentText}; font-family:${f.body}; font-weight:600; padding:13px 28px; border-radius:8px; text-decoration:none;">${cta}</a>
