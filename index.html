@@ -811,6 +811,120 @@ nav {
 .author-name { font-size: 13px; font-weight: 600; color: white; }
 .author-biz { font-size: 12px; color: rgba(255,255,255,0.90); margin-top: 1px; }
 
+/* ── LEAVE A REVIEW ──────────────────────────────── */
+.review-form-wrap {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+}
+
+.review-form-card {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  margin-top: 52px;
+  max-width: 640px;
+}
+
+.review-form-card h3 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--teal-deep);
+  margin-bottom: 8px;
+}
+
+.review-form-card > p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+
+.review-field { margin-bottom: 18px; }
+
+.review-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--teal-deep);
+  margin-bottom: 7px;
+}
+
+.review-field input[type="text"],
+.review-field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: #33484a;
+  background: var(--white);
+  transition: border-color 0.2s;
+}
+
+.review-field input[type="text"]:focus,
+.review-field textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.review-field textarea { resize: vertical; min-height: 96px; }
+
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.star-rating input { position: absolute; opacity: 0; pointer-events: none; }
+
+.star-rating label {
+  font-size: 30px;
+  line-height: 1;
+  color: #d8ddd8;
+  cursor: pointer;
+  transition: color 0.15s;
+  margin-bottom: 0 !important;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+  color: var(--gold);
+}
+
+.review-submit-btn {
+  background: var(--gold);
+  color: #ffffff;
+  padding: 13px 30px;
+  border-radius: 50px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.review-submit-btn:hover { background: #ffd54f; transform: translateY(-1px); }
+.review-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.review-status-msg {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  display: none;
+}
+
+.review-status-msg.show { display: block; }
+.review-status-msg.ok { color: var(--teal-dark); }
+.review-status-msg.err { color: #c0392b; }
+
 /* ── ABOUT ───────────────────────────────────────── */
 .about-wrap {
   background: var(--white);
@@ -1143,6 +1257,7 @@ footer {
   .footer-brand p { max-width: 100%; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
   .cta-actions { flex-direction: column; }
+  .review-form-card { padding: 28px 22px; }
 }
 </style>
 </head>
@@ -1472,7 +1587,7 @@ footer {
   <div class="section">
     <p class="section-eyebrow" style="color:var(--gold);">Client Feedback</p>
     <h2 class="section-title" style="color:white;">Results that speak<br><em>for themselves</em></h2>
-    <div class="testimonials-grid">
+    <div class="testimonials-grid" id="testimonialsGrid">
       <div class="testimonial-card">
         <div class="testimonial-stars">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>
@@ -1544,6 +1659,44 @@ footer {
     </div>
   </div>
 </div>
+
+<!-- ── LEAVE A REVIEW ─────────────────────────────────── -->
+<div class="review-form-wrap">
+  <div class="section" style="padding-top:64px;padding-bottom:64px;">
+    <p class="section-eyebrow">Share Your Experience</p>
+    <h2 class="section-title">Worked with us?<br>Leave a <em>review</em></h2>
+    <p class="section-sub" style="margin-top:12px;">Reviews of 3 stars and up are shown above automatically. Anything below that goes straight to us, privately.</p>
+
+    <form id="reviewForm" class="review-form-card">
+      <div class="review-field">
+        <label for="reviewName">Your name</label>
+        <input type="text" id="reviewName" name="name" required maxlength="80" placeholder="Jane Smith">
+      </div>
+      <div class="review-field">
+        <label for="reviewBusiness">Business / location (optional)</label>
+        <input type="text" id="reviewBusiness" name="business" maxlength="80" placeholder="Smith Family Dentistry, Ohio">
+      </div>
+      <div class="review-field">
+        <label>Rating</label>
+        <div class="star-rating" id="starRating">
+          <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars">★</label>
+          <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars">★</label>
+          <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars">★</label>
+          <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars">★</label>
+          <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star">★</label>
+        </div>
+      </div>
+      <div class="review-field">
+        <label for="reviewQuote">Your review</label>
+        <textarea id="reviewQuote" name="quote" required maxlength="500" placeholder="Tell us how it went..."></textarea>
+      </div>
+      <button type="submit" class="review-submit-btn" id="reviewSubmitBtn">Submit Review</button>
+      <p class="review-status-msg" id="reviewStatusMsg"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ── ABOUT ───────────────────────────────────────── -->
 
 <!-- ── PRICING TEASER ─────────────────────────────────── -->
 <section class="section" style="padding-bottom:40px;">
@@ -1648,6 +1801,141 @@ footer {
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
   }
+
+  // ── REVIEWS: submit + auto-populate ──────────────────────
+  // Paste the SAME Apps Script Web App URL your other forms (contact.html, etc.) already use.
+  const REVIEWS_API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  const AVATAR_CLASSES = ['av-blue', 'av-teal', 'av-purple'];
+
+  function initialsFor(name) {
+    if (!name) return '??';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  function starsSvg(count) {
+    let out = '';
+    const full = Math.max(0, Math.min(5, Math.round(count)));
+    for (let i = 0; i < full; i++) {
+      out += '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 1l1.55 3.6L12.5 5l-2.75 2.56.76 3.94L7 9.6l-3.51 1.9.76-3.94L1.5 5l3.95-.4L7 1z" fill="#F5C842"/></svg>';
+    }
+    return out;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  function buildReviewCard(review, idx) {
+    const avatarClass = AVATAR_CLASSES[idx % AVATAR_CLASSES.length];
+    const initials = initialsFor(review.name);
+    const location = review.business ? escapeHtml(review.business) : '';
+
+    return `<div class="testimonial-card">
+      <div class="testimonial-stars">${starsSvg(review.rating)}</div>
+      <p class="testimonial-quote">"${escapeHtml(review.quote)}"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar ${avatarClass}">${escapeHtml(initials)}</div>
+        <div>
+          <p class="author-name">${escapeHtml(review.name || 'Anonymous')}</p>
+          ${location ? `<p class="author-biz">${location}</p>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  async function loadReviews() {
+    if (!REVIEWS_API_URL || REVIEWS_API_URL.indexOf('PASTE_YOUR') === 0) return;
+    try {
+      const res = await fetch(`${REVIEWS_API_URL}?action=reviews`);
+      const data = await res.json();
+      if (data.status !== 'ok' || !Array.isArray(data.reviews)) return;
+
+      const grid = document.getElementById('testimonialsGrid');
+      if (!grid) return;
+
+      data.reviews.forEach((review, idx) => {
+        grid.insertAdjacentHTML('afterbegin', buildReviewCard(review, idx));
+      });
+    } catch (err) {
+      console.error('Could not load reviews:', err);
+    }
+  }
+
+  function setupReviewForm() {
+    const form = document.getElementById('reviewForm');
+    if (!form) return;
+    const statusMsg = document.getElementById('reviewStatusMsg');
+    const submitBtn = document.getElementById('reviewSubmitBtn');
+
+    form.addEventListener('submit', async function(evt) {
+      evt.preventDefault();
+
+      const name = document.getElementById('reviewName').value.trim();
+      const business = document.getElementById('reviewBusiness').value.trim();
+      const quote = document.getElementById('reviewQuote').value.trim();
+      const ratingInput = form.querySelector('input[name="rating"]:checked');
+
+      statusMsg.className = 'review-status-msg';
+
+      if (!ratingInput) {
+        statusMsg.textContent = 'Please select a star rating.';
+        statusMsg.classList.add('show', 'err');
+        return;
+      }
+      if (!REVIEWS_API_URL || REVIEWS_API_URL.indexOf('PASTE_YOUR') === 0) {
+        statusMsg.textContent = 'Review submissions are not connected yet. Please contact us directly.';
+        statusMsg.classList.add('show', 'err');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        await fetch(REVIEWS_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            formType: 'Review',
+            name: name,
+            business: business,
+            rating: ratingInput.value,
+            quote: quote
+          })
+        });
+
+        const ratingNum = parseInt(ratingInput.value, 10);
+        statusMsg.textContent = ratingNum >= 3
+          ? 'Thank you! Your review has been posted above.'
+          : 'Thank you for your honest feedback — it\'s been sent to us directly.';
+        statusMsg.classList.add('show', 'ok');
+        form.reset();
+
+        if (ratingNum >= 3) {
+          const grid = document.getElementById('testimonialsGrid');
+          if (grid) {
+            grid.insertAdjacentHTML('afterbegin', buildReviewCard({
+              name: name, business: business, rating: ratingNum, quote: quote
+            }, 0));
+          }
+        }
+      } catch (err) {
+        statusMsg.textContent = 'Something went wrong submitting your review. Please try again.';
+        statusMsg.classList.add('show', 'err');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Review';
+      }
+    });
+  }
+
+  loadReviews();
+  setupReviewForm();
 </script>
 </body>
 </html>
