@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow">
 <title>Order Details Form – TEC Web Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -22,7 +24,6 @@
     --bg: #f4f8f8;
     --white: #ffffff;
     --error: #e05252;
-    --success: #3aaa6e;
   }
 
   body {
@@ -33,20 +34,19 @@
     padding: 40px 20px 60px;
   }
 
-  .form-wrapper {
-    max-width: 640px;
-    margin: 0 auto;
+  .form-wrapper { max-width: 640px; margin: 0 auto; }
+
+  button:focus-visible, input:focus-visible {
+    outline: 3px solid rgba(61,122,128,0.45);
+    outline-offset: 2px;
   }
 
   /* ── Search bar ── */
-  .search-bar-wrap {
-    margin-bottom: 20px;
-    position: relative;
-  }
+  .search-bar-wrap { margin-bottom: 20px; position: relative; }
 
-  .search-bar-wrap input {
+  .search-bar-wrap input[type="text"] {
     width: 100%;
-    padding: 12px 16px 12px 44px;
+    padding: 12px 40px 12px 44px;
     border: 1.5px solid var(--border);
     border-radius: 50px;
     font-family: 'DM Sans', sans-serif;
@@ -57,37 +57,20 @@
     box-shadow: 0 2px 10px rgba(26,46,46,0.07);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-
-  .search-bar-wrap input::placeholder { color: #aabcbc; }
-
-  .search-bar-wrap input:focus {
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(106,171,176,0.15);
-  }
+  .search-bar-wrap input[type="text"]::placeholder { color: #93a8a8; }
+  .search-bar-wrap input[type="text"]:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(106,171,176,0.15); }
 
   .search-bar-wrap .search-icon {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--teal);
-    pointer-events: none;
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    color: var(--teal); pointer-events: none;
   }
 
   .search-bar-wrap .search-clear {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--muted);
-    font-size: 18px;
-    line-height: 1;
-    display: none;
-    padding: 0;
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--muted);
+    padding: 6px; line-height: 0; display: none; border-radius: 50%;
   }
+  .search-bar-wrap .search-clear svg { width: 16px; height: 16px; }
 
   .search-results-panel {
     display: none;
@@ -98,27 +81,13 @@
     box-shadow: 0 8px 40px rgba(26,46,46,0.10);
     margin-bottom: 20px;
   }
-
   .search-results-panel.visible { display: block; }
 
-  .search-results-panel .results-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--teal-dark);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .results-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--teal-dark); margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
   }
-
-  .search-results-panel .results-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .results-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   .result-card {
     background: var(--bg);
@@ -127,64 +96,18 @@
     padding: 16px 18px;
     margin-bottom: 10px;
   }
-
   .result-card:last-child { margin-bottom: 0; }
-
-  .result-card .rc-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: var(--dark);
-    margin-bottom: 4px;
-  }
-
-  .result-card .rc-email {
-    font-size: 12px;
-    color: var(--teal-dark);
-    margin-bottom: 10px;
-  }
-
-  .result-card .rc-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text);
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(106,171,176,0.15);
-  }
-
-  .result-card .rc-row:last-child { border-bottom: none; }
-  .result-card .rc-row .rc-key { color: var(--muted); }
-  .result-card .rc-row .rc-val { font-weight: 600; }
-
-  .result-card .rc-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 2px solid var(--teal);
-  }
-
-  .result-card .rc-total .rc-total-label {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--teal-dark);
-  }
-
-  .result-card .rc-total .rc-total-amount {
-    font-family: 'DM Serif Display', serif;
-    font-size: 20px;
-    color: var(--dark);
-  }
-
-  .no-results {
-    text-align: center;
-    padding: 20px 0 8px;
-    font-size: 14px;
-    color: var(--muted);
-  }
+  .rc-name { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--dark); margin-bottom: 4px; }
+  .rc-email { font-size: 12px; color: var(--teal-dark); margin-bottom: 10px; }
+  .rc-row { display: flex; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--text); padding: 4px 0; border-bottom: 1px solid rgba(106,171,176,0.15); }
+  .rc-row:last-of-type { border-bottom: none; }
+  .rc-key { color: var(--muted); flex-shrink: 0; }
+  .rc-val { font-weight: 600; text-align: right; }
+  .rc-total { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--teal); }
+  .rc-total-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal-dark); }
+  .rc-total-amount { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--dark); text-align: right; }
+  .rc-recurring { display: block; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--teal-dark); }
+  .no-results { text-align: center; padding: 20px 0 8px; font-size: 14px; color: var(--muted); }
 
   /* ── Form header ── */
   .form-header {
@@ -195,41 +118,18 @@
     position: relative;
     overflow: hidden;
   }
-
   .form-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse at 70% 0%, rgba(245,200,66,0.18) 0%, transparent 60%);
     pointer-events: none;
   }
-
   .form-header .badge {
-    display: inline-block;
-    background: var(--gold);
-    color: #111;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 20px;
-    margin-bottom: 16px;
+    display: inline-block; background: var(--gold); color: #111; font-size: 10px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 16px; position: relative;
   }
-
-  .form-header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 28px;
-    color: var(--white);
-    line-height: 1.3;
-    margin-bottom: 8px;
-  }
-
-  .form-header p {
-    font-size: 13px;
-    color: rgba(255,255,255,0.82);
-    letter-spacing: 0.3px;
-  }
+  .form-header h1 { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--white); line-height: 1.3; margin-bottom: 8px; position: relative; }
+  .form-header p { font-size: 13px; color: rgba(255,255,255,0.92); letter-spacing: 0.3px; position: relative; }
 
   /* ── Form card ── */
   .form-card {
@@ -239,256 +139,100 @@
     box-shadow: 0 8px 40px rgba(26,46,46,0.10);
   }
 
-  /* ── Section divider (matches inquiry form) ── */
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 28px 0 20px;
-  }
-
-  .section-divider span {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--teal);
-    white-space: nowrap;
-  }
-
-  .section-divider::before,
-  .section-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .section-divider { display: flex; align-items: center; gap: 12px; margin: 28px 0 20px; }
+  .section-divider:first-child { margin-top: 0; }
+  .section-divider span { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-dark); white-space: nowrap; }
+  .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   /* ── Fields ── */
-  .field-group {
-    margin-bottom: 20px;
+  .field-group { margin-bottom: 20px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  label, .group-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 7px; letter-spacing: 0.2px; }
+  .req { color: var(--teal-dark); margin-left: 2px; }
+  .opt { font-weight: 400; color: var(--muted); }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none; appearance: none;
   }
+  input::placeholder { color: #93a8a8; }
+  input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(106,171,176,0.15); }
+  input.error { border-color: var(--error); box-shadow: 0 0 0 3px rgba(224,82,82,0.10); }
 
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 7px;
-    letter-spacing: 0.2px;
-  }
+  .error-msg, .error-group-msg { font-size: 12px; color: var(--error); margin-top: 5px; display: none; }
+  .error-msg.visible, .error-group-msg.visible { display: block; }
 
-  label .req { color: var(--teal); margin-left: 2px; }
-
-  input[type="text"],
-  input[type="email"] {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--white);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-    appearance: none;
-  }
-
-  input::placeholder { color: #aabcbc; }
-
-  input:focus {
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(106,171,176,0.15);
-  }
-
-  input.error {
-    border-color: var(--error);
-    box-shadow: 0 0 0 3px rgba(224,82,82,0.10);
-  }
-
-  .error-msg {
-    font-size: 11.5px;
-    color: var(--error);
-    margin-top: 5px;
-    display: none;
-  }
-
-  .error-msg.visible { display: block; }
-
-  /* ── Option cards (radio style, matching inquiry form) ── */
-  .options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
+  /* ── Option cards ── */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .options-grid.single-col { grid-template-columns: 1fr; }
-
   .option-item { position: relative; }
-
-  .option-item input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
+  .option-item input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
 
   .option-item label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 13.5px;
-    font-weight: 400;
-    color: var(--text);
-    transition: border-color 0.2s, background 0.2s, color 0.2s;
-    user-select: none;
-    margin-bottom: 0;
+    display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer;
+    font-size: 13.5px; font-weight: 400; color: var(--text);
+    transition: border-color 0.2s, background 0.2s, color 0.2s; user-select: none; margin-bottom: 0;
   }
-
   .option-item label::before {
-    content: '';
-    width: 17px;
-    height: 17px;
-    min-width: 17px;
-    border: 2px solid var(--border);
-    border-radius: 50%;
-    transition: border-color 0.2s, background 0.2s;
-    background: var(--white);
+    content: ''; width: 17px; height: 17px; min-width: 17px; border: 2px solid var(--border);
+    border-radius: 50%; transition: border-color 0.2s, background 0.2s; background: var(--white);
   }
+  .option-item input:checked + label { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); font-weight: 500; }
+  .option-item input:checked + label::before { border-color: var(--teal); background: var(--teal); box-shadow: inset 0 0 0 3px var(--white); }
+  .option-item input:focus-visible + label { outline: 3px solid rgba(61,122,128,0.45); outline-offset: 2px; }
+  .option-item .price { margin-left: auto; font-weight: 600; color: var(--muted); font-size: 12.5px; }
+  .option-item input:checked + label .price { color: var(--teal-dark); }
 
-  .option-item input:checked + label {
-    border-color: var(--teal);
-    background: var(--teal-light);
-    color: var(--teal-dark);
-    font-weight: 500;
-  }
+  /* ── Order total ── */
+  .recurring-note { display: none; margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--teal-dark); }
+  .recurring-note.visible { display: block; }
 
-  .option-item input:checked + label::before {
-    border-color: var(--teal);
-    background: var(--teal);
-    box-shadow: inset 0 0 0 3px var(--white);
-  }
-
-  .error-group-msg {
-    font-size: 11.5px;
-    color: var(--error);
-    margin-top: 5px;
-    display: none;
-  }
-
-  .error-group-msg.visible { display: block; }
-
-  /* ── Order total display ── */
-  .total-display {
-    background: var(--teal-light);
-    border: 1.5px solid var(--teal);
-    border-radius: 10px;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-
-  .total-display .td-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--teal-dark);
-  }
-
-  .total-display .td-amount {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: var(--dark);
-  }
-
-  /* ── Submit button ── */
+  /* ── Submit ── */
   .submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: var(--gold);
-    color: #111;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    margin-top: 8px;
-    box-shadow: 0 4px 16px rgba(245,200,66,0.35);
+    width: 100%; padding: 16px; background: var(--gold); color: #111; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: none;
+    border-radius: 50px; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    margin-top: 8px; box-shadow: 0 4px 16px rgba(245,200,66,0.35);
   }
-
-  .submit-btn:hover {
-    background: var(--gold-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(245,200,66,0.45);
-  }
-
+  .submit-btn:hover { background: var(--gold-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,200,66,0.45); }
   .submit-btn:active { transform: translateY(0); }
   .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .form-error { display: none; margin-top: 14px; text-align: center; font-size: 13px; color: var(--error); line-height: 1.6; }
+  .form-error.visible { display: block; }
 
-  /* ── Success state ── */
-  .success-message {
-    display: none;
-    text-align: center;
-    padding: 40px 20px;
-  }
-
+  /* ── Success ── */
+  .success-message { display: none; text-align: center; padding: 40px 20px; }
   .success-message.visible { display: block; }
-
   .success-icon {
-    width: 64px;
-    height: 64px;
-    background: var(--teal-light);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 28px;
+    width: 64px; height: 64px; background: var(--teal-light); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--teal-dark);
   }
-
-  .success-message h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: var(--dark);
-    margin-bottom: 10px;
+  .success-icon svg { width: 30px; height: 30px; }
+  .success-message h2 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: var(--dark); margin-bottom: 10px; }
+  .success-message p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .new-order-btn {
+    margin-top: 22px; background: none; border: 1.5px solid var(--teal); color: var(--teal-dark);
+    padding: 10px 24px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
   }
-
-  .success-message p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
+  .new-order-btn:hover { background: var(--teal-light); }
 
   /* ── Spinner ── */
   .spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(0,0,0,0.2);
-    border-top-color: #111;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 8px;
+    display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: #111; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
 
   @media (max-width: 540px) {
     .form-card { padding: 28px 22px 36px; }
     .form-header { padding: 32px 22px 24px; }
-    .options-grid { grid-template-columns: 1fr; }
+    .options-grid, .two-col { grid-template-columns: 1fr; }
   }
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; } .spinner { animation-duration: 1.5s; } }
 </style>
 </head>
 <body>
@@ -496,15 +240,17 @@
 
   <!-- Search Bar -->
   <div class="search-bar-wrap">
-    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
     </svg>
-    <input type="text" id="searchInput" placeholder="Search orders by name, email, or package…" autocomplete="off" />
-    <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
+    <input type="text" id="searchInput" placeholder="Search orders by name, email, or package…" autocomplete="off" aria-label="Search orders" />
+    <button type="button" class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Clear search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
   </div>
 
   <!-- Search Results Panel -->
-  <div class="search-results-panel" id="searchResults">
+  <div class="search-results-panel" id="searchResults" aria-live="polite">
     <div class="results-label">Search Results</div>
     <div id="resultsBody"></div>
   </div>
@@ -513,15 +259,18 @@
   <div class="form-header">
     <div class="badge">TEC Web Studio</div>
     <h1>Order Details Form</h1>
-    <p>Please fill out your order information accurately to proceed.</p>
+    <p>Log an order manually. Orders paid through the payments page are recorded automatically.</p>
   </div>
 
   <div class="form-card">
 
-    <div class="success-message" id="successMsg">
-      <div class="success-icon">🎉</div>
-      <h2>Order received!</h2>
-      <p>Thank you for your order. We'll be in touch shortly to get everything started.</p>
+    <div class="success-message" id="successMsg" role="status" tabindex="-1">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Order logged!</h2>
+      <p>The order was sent to your sheet.</p>
+      <button type="button" class="new-order-btn" onclick="resetForm()">Log another order</button>
     </div>
 
     <form id="orderForm" novalidate>
@@ -529,99 +278,79 @@
       <!-- Contact Info -->
       <div class="section-divider"><span>Contact Info</span></div>
 
-      <div class="field-group">
-        <label for="fullName">Full Name <span class="req">*</span></label>
-        <input type="text" id="fullName" name="fullName" placeholder="Jane Smith" />
-        <div class="error-msg" id="fullNameErr">Please enter your full name.</div>
+      <div class="two-col">
+        <div class="field-group">
+          <label for="fullName">Full Name <span class="req">*</span></label>
+          <input type="text" id="fullName" name="fullName" placeholder="Jane Smith" autocomplete="off" />
+          <div class="error-msg" id="fullNameErr">Please enter the customer's name.</div>
+        </div>
+        <div class="field-group">
+          <label for="businessName">Business Name <span class="opt">(optional)</span></label>
+          <input type="text" id="businessName" name="businessName" autocomplete="off" />
+        </div>
       </div>
 
-      <div class="field-group">
-        <label for="email">Email Address <span class="req">*</span></label>
-        <input type="email" id="email" name="email" placeholder="example@example.com" />
-        <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+      <div class="two-col">
+        <div class="field-group">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="example@example.com" autocomplete="off" />
+          <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+        </div>
+        <div class="field-group">
+          <label for="phone">Phone Number <span class="opt">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" autocomplete="off" />
+        </div>
       </div>
 
       <!-- Package -->
       <div class="section-divider"><span>Package Selection</span></div>
-
       <div class="field-group">
-        <label>Package <span class="req">*</span></label>
-        <div class="options-grid single-col">
-          <div class="option-item">
-            <input type="radio" name="package" id="pkg_glowup" value="The Glow-Up" />
-            <label for="pkg_glowup">The Glow-Up</label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="package" id="pkg_refreshers" value="Site Refreshers – $299" />
-            <label for="pkg_refreshers">Site Refreshers – $299</label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="package" id="pkg_dfy" value="Done-For-You – $400" />
-            <label for="pkg_dfy">Done-For-You – $400</label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="package" id="pkg_allinclusive" value="The All-Inclusive – $699" />
-            <label for="pkg_allinclusive">The All-Inclusive – $699</label>
-          </div>
-        </div>
+        <span class="group-label" id="pkgLabel">Package <span class="req">*</span></span>
+        <div class="options-grid single-col" id="packageOptions" role="radiogroup" aria-labelledby="pkgLabel"></div>
         <div class="error-group-msg" id="packageErr">Please select a package.</div>
       </div>
 
-      <!-- Hosting & Setup -->
-      <div class="section-divider"><span>Hosting & Setup</span></div>
+      <!-- Website Type / Domain / Account -->
+      <div class="section-divider"><span>Website Setup</span></div>
 
       <div class="field-group">
-        <label>Hosting Platform <span class="req">*</span></label>
-        <div class="options-grid">
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_wix" value="Wix" />
-            <label for="host_wix">Wix <span style="font-size:11px;color:var(--muted);">~$17/mo</span></label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_squarespace" value="Squarespace" />
-            <label for="host_squarespace">Squarespace <span style="font-size:11px;color:var(--muted);">~$16/mo</span></label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_wordpress" value="WordPress" />
-            <label for="host_wordpress">WordPress <span style="font-size:11px;color:var(--muted);">~$5–15/mo</span></label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_shopify" value="Shopify" />
-            <label for="host_shopify">Shopify <span style="font-size:11px;color:var(--muted);">~$29/mo</span></label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_webflow" value="Webflow" />
-            <label for="host_webflow">Webflow <span style="font-size:11px;color:var(--muted);">~$14/mo</span></label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_github" value="GitHub Pages" />
-            <label for="host_github">GitHub Pages <span style="font-size:11px;color:var(--muted);">Free</span></label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="hostingPlatform" id="host_notsure" value="Not sure yet" />
-            <label for="host_notsure">Not sure yet</label>
-          </div>
-        </div>
-        <div class="error-group-msg" id="hostingErr">Please select a hosting platform.</div>
+        <span class="group-label" id="typeLabel">Website Type <span class="req">*</span></span>
+        <div class="options-grid" id="typeOptions" role="radiogroup" aria-labelledby="typeLabel"></div>
+        <div class="error-group-msg" id="typeErr">Please select a website type.</div>
       </div>
 
       <div class="field-group">
-        <label>Needs Setup Help? <span class="req">*</span></label>
-        <div class="options-grid single-col">
-          <div class="option-item">
-            <input type="radio" name="setupHelp" id="setup_yes" value="Yes – please walk me through it" />
-            <label for="setup_yes">Yes – please walk me through it</label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="setupHelp" id="setup_no" value="No – I can handle it myself" />
-            <label for="setup_no">No – I can handle it myself</label>
-          </div>
-          <div class="option-item">
-            <input type="radio" name="setupHelp" id="setup_notsure" value="Not sure yet" />
-            <label for="setup_notsure">Not sure yet</label>
-          </div>
+        <span class="group-label" id="domainLabel">Domain <span class="req">*</span></span>
+        <div class="options-grid" id="domainOptions" role="radiogroup" aria-labelledby="domainLabel"></div>
+        <div class="error-group-msg" id="domainErr">Please select a domain option.</div>
+        <div id="domainDetailWrap" style="display:none;margin-top:12px;">
+          <label for="domainDetail" id="domainDetailLabel">Domain</label>
+          <input type="text" id="domainDetail" autocomplete="off" />
         </div>
-        <div class="error-group-msg" id="setupHelpErr">Please select an option.</div>
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="acctLabel">Account Setup <span class="req">*</span></span>
+        <div class="options-grid single-col" id="acctOptions" role="radiogroup" aria-labelledby="acctLabel"></div>
+        <div class="error-group-msg" id="acctErr">Please select an account setup option.</div>
+        <div id="acctEmailWrap" style="display:none;margin-top:12px;">
+          <label for="acctEmail">Account email <span class="opt">(optional)</span></label>
+          <input type="email" id="acctEmail" autocomplete="off" />
+          <div class="error-msg" id="acctEmailErr">That email doesn't look right.</div>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div class="section-divider"><span>Add-Ons</span></div>
+
+      <div class="field-group">
+        <span class="group-label" id="prioLabel">Priority Delivery</span>
+        <div class="options-grid" id="priorityOptions" role="radiogroup" aria-labelledby="prioLabel"></div>
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="careLabel">Updates &amp; Care</span>
+        <div class="options-grid single-col" id="careOptions" role="radiogroup" aria-labelledby="careLabel"></div>
       </div>
 
       <!-- Order Total -->
@@ -629,24 +358,106 @@
 
       <div class="field-group">
         <label for="orderTotal">Order Total <span class="req">*</span></label>
-        <input type="text" id="orderTotal" name="orderTotal" placeholder="e.g. $400" />
+        <input type="text" id="orderTotal" name="orderTotal" placeholder="e.g. $599.00" autocomplete="off" />
+        <div class="recurring-note" id="recurringNote"></div>
+        <div class="hint" id="totalHint">Calculated from the selections above. Edit it if the customer's price differs.</div>
         <div class="error-msg" id="orderTotalErr">Please enter the order total.</div>
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">Submit Order</button>
+      <div class="form-error" id="formError" role="alert"></div>
     </form>
   </div>
 </div>
 
 <script>
-  // ── Search against Google Sheets via Apps Script ────────────────────────
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  const $ = (id) => document.getElementById(id);
 
-  const searchInput  = document.getElementById('searchInput');
-  const searchClear  = document.getElementById('searchClear');
-  const resultsPanel = document.getElementById('searchResults');
-  const resultsBody  = document.getElementById('resultsBody');
+  /* =====================================================
+     PRICES & OPTIONS — keep in sync with payment.html.
+     The labels written to your sheet match what the
+     payments page logs, so both kinds of order look alike.
+     ===================================================== */
+  const PACKAGES = {
+    quickstart: { name: 'Quick Start',              price: 299 },
+    business:   { name: 'Business Website',         price: 599 },
+    complete:   { name: 'Complete Brand + Website', price: 799 },
+    makeover:   { name: 'Website Makeover',         price: 399 }
+  };
+  const PRIORITY = {
+    none: { label: 'None' },
+    d3:   { label: '3-Day Delivery',   price: 99 },
+    d2:   { label: '2-Day Delivery',   price: 149 },
+    d1:   { label: '24-Hour Delivery', price: 199 }
+  };
+  const CARE = {
+    none:   { name: 'None' },
+    pack:   { name: 'Website Update Pack', price: 149, type: 'once' },
+    care:   { name: 'Website Care',        price: 99,  type: 'monthly' },
+    active: { name: 'Active Website Care', price: 249, type: 'monthly' }
+  };
+  const TYPES   = { tecweb: 'TecWeb Managed', wix: 'Wix Website' };
+  const DOMAINS = { have: 'Existing Domain', help: 'Domain Assistance', later: 'Not decided yet' };
+  const ACCTS   = { self: 'Customer sets up own account', help: 'TEC Web Studio helps set up' };
 
+  /* ---------- render option cards ---------- */
+  function radio(name, key, label, price, checked) {
+    const id = name + '_' + key;
+    return '<div class="option-item"><input type="radio" name="' + name + '" id="' + id + '" value="' + key + '"' + (checked ? ' checked' : '') + ' />' +
+           '<label for="' + id + '">' + label + (price ? '<span class="price">' + price + '</span>' : '') + '</label></div>';
+  }
+  $('packageOptions').innerHTML = Object.keys(PACKAGES).map(function(k) { return radio('package', k, PACKAGES[k].name, '$' + PACKAGES[k].price); }).join('');
+  $('typeOptions').innerHTML    = Object.keys(TYPES).map(function(k) { return radio('websiteType', k, TYPES[k]); }).join('');
+  $('domainOptions').innerHTML  = Object.keys(DOMAINS).map(function(k) { return radio('domain', k, DOMAINS[k]); }).join('');
+  $('acctOptions').innerHTML    = Object.keys(ACCTS).map(function(k) { return radio('acct', k, ACCTS[k]); }).join('');
+  $('priorityOptions').innerHTML = Object.keys(PRIORITY).map(function(k) { return radio('priority', k, PRIORITY[k].label, PRIORITY[k].price ? '+$' + PRIORITY[k].price : '', k === 'none'); }).join('');
+  $('careOptions').innerHTML = Object.keys(CARE).map(function(k) {
+    const c = CARE[k];
+    const price = !c.price ? '' : (c.type === 'monthly' ? '$' + c.price + '/mo' : '$' + c.price + ' one-time');
+    return radio('care', k, c.name, price, k === 'none');
+  }).join('');
+
+  const val = (name) => { const r = document.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : ''; };
+
+  /* ---------- total ---------- */
+  let totalTouched = false;
+  $('orderTotal').addEventListener('input', function() { totalTouched = true; showError('orderTotal', 'orderTotalErr', false); });
+
+  function computeTotals() {
+    let one = 0, rec = 0;
+    const p = val('package'); if (p) one += PACKAGES[p].price;
+    const pr = val('priority'); if (pr && PRIORITY[pr].price) one += PRIORITY[pr].price;
+    const c = val('care');
+    if (c && CARE[c].price) { if (CARE[c].type === 'monthly') rec = CARE[c].price; else one += CARE[c].price; }
+    return { one: one, rec: rec };
+  }
+
+  function updateTotal() {
+    const t = computeTotals();
+    if (!totalTouched) $('orderTotal').value = val('package') ? '$' + t.one.toFixed(2) : '';
+    const note = $('recurringNote');
+    note.classList.toggle('visible', !!t.rec);
+    note.textContent = t.rec ? '+ $' + t.rec.toFixed(2) + '/month recurring (not included in the total above)' : '';
+  }
+
+  /* ---------- conditional detail fields ---------- */
+  function updateDetails() {
+    const d = val('domain');
+    $('domainDetailWrap').style.display = (d === 'have' || d === 'help') ? 'block' : 'none';
+    if (d === 'have') { $('domainDetailLabel').innerHTML = 'Customer\'s domain <span class="opt">(optional)</span>'; $('domainDetail').placeholder = 'yourbusiness.com'; }
+    if (d === 'help') { $('domainDetailLabel').innerHTML = 'Preferred domain name <span class="opt">(optional)</span>'; $('domainDetail').placeholder = ''; }
+    $('acctEmailWrap').style.display = val('acct') === 'help' ? 'block' : 'none';
+  }
+
+  document.getElementById('orderForm').addEventListener('change', function(e) {
+    if (e.target.type !== 'radio') return;
+    ['packageErr','typeErr','domainErr','acctErr'].forEach(function(id) { showGroupError(id, false); });
+    updateTotal(); updateDetails();
+  });
+
+  /* ---------- search ---------- */
+  const searchInput = $('searchInput'), searchClear = $('searchClear'), resultsPanel = $('searchResults'), resultsBody = $('resultsBody');
   let searchTimer = null;
 
   searchInput.addEventListener('input', function() {
@@ -667,117 +478,150 @@
   function runSearch(query) {
     resultsBody.innerHTML = '<div class="no-results">Searching…</div>';
     resultsPanel.classList.add('visible');
-
     fetch(APPS_SCRIPT_URL + '?action=search&q=' + encodeURIComponent(query))
       .then(function(r) { return r.json(); })
       .then(function(data) { renderResults(data.results || []); })
       .catch(function() { resultsBody.innerHTML = '<div class="no-results">Could not reach the server. Please try again.</div>'; });
   }
 
+  function esc(str) {
+    return String(str == null ? '' : str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function rcRow(label, value) { return '<div class="rc-row"><span class="rc-key">' + label + '</span><span class="rc-val">' + esc(value) + '</span></div>'; }
+
   function renderResults(results) {
-    if (!results.length) {
-      resultsBody.innerHTML = '<div class="no-results">No orders found for that search.</div>';
-      return;
-    }
+    if (!results.length) { resultsBody.innerHTML = '<div class="no-results">No orders found for that search.</div>'; return; }
     resultsBody.innerHTML = results.map(function(r) {
+      let rows = rcRow('Package', r.package) + rcRow('Website type', r.hostingPlatform) + rcRow('Setup help', r.setupHelp);
+      // Extra fields appear once your script returns them
+      if (r.domainOption)      rows += rcRow('Domain', r.domainOption);
+      if (r.priorityDelivery)  rows += rcRow('Priority', r.priorityDelivery);
+      if (r.carePlan)          rows += rcRow('Care plan', r.carePlan);
+      rows += rcRow('Add-ons', r.addOns || 'None') + rcRow('Date', r.timestamp);
+      const rec = (r.recurringTotal && r.recurringTotal !== 'None') ? '<span class="rc-recurring">+ ' + esc(r.recurringTotal) + '</span>' : '';
       return '<div class="result-card">' +
-        '<div class="rc-name">' + esc(r.fullName) + '</div>' +
-        '<div class="rc-email">' + esc(r.email) + '</div>' +
-        '<div class="rc-row"><span class="rc-key">Package</span><span class="rc-val">' + esc(r.package) + '</span></div>' +
-        '<div class="rc-row"><span class="rc-key">Hosting</span><span class="rc-val">' + esc(r.hostingPlatform) + '</span></div>' +
-        '<div class="rc-row"><span class="rc-key">Setup Help</span><span class="rc-val">' + esc(r.setupHelp) + '</span></div>' +
-        '<div class="rc-row"><span class="rc-key">Add-Ons</span><span class="rc-val">' + esc(r.addOns || 'None') + '</span></div>' +
-        '<div class="rc-row"><span class="rc-key">Date</span><span class="rc-val">' + esc(r.timestamp) + '</span></div>' +
-        '<div class="rc-total"><span class="rc-total-label">Order Total</span><span class="rc-total-amount">' + esc(r.orderTotal) + '</span></div>' +
+        '<div class="rc-name">' + esc(r.fullName) + (r.businessName ? ' <span style="font-family:\'DM Sans\',sans-serif;font-size:12px;color:var(--muted);">· ' + esc(r.businessName) + '</span>' : '') + '</div>' +
+        '<div class="rc-email">' + esc(r.email) + '</div>' + rows +
+        '<div class="rc-total"><span class="rc-total-label">Order Total</span><span class="rc-total-amount">' + esc(r.orderTotal) + rec + '</span></div>' +
         '</div>';
     }).join('');
   }
 
-  function esc(str) {
-    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  // ── Validation ──────────────────────────────────────────────────────────
+  /* ---------- validation ---------- */
   function showError(inputId, errId, show) {
-    const input = document.getElementById(inputId);
-    const err   = document.getElementById(errId);
+    const input = $(inputId), err = $(errId);
     if (!input || !err) return;
     input.classList.toggle('error', show);
     err.classList.toggle('visible', show);
   }
+  function showGroupError(errId, show) { const e = $(errId); if (e) e.classList.toggle('visible', show); }
+  const validEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
-  function showGroupError(errId, show) {
-    const err = document.getElementById(errId);
-    if (err) err.classList.toggle('visible', show);
-  }
+  ['fullName', 'email', 'acctEmail'].forEach(function(id) { $(id).addEventListener('input', function() { showError(id, id + 'Err', false); }); });
 
   function validateForm() {
-    let valid = true;
+    let firstBad = null;
+    const flag = (el) => { if (!firstBad) firstBad = el; };
 
-    const fn = document.getElementById('fullName').value.trim();
-    showError('fullName', 'fullNameErr', !fn);
-    if (!fn) valid = false;
+    const fn = $('fullName').value.trim();
+    showError('fullName', 'fullNameErr', !fn); if (!fn) flag($('fullName'));
 
-    const em = document.getElementById('email').value.trim();
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
-    showError('email', 'emailErr', !emailOk);
-    if (!emailOk) valid = false;
+    const em = $('email').value.trim();
+    showError('email', 'emailErr', !validEmail(em)); if (!validEmail(em)) flag($('email'));
 
-    const pkg = document.querySelector('input[name="package"]:checked');
-    showGroupError('packageErr', !pkg);
-    if (!pkg) valid = false;
+    [['package','packageErr','package_quickstart'], ['websiteType','typeErr','websiteType_tecweb'], ['domain','domainErr','domain_have'], ['acct','acctErr','acct_self']].forEach(function(g) {
+      const missing = !val(g[0]);
+      showGroupError(g[1], missing); if (missing) flag($(g[2]));
+    });
 
-    const hosting = document.querySelector('input[name="hostingPlatform"]:checked');
-    showGroupError('hostingErr', !hosting);
-    if (!hosting) valid = false;
+    const ae = $('acctEmail').value.trim();
+    const aeBad = val('acct') === 'help' && ae && !validEmail(ae);
+    showError('acctEmail', 'acctEmailErr', aeBad); if (aeBad) flag($('acctEmail'));
 
-    const setup = document.querySelector('input[name="setupHelp"]:checked');
-    showGroupError('setupHelpErr', !setup);
-    if (!setup) valid = false;
+    const total = $('orderTotal').value.trim();
+    showError('orderTotal', 'orderTotalErr', !total); if (!total) flag($('orderTotal'));
 
-    const total = document.getElementById('orderTotal').value.trim();
-    showError('orderTotal', 'orderTotalErr', !total);
-    if (!total) valid = false;
-
-    return valid;
+    if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return !firstBad;
   }
 
-  // ── Form Submit ─────────────────────────────────────────────────────────
-  document.getElementById('orderForm').addEventListener('submit', async function(e) {
+  /* ---------- submit ---------- */
+  function buildPayload() {
+    const t = computeTotals();
+    const pr = val('priority'), c = val('care'), d = val('domain'), a = val('acct');
+    const addOns = [];
+    if (pr && PRIORITY[pr].price) addOns.push(PRIORITY[pr].label);
+    let careLabel = 'None';
+    if (c && CARE[c].price) {
+      careLabel = CARE[c].name + (CARE[c].type === 'monthly' ? ' ($' + CARE[c].price + '/month)' : ' ($' + CARE[c].price + ' one-time)');
+      addOns.push(careLabel);
+    }
+    return {
+      formType:         'Order Details',
+      fullName:         $('fullName').value.trim(),
+      businessName:     $('businessName').value.trim(),
+      email:            $('email').value.trim(),
+      phone:            $('phone').value.trim(),
+      package:          PACKAGES[val('package')].name,
+      websiteType:      TYPES[val('websiteType')],
+      hostingPlatform:  TYPES[val('websiteType')],
+      domainOption:     DOMAINS[d],
+      existingDomain:   d === 'have' ? $('domainDetail').value.trim() : '',
+      domainBusinessName: '',
+      preferredDomain:  d === 'help' ? $('domainDetail').value.trim() : '',
+      accountSetup:     ACCTS[a],
+      setupHelp:        a === 'help' ? 'Yes — needs help' : 'No — self-managed',
+      accountEmail:     a === 'help' ? $('acctEmail').value.trim() : '',
+      priorityDelivery: (pr && PRIORITY[pr].price) ? PRIORITY[pr].label + ' (+$' + PRIORITY[pr].price + ')' : 'None',
+      carePlan:         careLabel,
+      addOns:           addOns.length ? addOns.join(', ') : 'None',
+      orderTotal:       $('orderTotal').value.trim(),
+      recurringTotal:   t.rec ? '$' + t.rec.toFixed(2) + '/month' : 'None'
+    };
+  }
+
+  $('orderForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+    $('formError').classList.remove('visible');
     if (!validateForm()) return;
 
-    const btn = document.getElementById('submitBtn');
+    const btn = $('submitBtn');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Submitting...';
 
-    const payload = {
-      fullName:        document.getElementById('fullName').value.trim(),
-      email:           document.getElementById('email').value.trim(),
-      package:         document.querySelector('input[name="package"]:checked').value,
-      hostingPlatform: document.querySelector('input[name="hostingPlatform"]:checked').value,
-      setupHelp:       document.querySelector('input[name="setupHelp"]:checked').value,
-      orderTotal:      document.getElementById('orderTotal').value.trim(),
-      formType:        'Order Details'
-    };
-
     try {
+      const payload = buildPayload();
       const formData = new FormData();
-      Object.keys(payload).forEach(key => formData.append(key, payload[key]));
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-      });
+      Object.keys(payload).forEach(function(k) { formData.append(k, payload[k]); });
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData });
 
-      document.getElementById('orderForm').style.display = 'none';
-      document.getElementById('successMsg').classList.add('visible');
+      $('orderForm').style.display = 'none';
+      const s = $('successMsg');
+      s.classList.add('visible');
+      s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      s.focus({ preventScroll: true });
     } catch (err) {
       btn.disabled = false;
-      btn.innerHTML = 'Submit Order';
-      alert('Something went wrong. Please try again.');
+      btn.textContent = 'Submit Order';
+      const fe = $('formError');
+      fe.textContent = 'Something went wrong sending the order. Please check your connection and try again.';
+      fe.classList.add('visible');
     }
   });
+
+  function resetForm() {
+    $('orderForm').reset();
+    totalTouched = false;
+    $('orderForm').style.display = '';
+    $('successMsg').classList.remove('visible');
+    const btn = $('submitBtn'); btn.disabled = false; btn.textContent = 'Submit Order';
+    updateTotal(); updateDetails();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  updateTotal();
+  updateDetails();
 </script>
 </body>
 </html>
