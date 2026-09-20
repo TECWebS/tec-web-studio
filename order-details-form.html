@@ -375,7 +375,7 @@
   const $ = (id) => document.getElementById(id);
 
   /* =====================================================
-     PRICES & OPTIONS — keep in sync with payment.html.
+     PRICES & OPTIONS — keep in sync with payments.html.
      The labels written to your sheet match what the
      payments page logs, so both kinds of order look alike.
      ===================================================== */
@@ -475,12 +475,36 @@
     searchInput.focus();
   }
 
-  function runSearch(query) {
+  // Order search is protected by a passcode (SEARCH_PASSCODE in your Apps Script properties).
+  // It's asked once per browser tab and kept only for that tab's session.
+  function getSearchKey(forcePrompt) {
+    let key = forcePrompt ? '' : (sessionStorage.getItem('tec_search_key') || '');
+    if (!key) {
+      key = (window.prompt('Enter your admin passcode to search orders:') || '').trim();
+      if (key) sessionStorage.setItem('tec_search_key', key);
+    }
+    return key;
+  }
+
+  function runSearch(query, retried) {
+    const key = getSearchKey(false);
+    if (!key) {
+      resultsBody.innerHTML = '<div class="no-results">A passcode is required to search orders.</div>';
+      resultsPanel.classList.add('visible');
+      return;
+    }
     resultsBody.innerHTML = '<div class="no-results">Searching…</div>';
     resultsPanel.classList.add('visible');
-    fetch(APPS_SCRIPT_URL + '?action=search&q=' + encodeURIComponent(query))
+    fetch(APPS_SCRIPT_URL + '?action=search&q=' + encodeURIComponent(query) + '&key=' + encodeURIComponent(key))
       .then(function(r) { return r.json(); })
-      .then(function(data) { renderResults(data.results || []); })
+      .then(function(data) {
+        if (data.status === 'unauthorized') {
+          sessionStorage.removeItem('tec_search_key');
+          resultsBody.innerHTML = '<div class="no-results">Incorrect passcode. Type in the search box to try again.</div>';
+          return;
+        }
+        renderResults(data.results || []);
+      })
       .catch(function() { resultsBody.innerHTML = '<div class="no-results">Could not reach the server. Please try again.</div>'; });
   }
 
