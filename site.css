@@ -398,7 +398,11 @@ footer { background: #6AABB0; color: rgba(255,255,255,0.95); }
   gap: 40px;
 }
 .footer-name { font-family: var(--serif); font-size: 24px; color: var(--white); margin-bottom: 8px; line-height: 1.2; }
-.footer-brand p:last-child { font-size: 14px; color: rgba(255,255,255,0.95); max-width: 260px; line-height: 1.7; }
+.footer-brand p:not(.footer-name) { font-size: 14px; color: rgba(255,255,255,0.95); max-width: 260px; line-height: 1.7; }
+/* Logo sits on a light badge so its teal lettering stays readable on the teal footer */
+.footer-logo { display: inline-block; margin-top: 18px; background: #fffdf5; border-radius: 14px; padding: 10px 16px; line-height: 0; box-shadow: 0 4px 16px rgba(26,46,46,0.12); transition: transform 0.2s; }
+.footer-logo:hover { transform: translateY(-2px); }
+.footer-logo img { height: 84px; width: auto; display: block; }
 .footer-col h5 { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white); margin-bottom: 14px; }
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .footer-col a { color: rgba(255,255,255,0.96); text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 9px; transition: color 0.2s; }
