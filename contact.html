@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Request a Preview — TEC Web Studio</title>
+<title>Let's Build Your Website — Contact TEC Web Studio</title>
+<meta name="description" content="Tell us a little about your business and what you're looking for. We'll get back to you with the next steps.">
+
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-fixed-16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon-fixed.png">
@@ -11,579 +13,114 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="site.css">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── CONTACT ─────────────────────────────────────── */
+.contact-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 32px; align-items: start; }
+.form-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 36px 40px 40px; box-shadow: var(--shadow-sm); }
+.side-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 30px 28px; }
+.side-card h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--teal-deep); margin-bottom: 18px; }
+.next-steps { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.next-steps li { display: flex; gap: 14px; align-items: flex-start; }
+.step-num { width: 34px; height: 34px; border-radius: 50%; background: var(--gold); color: var(--ink); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.next-steps strong { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
+.next-steps span { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+.audit-nudge { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--border); font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+.audit-nudge a { color: var(--teal-dark); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; text-decoration: none; }
+.audit-nudge a:hover { text-decoration: underline; }
+.audit-nudge a .ico { width: 15px; height: 15px; stroke-width: 2.6; }
+.email-alt { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border); font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+.email-alt a { color: var(--teal-dark); font-weight: 700; display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; text-decoration: none; word-break: break-all; }
+.email-alt a:hover { text-decoration: underline; }
+.email-alt a svg { width: 16px; height: 16px; }
 
-:root {
-  --gold: #F5C842;
-  --gold-dark: #c9a020;
-  --gold-light: #fff8e1;
-  --teal: #6AABB0;
-  --teal-dark: #4a8a8f;
-  --teal-deep: #6AABB0;
-  --teal-light: #e8f4f5;
-  --cream: #f7fafa;
-  --warm: #f2f8f8;
-  --text: #6AABB0;
-  --text-muted: #557070;
-  --border: #cce0e2;
-  --white: #ffffff;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --sans: 'DM Sans', sans-serif;
-  --shadow-sm: 0 2px 12px rgba(106,171,176,0.10);
-  --shadow-md: 0 6px 28px rgba(106,171,176,0.16);
-  --shadow-lg: 0 12px 48px rgba(106,171,176,0.20);
+.field-group { margin-bottom: 20px; }
+.form-card label, .group-label { display: block; font-size: 13px; font-weight: 600; color: #2d3e3e; margin-bottom: 7px; letter-spacing: 0.2px; }
+.req { color: var(--teal-dark); margin-left: 2px; }
+.opt { font-weight: 400; color: var(--text-muted); }
+.form-card input[type="text"], .form-card input[type="email"], .form-card input[type="tel"], .form-card textarea {
+  width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: var(--sans); font-size: 14px; color: #2d3e3e; background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s; outline: none; appearance: none;
 }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--sans);
-  color: var(--text);
-  background: var(--cream);
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
+.form-card textarea { resize: vertical; min-height: 120px; line-height: 1.55; }
+.form-card input::placeholder, .form-card textarea::placeholder { color: #93a8a8; }
+.form-card input:focus, .form-card textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(106,171,176,0.18); }
+.form-card input.error, .form-card textarea.error { border-color: #e05252; box-shadow: 0 0 0 3px rgba(224,82,82,0.10); }
+.error-msg, .error-group-msg { font-size: 12px; color: #e05252; margin-top: 5px; display: none; }
+.error-msg.visible, .error-group-msg.visible { display: block; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.options-grid.single-col { grid-template-columns: 1fr; }
+.option-item { position: relative; }
+.option-item input { position: absolute; opacity: 0; width: 0; height: 0; }
+.option-item label {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1.5px solid var(--border);
+  border-radius: 10px; cursor: pointer; font-size: 13.5px; font-weight: 400; color: #2d3e3e;
+  transition: border-color 0.2s, background 0.2s, color 0.2s; user-select: none; margin-bottom: 0;
 }
-
-/* ── NAV ─────────────────────────────────────────── */
-header {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: rgba(250,253,248,0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+.option-item label::before { content: ''; width: 17px; height: 17px; min-width: 17px; border: 2px solid var(--border); background: var(--white) center / 11px no-repeat; transition: border-color 0.2s, background 0.2s; }
+.option-item input[type="radio"] + label::before { border-radius: 50%; }
+.option-item input[type="checkbox"] + label::before { border-radius: 5px; }
+.option-item input:checked + label { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); font-weight: 500; }
+.option-item input[type="radio"]:checked + label::before { border-color: var(--teal); background: var(--teal); box-shadow: inset 0 0 0 3px var(--white); }
+.option-item input[type="checkbox"]:checked + label::before {
+  border-color: var(--teal); background-color: var(--teal);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
 }
-
-nav {
-  max-width: 1080px;
-  margin: auto;
-  padding: 0 24px;
-  height: 66px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.option-item input:focus-visible + label { outline: 3px solid rgba(61,122,128,0.45); outline-offset: 2px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.submit-btn {
+  width: 100%; padding: 16px; background: var(--gold); color: #111; font-family: var(--sans); font-size: 14px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; border: none; border-radius: 50px; cursor: pointer; margin-top: 8px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 16px rgba(245,200,66,0.35);
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-
-.logo-img {
-  height: 58px;
-  width: auto;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  list-style: none;
-}
-
-.nav-links a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--teal-dark); }
-
-.nav-cta {
-  background: var(--gold) !important;
-  color: #1a1a1a !important;
-  padding: 9px 22px !important;
-  border-radius: 50px !important;
-  font-weight: 700 !important;
-  font-size: 13px !important;
-  letter-spacing: 0.3px !important;
-  transition: background 0.2s, transform 0.15s !important;
-}
-
-.nav-cta:hover {
-  background: #ffd54f !important;
-  transform: translateY(-1px) !important;
-  color: #1a1a1a !important;
-}
-
-/* hamburger */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 4px;
-}
-.hamburger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--text);
-  border-radius: 2px;
-  transition: all 0.3s;
-}
-.mobile-menu {
-  display: none;
-  position: fixed;
-  top: 66px;
-  left: 0; right: 0;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 20px 24px;
-  z-index: 199;
-  flex-direction: column;
-  gap: 16px;
-}
-.mobile-menu.open { display: flex; }
-.mobile-menu a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-.mobile-menu a:last-child { border-bottom: none; }
-
-/* ── MAIN CONTACT LAYOUT ─────────────────────────── */
-.contact-wrap {
-  background: var(--teal-light);
-  border-top: 1px solid var(--border);
-}
-
-.contact-inner {
-  max-width: 1080px;
-  margin: auto;
-  padding: 72px 24px 88px;
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 64px;
-  align-items: start;
-}
-
-/* ── SIDEBAR INFO ────────────────────────────────── */
-.section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--teal-dark);
-  margin-bottom: 14px;
-}
-
-.section-eyebrow::before {
-  content: '';
-  width: 20px;
-  height: 2px;
-  background: var(--gold);
-  border-radius: 2px;
-}
-
-.section-title {
-  font-family: var(--serif);
-  font-size: clamp(28px, 3vw, 40px);
-  font-weight: 400;
-  line-height: 1.2;
-  color: var(--teal-deep);
-  letter-spacing: -0.3px;
-  margin-bottom: 16px;
-}
-
-.section-title em { font-style: italic; color: var(--teal); }
-
-.contact-lead {
-  font-size: 16px;
-  color: var(--text-muted);
-  line-height: 1.8;
-  margin-top: 16px;
-  margin-bottom: 32px;
-}
-
-.contact-info-items {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.contact-info-item {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-
-.info-icon {
-  width: 38px; height: 38px;
-  border-radius: 10px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
-}
-
-.info-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--teal-deep); margin-bottom: 2px; }
-.info-text span { font-size: 13px; color: var(--text-muted); }
-.info-text a { color: var(--teal-dark); text-decoration: none; }
-.info-text a:hover { text-decoration: underline; }
-
-/* trust badges under info */
-.trust-badges {
-  margin-top: 40px;
-  padding-top: 32px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.trust-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.trust-badge svg { flex-shrink: 0; }
-
-/* ── FORM CONTAINER ─────────────────────────────── */
-.form-embed-wrap {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  min-width: 0;
-  width: 100%;
-}
-
-#inquiry-form-container {
-  padding: 28px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* ── POST-SUBMIT PRICING REVEAL ─────────────────── */
-#pricing-reveal {
-  display: none;
-  background: var(--warm);
-  border-top: 1px solid var(--border);
-  padding: 64px 24px;
-}
-
-#pricing-reveal.visible { display: block; }
-
-.pricing-reveal-inner {
-  max-width: 1080px;
-  margin: auto;
-}
-
-.pricing-reveal-banner {
-  background: linear-gradient(135deg, #6AABB0, #7abbbf);
-  border-radius: 14px;
-  padding: 28px 32px;
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.pricing-reveal-banner h3 {
-  font-family: var(--serif);
-  font-size: 22px;
-  color: white;
-  margin-bottom: 6px;
-}
-
-.pricing-reveal-banner p { font-size: 14px; color: rgba(255,255,255,0.95); }
-
-.portfolio-links-wrap {
-  text-align: center;
-}
-
-.portfolio-links-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--teal-dark);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.portfolio-links-eyebrow::before,
-.portfolio-links-eyebrow::after {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--border);
-}
-
-.portfolio-links-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-}
-
-.portfolio-link-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--white);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 24px;
-  text-decoration: none;
-  color: var(--teal-dark);
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
-}
-
-.portfolio-link-card:hover {
-  border-color: var(--teal);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.portfolio-link-card-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 2px;
-  text-align: left;
-}
-
-/* ── FORM STYLES ─────────────────────────────────── */
-#inquiry-form-container { font-family: 'DM Sans', sans-serif; }
-.ifs-field { margin-bottom: 18px; }
-.ifs-field.hidden { display: none; }
-.ifs-label { display: block; font-size: 13px; font-weight: 600; color: #2d3e3e; margin-bottom: 7px; }
-.ifs-label .req { color: #6aabb0; margin-left: 2px; }
-.ifs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-.ifs-input, .ifs-textarea, .ifs-select {
-  width: 100%; padding: 11px 14px; border: 1.5px solid #d0e4e6;
-  border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px;
-  color: #2d3e3e; background: #fff; outline: none; appearance: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.ifs-input::placeholder, .ifs-textarea::placeholder { color: #aabcbc; }
-.ifs-input:focus, .ifs-textarea:focus, .ifs-select:focus {
-  border-color: #6aabb0; box-shadow: 0 0 0 3px rgba(106,171,176,0.15);
-}
-.ifs-input.err, .ifs-textarea.err, .ifs-select.err { border-color: #e05252; }
-.ifs-errmsg { font-size: 11.5px; color: #e05252; margin-top: 4px; display: none; }
-.ifs-errmsg.show { display: block; }
-.ifs-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
-.ifs-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236aabb0' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer;
-}
-.ifs-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.ifs-opts.single { grid-template-columns: 1fr; }
-.ifs-opt { position: relative; }
-.ifs-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-.ifs-opt label {
-  display: flex; align-items: center; gap: 10px; padding: 10px 13px;
-  border: 1.5px solid #d0e4e6; border-radius: 10px; cursor: pointer;
-  font-size: 13px; color: #2d3e3e; transition: all 0.18s; user-select: none; margin: 0;
-}
-.ifs-opt label::before {
-  content: ''; width: 16px; height: 16px; min-width: 16px;
-  border: 2px solid #d0e4e6; border-radius: 50%; background: #fff;
-  transition: all 0.18s;
-}
-.ifs-opt input[type="checkbox"] + label::before { border-radius: 4px; }
-.ifs-opt input:checked + label { border-color: #6aabb0; background: #e8f4f5; color: #3d7a80; font-weight: 500; }
-.ifs-opt input:checked + label::before {
-  border-color: #6aabb0; background: #6aabb0; box-shadow: inset 0 0 0 3px #fff;
-}
-.ifs-opt input[type="checkbox"]:checked + label::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: center; box-shadow: none;
-}
-.ifs-ts-banner {
-  display: none; background: linear-gradient(135deg,#fffbea,#fff8d6);
-  border: 1.5px solid #f5c842; border-radius: 10px; padding: 13px 16px;
-  margin-bottom: 16px; font-size: 12px; color: #8a6a00; line-height: 1.5;
-}
-.ifs-ts-banner.show { display: block; }
-.ifs-sig-caption {
-  display: none; margin-top: 10px; background: linear-gradient(135deg,#1a3d3d,#2a5a5a);
-  border-radius: 10px; padding: 12px 15px; font-size: 13px; color: #f5c842;
-  font-weight: 500; line-height: 1.6;
-}
-.ifs-sig-caption.show { display: block; }
-.ifs-btn {
-  width: 100%; padding: 15px; background: #f5c842; color: #111; font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-  border: none; border-radius: 50px; cursor: pointer; margin-top: 6px;
-  box-shadow: 0 4px 16px rgba(245,200,66,0.35); transition: background 0.2s, transform 0.15s;
-}
-.ifs-btn:hover { background: #e0b020; transform: translateY(-1px); }
-.ifs-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.ifs-spinner {
-  display: inline-block; width: 15px; height: 15px; border: 2px solid rgba(0,0,0,0.2);
-  border-top-color: #111; border-radius: 50%; animation: ifs-spin 0.7s linear infinite;
-  vertical-align: middle; margin-right: 6px;
-}
-@keyframes ifs-spin { to { transform: rotate(360deg); } }
-.ifs-success { display: none; text-align: center; padding: 32px 16px; }
-.ifs-success.show { display: block; }
-.ifs-success-icon { margin-bottom: 14px; }
-.ifs-success h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: #1a2e2e; margin-bottom: 8px; }
-.ifs-success p { font-size: 13px; color: #557070; line-height: 1.7; }
-
-/* ── FOOTER ──────────────────────────────────────── */
-footer {
-  background: #6AABB0;
-  color: rgba(255,255,255,0.95);
-}
-
-.footer-inner {
-  max-width: 1080px;
-  margin: auto;
-  padding: 32px 24px 24px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
-.footer-brand p {
-  font-size: 13px;
-  color: rgba(255,255,255,0.90);
-  max-width: 200px;
-  line-height: 1.7;
-  flex-shrink: 0;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-}
-
-.footer-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0;
-}
-
-.footer-row-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.97);
-  white-space: nowrap;
-  padding-right: 16px;
-  border-right: 1px solid rgba(255,255,255,0.25);
-  margin-right: 16px;
-  min-width: 80px;
-}
-
-.footer-row-items {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 18px;
-}
-
-.footer-row-items li {
-  font-size: 13px;
-  color: rgba(255,255,255,0.6);
-}
-
-.footer-row-items a {
-  font-size: 13px;
-  color: rgba(255,255,255,0.90);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer-row-items a:hover { color: white; }
-
-.footer-bottom {
-  max-width: 1080px;
-  margin: auto;
-  padding: 16px 24px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-}
-
-/* ── TOAST ───────────────────────────────────────── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: var(--teal-deep);
-  color: white;
-  padding: 16px 22px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 999;
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-  pointer-events: none;
-  border-left: 4px solid var(--gold);
-}
-
-.toast.show { transform: translateY(0); opacity: 1; }
-
-/* ── RESPONSIVE ──────────────────────────────────── */
+.submit-btn:hover { background: #ffd54f; transform: translateY(-1px); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.form-error { display: none; margin-top: 14px; text-align: center; font-size: 13px; color: #e05252; line-height: 1.6; }
+.form-error.visible { display: block; }
+.success-message { display: none; text-align: center; padding: 40px 20px; }
+.success-message.visible { display: block; }
+.success-icon { width: 64px; height: 64px; background: var(--teal-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--teal-dark); }
+.success-icon svg { width: 30px; height: 30px; }
+.success-message h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--ink); margin-bottom: 10px; }
+.success-message p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2); border-top-color: #111; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 900px) {
-  .contact-inner { grid-template-columns: 1fr; gap: 40px; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .footer-brand p { max-width: 100%; }
-  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .side-card { order: -1; }
 }
-
 @media (max-width: 540px) {
-  .ifs-row { grid-template-columns: 1fr; }
-  .ifs-opts { grid-template-columns: 1fr; }
-  #inquiry-form-container { padding: 20px; }
+  .form-card { padding: 28px 22px 32px; }
+  .options-grid, .two-col { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-dollar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-filecheck" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></symbol>
+</svg>
 
 <!-- ── NAV ─────────────────────────────────────────── -->
 <header>
@@ -592,494 +129,273 @@ footer {
       <img src="TEC_Web_Studio_logo.png" alt="TEC Web Studio" class="logo-img">
     </a>
     <ul class="nav-links">
-      <li><a href="index.html#services">Services</a></li>
-      <li><a href="index.html#work">Work</a></li>
-      <li><a href="index.html#about">About</a></li>
-      <li><a href="contact.html" class="nav-cta">Request Preview</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="index.html#work">Our Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" aria-current="page">Contact</a></li>
+      <li><a href="audit.html" class="nav-cta">Get My Free Website Audit</a></li>
     </ul>
-    <div class="hamburger" onclick="toggleMenu()">
+    <button type="button" class="hamburger" onclick="toggleMenu()" aria-label="Open menu" aria-controls="mobileMenu">
       <span></span><span></span><span></span>
-    </div>
+    </button>
   </nav>
 </header>
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html#services" onclick="toggleMenu()">Services</a>
-  <a href="index.html#work" onclick="toggleMenu()">Work</a>
-  <a href="index.html#about" onclick="toggleMenu()">About</a>
-  <a href="contact.html" onclick="toggleMenu()">Request Preview</a>
+  <a href="index.html" onclick="toggleMenu()">Home</a>
+  <a href="services.html" onclick="toggleMenu()">Services</a>
+  <a href="index.html#work" onclick="toggleMenu()">Our Work</a>
+  <a href="about.html" onclick="toggleMenu()">About</a>
+  <a href="contact.html" aria-current="page" onclick="toggleMenu()">Contact</a>
+  <a href="audit.html" class="mobile-cta" onclick="toggleMenu()">Get My Free Website Audit</a>
 </div>
 
-<!-- ── MAIN CONTACT SECTION ──────────────────────────── -->
-<div class="contact-wrap">
-  <div class="contact-inner">
-
-    <!-- Left: info sidebar -->
-    <div>
-      <p class="section-eyebrow">Get in Touch</p>
-      <h2 class="section-title">Let's build<br><em>something great</em></h2>
-      <p class="contact-lead">Fill out the form and we'll be in touch shortly. Qualified clients receive a complimentary mock-up so you can see exactly what your site will look like before committing.</p>
-
-      <div class="contact-info-items">
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#6AABB0" stroke-width="1.5"/>
-              <path d="M2 5.5l7 5 7-5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Email</strong>
-            <span>We'll reach out directly to your inbox</span>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="9" cy="9" r="7" stroke="#6AABB0" stroke-width="1.5"/>
-              <path d="M9 5.5V9l2.5 2.5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Response time</strong>
-            <span>We typically reply within 24 hours</span>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M9 2l1.9 4.4L16 7.2l-3.5 3.3.9 5L9 13.2l-4.4 2.3.9-5L2 7.2l5.1-.8L9 2z" fill="#F5C842"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Complimentary preview for ready clients</strong>
-            <span>Fill out the form and chat with us live — qualified clients receive a complimentary mock-up.*</span>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="info-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="3.5" y="8" width="11" height="8" rx="1.5" stroke="#6AABB0" stroke-width="1.5"/>
-              <path d="M6 8V6a3 3 0 016 0v2" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="info-text">
-            <strong>Pricing revealed after inquiry</strong>
-            <span>We'll send your personalized package recommendation along with your requested preview</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="trust-badges">
-        <div class="trust-badge">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M8 1l1.8 4H14l-3.6 2.6L11.6 12 8 9.6 4.4 12l1.2-4.4L2 5h4.2L8 1z" fill="#F5C842"/>
-          </svg>
-          Trusted by education, wellness, contractors & more
-        </div>
-        <div class="trust-badge">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M8 14s-6-3.5-6-8a6 6 0 0112 0c0 4.5-6 8-6 8z" stroke="#6AABB0" stroke-width="1.5" fill="none"/>
-            <path d="M5.5 7.5l2 2 3-3" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Sites starting at $200 — no surprise fees
-        </div>
-        <div class="trust-badge">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="8" cy="8" r="6.5" stroke="#6AABB0" stroke-width="1.5"/>
-            <path d="M8 4.5V8l2.5 2.5" stroke="#6AABB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Fast turnaround — most sites delivered in days
-        </div>
-      </div>
-    </div>
-
-    <!-- Right: form -->
-    <div class="form-embed-wrap">
-      <div id="inquiry-form-container">
-
-        <!-- Form header -->
-        <div style="background:#6aabb0;padding:24px 28px;margin:-28px -28px 28px;border-radius:0;">
-          <div style="display:inline-block;background:#f5c842;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:10px;">TEC Web Studio</div>
-          <h3 style="font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:0 0 4px;">Service Inquiry Form</h3>
-          <p style="font-size:12px;color:rgba(255,255,255,0.82);margin:0;">Please provide your details and specific needs for your website project.</p>
-        </div>
-
-        <!-- Success state -->
-        <div class="ifs-success" id="ifsSuccess">
-          <div class="ifs-success-icon">
-            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M22 4v6M22 34v6M4 22h6M34 22h6M9.64 9.64l4.24 4.24M30.12 30.12l4.24 4.24M9.64 34.36l4.24-4.24M30.12 13.88l4.24-4.24" stroke="#6AABB0" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="22" cy="22" r="7" fill="#6AABB0"/>
-              <circle cx="22" cy="22" r="4" fill="white"/>
-            </svg>
-          </div>
-          <h3>We've received your inquiry!</h3>
-          <p>Check your inbox — we've sent you a personalized package recommendation. We'll follow up shortly with your free preview!</p>
-        </div>
-
-        <form id="ifsForm" novalidate>
-          <!-- Name row -->
-          <div class="ifs-row">
-            <div class="ifs-field">
-              <label class="ifs-label" for="ifsFirst">First Name <span class="req">*</span></label>
-              <input class="ifs-input" type="text" id="ifsFirst" placeholder="Jane" />
-              <div class="ifs-errmsg" id="ifsFirstErr">Please enter your first name.</div>
-            </div>
-            <div class="ifs-field">
-              <label class="ifs-label" for="ifsLast">Last Name <span class="req">*</span></label>
-              <input class="ifs-input" type="text" id="ifsLast" placeholder="Smith" />
-              <div class="ifs-errmsg" id="ifsLastErr">Please enter your last name.</div>
-            </div>
-          </div>
-
-          <!-- Email -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsEmail">Email Address <span class="req">*</span></label>
-            <input class="ifs-input" type="email" id="ifsEmail" placeholder="example@example.com" />
-            <div class="ifs-errmsg" id="ifsEmailErr">Please enter a valid email.</div>
-          </div>
-
-          <!-- Company -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsCompany">Company or Organization Name <span class="req">*</span></label>
-            <input class="ifs-input" type="text" id="ifsCompany" placeholder="Your business name" />
-            <div class="ifs-errmsg" id="ifsCompanyErr">Please enter your company name.</div>
-          </div>
-
-          <!-- Existing site question -->
-          <div class="ifs-field">
-            <label class="ifs-label">Do you already have an existing website? <span class="req">*</span></label>
-            <div class="ifs-opts single">
-              <div class="ifs-opt"><input type="radio" name="ifsExisting" id="ifsExistingY" value="Yes"><label for="ifsExistingY">Yes</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsExisting" id="ifsExistingN" value="No"><label for="ifsExistingN">No</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsExistingErr">Please select an option.</div>
-          </div>
-
-          <!-- Service -->
-          <div class="ifs-field hidden" id="ifsSvcGroup">
-            <label class="ifs-label">What kind of service do you need? <span class="req">*</span></label>
-            <div class="ifs-opts">
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc1" value="Business Website"><label for="ifsSvc1">Business Website</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc2" value="Portfolio/Personal Site"><label for="ifsSvc2">Portfolio/Personal Site</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc3" value="E-commerce Store"><label for="ifsSvc3">E-commerce Store</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsSvc" id="ifsSvc4" value="The Signature Build"><label for="ifsSvc4">The Signature Build</label></div>
-            </div>
-            <div class="ifs-sig-caption" id="ifsSigCaption">We handle everything from your brand identity to your final launch — content, SEO, brand alignment, name &amp; logo creation, and more.</div>
-            <div class="ifs-errmsg" id="ifsSvcErr">Please select a service.</div>
-          </div>
-
-          <!-- Description -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsDesc">Briefly describe your project and any specific requirements. <span class="req">*</span></label>
-            <textarea class="ifs-textarea" id="ifsDesc" placeholder="Tell us about your project..."></textarea>
-            <div class="ifs-errmsg" id="ifsDescErr">Please describe your project.</div>
-          </div>
-
-          <!-- Timeline -->
-          <div class="ifs-field">
-            <label class="ifs-label" for="ifsTl">Preferred Timeline <span class="req">*</span></label>
-            <select class="ifs-select" id="ifsTl">
-              <option value="">Please Select</option>
-              <option value="As soon as possible">As soon as possible</option>
-              <option value="1-3 months">1–3 months</option>
-              <option value="3-6 months">3–6 months</option>
-              <option value="Just exploring">Just exploring</option>
-            </select>
-            <div class="ifs-errmsg" id="ifsTlErr">Please select a timeline.</div>
-          </div>
-
-          <!-- Time sensitive banner -->
-          <div class="ifs-ts-banner" id="ifsTsBanner"><strong>Time Sensitive!</strong> If you need the completed work as soon as possible, an additional $75 expedited fee will apply.</div>
-
-          <!-- Content written -->
-          <div class="ifs-field hidden" id="ifsContentGroup">
-            <label class="ifs-label">Do you need content written? <span class="req">*</span></label>
-            <div class="ifs-opts single">
-              <div class="ifs-opt"><input type="radio" name="ifsContent" id="ifsContentY" value="Yes"><label for="ifsContentY">Yes</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsContent" id="ifsContentN" value="No"><label for="ifsContentN">No</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsContentErr">Please select an option.</div>
-          </div>
-
-          <!-- Pages needed -->
-          <div class="ifs-field hidden" id="ifsPagesGroup">
-            <label class="ifs-label">Pages needed <span class="req">*</span></label>
-            <div class="ifs-opts single">
-              <div class="ifs-opt"><input type="radio" name="ifsPages" id="ifsPages1" value="1-4"><label for="ifsPages1">1–4</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsPages" id="ifsPages2" value="5-8"><label for="ifsPages2">5–8</label></div>
-              <div class="ifs-opt"><input type="radio" name="ifsPages" id="ifsPages3" value="Not sure"><label for="ifsPages3">Not sure</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsPagesErr">Please select an option.</div>
-          </div>
-
-          <!-- Special features -->
-          <div class="ifs-field hidden" id="ifsFeaturesGroup">
-            <label class="ifs-label">Any special features or enhancements? <span class="req">*</span></label>
-            <div class="ifs-opts">
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat1" value="Animations"><label for="ifsFeat1">Animations</label></div>
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat2" value="E-commerce"><label for="ifsFeat2">E-commerce</label></div>
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat3" value="Branding"><label for="ifsFeat3">Branding</label></div>
-              <div class="ifs-opt"><input type="checkbox" name="ifsFeat" id="ifsFeat4" value="Other"><label for="ifsFeat4">Other</label></div>
-            </div>
-            <div class="ifs-errmsg" id="ifsFeatErr">Please select at least one.</div>
-          </div>
-
-          <button type="submit" class="ifs-btn" id="ifsBtn">Submit</button>
-        </form>
-      </div>
-    </div>
-
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>Let's Build Your Website</h1>
+    <p>Tell us a little about your business and what you're looking for. We'll get back to you with the next steps.</p>
   </div>
 </div>
 
-<!-- ── POST-SUBMIT PRICING REVEAL ────────────────────── -->
-<div id="pricing-reveal">
-  <div class="pricing-reveal-inner">
-    <div class="pricing-reveal-banner">
-      <div>
-        <h3 style="display:flex;align-items:center;gap:10px;">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M11 2v3M11 17v3M2 11h3M17 11h3M4.93 4.93l2.12 2.12M14.95 14.95l2.12 2.12M4.93 17.07l2.12-2.12M14.95 7.05l2.12-2.12" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-            <circle cx="11" cy="11" r="3.5" fill="#F5C842"/>
-          </svg>
-          Thanks for reaching out!
-        </h3>
-        <p>We'll follow up shortly with your personalized package recommendation.</p>
-        <p style="margin-top:6px;">In the meantime, if you'd like to chat live about your project — we're here!</p>
+<section class="section" style="padding-top:56px;">
+  <div class="contact-layout">
+
+    <div class="form-card">
+      <div class="success-message" id="successMsg" role="status" tabindex="-1">
+        <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>Request received!</h2>
+        <p>Thank you for reaching out. We'll review your details and get back to you with the next steps.</p>
       </div>
+
+      <form id="contactForm" novalidate>
+        <div class="hp" aria-hidden="true">
+          <label for="companySite">Leave this field empty</label>
+          <input type="text" id="companySite" name="companySite" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label for="fullName">Name <span class="req">*</span></label>
+            <input type="text" id="fullName" name="fullName" autocomplete="name" />
+            <div class="error-msg" id="fullNameErr">Please enter your name.</div>
+          </div>
+          <div class="field-group">
+            <label for="businessName">Business Name <span class="req">*</span></label>
+            <input type="text" id="businessName" name="businessName" autocomplete="organization" />
+            <div class="error-msg" id="businessNameErr">Please enter your business name.</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label for="email">Email <span class="req">*</span></label>
+            <input type="email" id="email" name="email" autocomplete="email" />
+            <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+          </div>
+          <div class="field-group">
+            <label for="phone">Phone <span class="opt">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="currentWebsite">Current Website <span class="opt">(optional)</span></label>
+          <input type="text" id="currentWebsite" name="currentWebsite" placeholder="yourbusiness.com" autocomplete="url" inputmode="url" />
+        </div>
+
+        <div class="field-group">
+          <span class="group-label" id="needLabel">What do you need? <span class="req">*</span></span>
+          <div class="options-grid" role="group" aria-labelledby="needLabel">
+            <div class="option-item"><input type="checkbox" name="needs" id="need_new" value="I need a new website" /><label for="need_new">I need a new website</label></div>
+            <div class="option-item"><input type="checkbox" name="needs" id="need_redesign" value="I need to redesign my website" /><label for="need_redesign">I need to redesign my website</label></div>
+            <div class="option-item"><input type="checkbox" name="needs" id="need_brand" value="I need help with branding" /><label for="need_brand">I need help with branding</label></div>
+            <div class="option-item"><input type="checkbox" name="needs" id="need_unsure" value="I'm not sure yet" data-exclusive="true" /><label for="need_unsure">I'm not sure yet</label></div>
+          </div>
+          <div class="error-group-msg" id="needsErr">Please select at least one option.</div>
+        </div>
+
+        <div class="field-group">
+          <span class="group-label" id="pkgLabel">Which package interests you? <span class="req">*</span></span>
+          <div class="options-grid single-col" role="radiogroup" aria-labelledby="pkgLabel">
+            <div class="option-item"><input type="radio" name="package" id="pkg_quickstart" value="Quick Start — $299" data-key="quickstart" /><label for="pkg_quickstart">Quick Start — $299</label></div>
+            <div class="option-item"><input type="radio" name="package" id="pkg_business" value="Business Website — $599" data-key="business" /><label for="pkg_business">Business Website — $599</label></div>
+            <div class="option-item"><input type="radio" name="package" id="pkg_complete" value="Complete Brand + Website — $799" data-key="complete" /><label for="pkg_complete">Complete Brand + Website — $799</label></div>
+            <div class="option-item"><input type="radio" name="package" id="pkg_makeover" value="Website Makeover — $399" data-key="makeover" /><label for="pkg_makeover">Website Makeover — $399</label></div>
+            <div class="option-item"><input type="radio" name="package" id="pkg_unsure" value="I'm not sure" data-key="unsure" /><label for="pkg_unsure">I'm not sure</label></div>
+          </div>
+          <div class="error-group-msg" id="packageErr">Please select an option.</div>
+        </div>
+
+        <div class="field-group">
+          <label for="notes">Tell us about your business <span class="opt">(optional)</span></label>
+          <textarea id="notes" name="notes" maxlength="1500"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Request a Free Consultation</button>
+        <div class="form-error" id="formError" role="alert"></div>
+      </form>
     </div>
 
-    <div class="portfolio-links-wrap">
-      <p class="portfolio-links-eyebrow">View Other TEC Web Studio Sites</p>
-      <div class="portfolio-links-grid">
-        <a href="https://www.theconsciousconnectiongroup.com" target="_blank" rel="noopener" class="portfolio-link-card">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
-            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <div>
-            <div class="portfolio-link-card-label">Education &amp; Community</div>
-            <div>theconsciousconnectiongroup.com</div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:4px;">
-            <path d="M2.5 11.5L11.5 2.5M11.5 2.5H7M11.5 2.5V7" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <a href="https://www.mawulipomary.com" target="_blank" rel="noopener" class="portfolio-link-card">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
-            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <div>
-            <div class="portfolio-link-card-label">Personal Portfolio &amp; Brand</div>
-            <div>mawulipomary.com</div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:4px;">
-            <path d="M2.5 11.5L11.5 2.5M11.5 2.5H7M11.5 2.5V7" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <a href="https://www.xindiesamazinghandsllc.com" target="_blank" rel="noopener" class="portfolio-link-card">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="10" cy="10" r="8" stroke="#6AABB0" stroke-width="1.6"/>
-            <path d="M10 2c-2.5 2-4 4.8-4 8s1.5 6 4 8M10 2c2.5 2 4 4.8 4 8s-1.5 6-4 8M2 10h16" stroke="#6AABB0" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <div>
-            <div class="portfolio-link-card-label">Catering &amp; Event Services</div>
-            <div>xindiesamazinghandsllc.com</div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:4px;">
-            <path d="M2.5 11.5L11.5 2.5M11.5 2.5H7M11.5 2.5V7" stroke="#6AABB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+    <aside class="side-card">
+      <h2>What happens next</h2>
+      <ol class="next-steps">
+        <li><span class="step-num">1</span><div><strong>You send us the details</strong><span>Tell us about your business and what you're looking for.</span></div></li>
+        <li><span class="step-num">2</span><div><strong>We review and reply</strong><span>We'll get back to you with the next steps.</span></div></li>
+        <li><span class="step-num">3</span><div><strong>We talk it through</strong><span>A free consultation to help you find the right option. No pressure, no obligation.</span></div></li>
+      </ol>
+      <div class="audit-nudge">
+        Want feedback on your current website first?
+        <br><a href="audit.html">Get My Free Website Audit <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
-    </div>
+      <div class="email-alt">
+        Prefer to email?
+        <br><a href="mailto:webstudiotec@gmail.com?subject=Website%20inquiry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>info@tecwebstudio.com</a>
+      </div>
+    </aside>
+
   </div>
-</div>
+</section>
 
-<!-- ── FOOTER ─────────────────────────────────────────── -->
+<!-- ── FOOTER ───────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-links">
-      <div class="footer-row">
-        <h5 class="footer-row-label">Company</h5>
-        <ul class="footer-row-items">
-          <li><a href="index.html#work">Portfolio</a></li>
-          <li><a href="index.html#about">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="/cdn-cgi/l/email-protection#5831363e37182c3d3b2f3d3a2b2c2d3c3137763b3735">Email</a></li>
-        </ul>
-      </div>
-      <div class="footer-row">
-        <h5 class="footer-row-label">Services</h5>
-        <ul class="footer-row-items">
-          <li>Website Design</li>
-          <li>Mobile Optimization</li>
-          <li>Lead Generation</li>
-          <li>Maintenance Plans</li>
-        </ul>
-      </div>
-    </div>
     <div class="footer-brand">
-      <p>Professional websites for small businesses and organizations. Simple pricing, fast delivery, real results.</p>
+      <p class="footer-name">TEC Web Studio</p>
+      <p>Professional websites for small businesses.</p>
+    </div>
+    <div class="footer-col" role="navigation" aria-label="Footer navigation">
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="index.html#work">Our Work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="audit.html">Free Website Audit</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Social</h5>
+      <ul>
+        <!-- TODO: replace each href="#" with your real profile URL -->
+        <li><a href="#" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-facebook"/></svg> Facebook</a></li>
+        <li><a href="#" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg> Instagram</a></li>
+        <li><a href="#" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn</a></li>
+      </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2026 TEC Web Studio. All rights reserved.</span>
-    <img src="TEC_Web_Studio_logo.png" alt="TEC Web Studio" style="height:48px;width:auto;opacity:0.85;">
   </div>
 </footer>
 
-<!-- ── TOAST ──────────────────────────────────────────── -->
-<div class="toast" id="toast">
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#F5C842" stroke-width="1.5"/>
-    <path d="M2 5.5l7 5 7-5" stroke="#F5C842" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>
-  Form submitted! Check your email for your recommended package.
-</div>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="site.js"></script>
 <script>
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  const $ = (id) => document.getElementById(id);
 
-(function() {
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
-
-  document.querySelectorAll('input[name="ifsExisting"]').forEach(function(r) {
-    r.addEventListener('change', updateCond);
-  });
-  document.querySelectorAll('input[name="ifsSvc"]').forEach(function(r) {
-    r.addEventListener('change', updateCond);
-  });
-  document.getElementById('ifsTl').addEventListener('change', function() {
-    document.getElementById('ifsTsBanner').classList.toggle('show', this.value === 'As soon as possible');
-  });
-
-  function updateCond() {
-    var existing = document.querySelector('input[name="ifsExisting"]:checked');
-    var hasExisting = existing && existing.value === 'Yes';
-    var svc = document.querySelector('input[name="ifsSvc"]:checked');
-    var isSig = svc && svc.value === 'The Signature Build';
-
-    var svcGroup = document.getElementById('ifsSvcGroup');
-    var showSvcGroup = existing && existing.value === 'No';
-    svcGroup.classList.toggle('hidden', !showSvcGroup);
-    if (hasExisting) {
-      document.querySelectorAll('input[name="ifsSvc"]').forEach(function(r){ r.checked=false; });
-    }
-
-    var showSubQ = existing && !isSig;
-    document.getElementById('ifsContentGroup').classList.toggle('hidden', !showSubQ);
-    document.getElementById('ifsPagesGroup').classList.toggle('hidden', !showSubQ);
-    document.getElementById('ifsFeaturesGroup').classList.toggle('hidden', !showSubQ);
-
-    document.getElementById('ifsSigCaption').classList.toggle('show', isSig && !hasExisting);
-
-    if (!showSubQ) {
-      document.querySelectorAll('input[name="ifsContent"]').forEach(function(r){ r.checked=false; });
-      document.querySelectorAll('input[name="ifsPages"]').forEach(function(r){ r.checked=false; });
-      document.querySelectorAll('input[name="ifsFeat"]').forEach(function(c){ c.checked=false; });
-    }
-  }
-
-  function showErr(id, errId, show) {
-    var el = document.getElementById(id);
-    var er = document.getElementById(errId);
-    if (el) el.classList.toggle('err', show);
-    if (er) er.classList.toggle('show', show);
-  }
-  function showGroupErr(errId, show) {
-    var er = document.getElementById(errId);
-    if (er) er.classList.toggle('show', show);
-  }
-
-  function validate() {
-    var ok = true;
-    var fn = document.getElementById('ifsFirst').value.trim();
-    showErr('ifsFirst','ifsFirstErr',!fn); if(!fn) ok=false;
-    var ln = document.getElementById('ifsLast').value.trim();
-    showErr('ifsLast','ifsLastErr',!ln); if(!ln) ok=false;
-    var em = document.getElementById('ifsEmail').value.trim();
-    var emOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
-    showErr('ifsEmail','ifsEmailErr',!emOk); if(!emOk) ok=false;
-    var co = document.getElementById('ifsCompany').value.trim();
-    showErr('ifsCompany','ifsCompanyErr',!co); if(!co) ok=false;
-    var existing = document.querySelector('input[name="ifsExisting"]:checked');
-    showGroupErr('ifsExistingErr',!existing); if(!existing) ok=false;
-    var hasExisting = existing && existing.value === 'Yes';
-    var svc = document.querySelector('input[name="ifsSvc"]:checked');
-    if (!hasExisting) {
-      showGroupErr('ifsSvcErr',!svc); if(!svc) ok=false;
-    }
-    var desc = document.getElementById('ifsDesc').value.trim();
-    showErr('ifsDesc','ifsDescErr',!desc); if(!desc) ok=false;
-    var tl = document.getElementById('ifsTl').value;
-    showErr('ifsTl','ifsTlErr',!tl); if(!tl) ok=false;
-    var isSig = svc && svc.value === 'The Signature Build';
-    if (existing && !isSig) {
-      var cw = document.querySelector('input[name="ifsContent"]:checked');
-      showGroupErr('ifsContentErr',!cw); if(!cw) ok=false;
-      var pg = document.querySelector('input[name="ifsPages"]:checked');
-      showGroupErr('ifsPagesErr',!pg); if(!pg) ok=false;
-      var ft = document.querySelectorAll('input[name="ifsFeat"]:checked');
-      showGroupErr('ifsFeatErr',ft.length===0); if(ft.length===0) ok=false;
-    }
-    return ok;
-  }
-
-  document.getElementById('ifsForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!validate()) return;
-    var btn = document.getElementById('ifsBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="ifs-spinner"></span>Sending...';
-    var existing = document.querySelector('input[name="ifsExisting"]:checked');
-    var hasExisting = existing && existing.value === 'Yes';
-    var svc = document.querySelector('input[name="ifsSvc"]:checked');
-    var isSig = svc && svc.value === 'The Signature Build';
-    var showSubQ = existing && !isSig;
-    var feats = showSubQ ? [...document.querySelectorAll('input[name="ifsFeat"]:checked')].map(function(c){return c.value;}) : [];
-    var payload = {
-      formType: 'Service Inquiry',
-      firstName: document.getElementById('ifsFirst').value.trim(),
-      lastName: document.getElementById('ifsLast').value.trim(),
-      email: document.getElementById('ifsEmail').value.trim(),
-      company: document.getElementById('ifsCompany').value.trim(),
-      existingSite: existing ? existing.value : 'No',
-      serviceType: hasExisting ? '' : (svc ? svc.value : ''),
-      description: document.getElementById('ifsDesc').value.trim(),
-      timeline: document.getElementById('ifsTl').value,
-      contentWritten: showSubQ ? (document.querySelector('input[name="ifsContent"]:checked') ? document.querySelector('input[name="ifsContent"]:checked').value : '') : 'N/A',
-      pagesNeeded: showSubQ ? (document.querySelector('input[name="ifsPages"]:checked') ? document.querySelector('input[name="ifsPages"]:checked').value : '') : 'N/A',
-      features: feats.join(', ') || 'N/A'
-    };
-    var formData = new FormData();
-    Object.keys(payload).forEach(function(key) {
-      formData.append(key, payload[key]);
-    });
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: formData
-    }).catch(function(err) { console.log('Fetch error:', err); });
-    setTimeout(function() {
-      document.getElementById('ifsForm').style.display = 'none';
-      document.getElementById('ifsSuccess').classList.add('show');
-      var pricingReveal = document.getElementById('pricing-reveal');
-      if (pricingReveal) {
-        pricingReveal.style.display = 'block';
+  // "I'm not sure yet" is exclusive with the other needs
+  document.querySelectorAll('input[name="needs"]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.querySelectorAll('input[name="needs"]').forEach(function(o) {
+          if (o !== cb && (cb.dataset.exclusive || o.dataset.exclusive)) o.checked = false;
+        });
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      var toast = document.getElementById('toast');
-      if (toast) { toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 4000); }
-    }, 1500);
+      $('needsErr').classList.remove('visible');
+    });
   });
-})();
+  document.querySelectorAll('input[name="package"]').forEach(function(r) {
+    r.addEventListener('change', function() { $('packageErr').classList.remove('visible'); });
+  });
+
+  // Preselect a package from the link, e.g. contact.html?package=makeover
+  (function() {
+    const key = new URLSearchParams(location.search).get('package');
+    if (!key) return;
+    const el = document.querySelector('input[name="package"][data-key="' + key + '"]');
+    if (el) el.checked = true;
+  })();
+
+  ['fullName', 'businessName', 'email'].forEach(function(id) {
+    $(id).addEventListener('input', function() { showError(id, id + 'Err', false); });
+  });
+
+  function showError(inputId, errId, show) {
+    $(inputId).classList.toggle('error', show);
+    $(errId).classList.toggle('visible', show);
+  }
+
+  function validateForm() {
+    let firstBad = null;
+    const flag = (el) => { if (!firstBad) firstBad = el; };
+
+    const fn = $('fullName').value.trim();
+    showError('fullName', 'fullNameErr', !fn); if (!fn) flag($('fullName'));
+
+    const biz = $('businessName').value.trim();
+    showError('businessName', 'businessNameErr', !biz); if (!biz) flag($('businessName'));
+
+    const em = $('email').value.trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    showError('email', 'emailErr', !ok); if (!ok) flag($('email'));
+
+    const needs = document.querySelectorAll('input[name="needs"]:checked');
+    $('needsErr').classList.toggle('visible', !needs.length); if (!needs.length) flag($('need_new'));
+
+    const pkg = document.querySelector('input[name="package"]:checked');
+    $('packageErr').classList.toggle('visible', !pkg); if (!pkg) flag($('pkg_quickstart'));
+
+    if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return !firstBad;
+  }
+
+  function showSuccess() {
+    $('contactForm').style.display = 'none';
+    const s = $('successMsg');
+    s.classList.add('visible');
+    s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    s.focus({ preventScroll: true });
+  }
+
+  $('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    $('formError').classList.remove('visible');
+    if (!validateForm()) return;
+    if ($('companySite').value) { showSuccess(); return; }   // honeypot
+
+    const btn = $('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Sending...';
+
+    const needs = Array.from(document.querySelectorAll('input[name="needs"]:checked')).map(function(c) { return c.value; });
+    const payload = {
+      formType:       'Consultation Request',
+      fullName:       $('fullName').value.trim(),
+      businessName:   $('businessName').value.trim(),
+      email:          $('email').value.trim(),
+      phone:          $('phone').value.trim(),
+      currentWebsite: $('currentWebsite').value.trim() || 'None provided',
+      needs:          needs.join(', '),
+      packageInterest: document.querySelector('input[name="package"]:checked').value,
+      notes:          $('notes').value.trim()
+    };
+
+    try {
+      const fd = new FormData();
+      Object.keys(payload).forEach(function(k) { fd.append(k, payload[k]); });
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: fd });
+      showSuccess();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Request a Free Consultation';
+      const fe = $('formError');
+      fe.textContent = 'Something went wrong sending your request. Please check your connection and try again.';
+      fe.classList.add('visible');
+    }
+  });
 </script>
 </body>
 </html>
