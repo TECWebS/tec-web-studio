@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Design Services & Pricing — TEC Web Studio</title>
+<meta name="description" content="Simple pricing. Professional design. No agency-sized price tag. Website packages for small businesses starting at $299.">
+
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-fixed-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon-fixed.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="site.css">
+<style>
+/* ── PACKAGES ────────────────────────────────────── */
+.pkg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+  row-gap: 0;
+  margin-top: 56px;
+  align-items: stretch;
+}
+.pkg-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+}
+.pkg-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--teal); }
+.pkg-card.popular { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal), var(--shadow-md); }
+.pkg-badge {
+  position: absolute;
+  top: -13px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.pkg-name {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--teal-deep);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.pkg-tagline { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.pkg-price {
+  font-family: var(--serif);
+  font-size: 44px;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.pkg-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+.pkg-card .checks { margin-bottom: 26px; }
+.pkg-card .btn-primary { margin-top: auto; width: 100%; }
+
+/* Aligned comparison rows: every card shares the same rows via subgrid */
+.pkg-card > * { min-width: 0; }
+.feat-head {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--teal-dark);
+  padding: 16px 0 6px;
+  border-bottom: 1px solid var(--border);
+}
+.feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(204,224,226,0.55);
+}
+.feat .mark {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--teal-light);
+  color: var(--teal-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.feat .mark .ico { width: 11px; height: 11px; stroke-width: 3.5; }
+.feat.no { color: #a3b5b5; }
+.feat.no .mark { background: #eef2f2; color: #a9baba; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.pkg-card .btn-primary { margin-top: 24px; align-self: end; }
+@supports (grid-template-rows: subgrid) {
+  .pkg-grid .pkg-card {
+    display: grid;
+    grid-row: span var(--rows);
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}
+
+
+/* ── MAKEOVER ────────────────────────────────────── */
+.makeover-card {
+  margin-top: 44px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  align-items: center;
+}
+.makeover-card h3 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--teal-deep);
+  margin-bottom: 4px;
+}
+.makeover-price { font-family: var(--serif); font-size: 40px; color: var(--ink); line-height: 1.1; margin-bottom: 12px; }
+.makeover-card > div:first-child p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 22px; }
+.makeover-card .checks { columns: 2; column-gap: 24px; }
+.makeover-card .checks li { break-inside: avoid; }
+
+
+/* ── SERVICES RESPONSIVE ─────────────────────────── */
+@media (max-width: 900px) {
+  .pkg-grid { grid-template-columns: 1fr; gap: 32px; }
+  .pkg-grid .pkg-card { display: flex; flex-direction: column; grid-row: auto; grid-template-rows: none; }
+  .pkg-card .feat.no, .pkg-card .feat-head.g-empty { display: none; }
+  .pkg-card .btn-primary { align-self: stretch; }
+  .makeover-card { grid-template-columns: 1fr; gap: 28px; padding: 28px 22px; }
+}
+@media (max-width: 640px) {
+  .makeover-card .checks { columns: 1; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-dollar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-filecheck" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></symbol>
+</svg>
+
+<!-- ── NAV ─────────────────────────────────────────── -->
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="TEC_Web_Studio_logo.png" alt="TEC Web Studio" class="logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html" aria-current="page">Services</a></li>
+      <li><a href="index.html#work">Our Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="audit.html" class="nav-cta">Get My Free Website Audit</a></li>
+    </ul>
+    <button type="button" class="hamburger" onclick="toggleMenu()" aria-label="Open menu" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">Home</a>
+  <a href="services.html" aria-current="page" onclick="toggleMenu()">Services</a>
+  <a href="index.html#work" onclick="toggleMenu()">Our Work</a>
+  <a href="about.html" onclick="toggleMenu()">About</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+  <a href="audit.html" class="mobile-cta" onclick="toggleMenu()">Get My Free Website Audit</a>
+</div>
+
+<!-- ── PAGE HERO ────────────────────────────────────── -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>Website Design for Small Businesses</h1>
+    <p>Simple pricing. Professional design. No agency-sized price tag.</p>
+  </div>
+</div>
+
+<!-- ── PACKAGES ─────────────────────────────────────── -->
+<section class="section" id="packages" style="padding-top:64px;">
+  <div class="pkg-grid" style="--rows:33">
+
+    <div class="pkg-card">
+      <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-sprout"/></svg></div>
+      <h2 class="pkg-name">Quick Start</h2>
+      <div class="pkg-price">$299</div>
+      <p class="pkg-desc">For businesses that need a professional online presence.</p>
+      <p class="feat-head">Website</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>1–4 page website</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Custom website design</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Mobile-friendly design</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Contact form</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Social media links</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Click-to-call functionality</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Google Maps integration</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Services section</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Reviews / testimonials</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Basic animations</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Conversion-focused UX</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>1 revision</span></div>
+      <p class="feat-head g-empty">Brand</p>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Business name assistance</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Custom logo</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Brand direction</span></div>
+      <p class="feat-head g-empty">Content</p>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Professional website copy</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Service descriptions</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Calls-to-action</span></div>
+      <p class="feat-head">Visibility</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Basic SEO setup</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Google-ready website structure</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Local business optimization</span></div>
+      <p class="feat-head">After Launch</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>1 month maintenance</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Minor updates included</span></div>
+      <a href="payment.html?package=quickstart" class="btn-primary btn-arrow">Get Started <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+
+    <div class="pkg-card popular">
+      <div class="pkg-badge"><svg class="ico fill" width="12" height="12" aria-hidden="true"><use href="#i-star"/></svg> Most Popular</div>
+      <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg></div>
+      <h2 class="pkg-name">Business Website</h2>
+      <div class="pkg-price">$599</div>
+      <p class="pkg-desc">For businesses ready to turn their website into a stronger part of their business.</p>
+      <p class="feat-head">Website</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Up to 6 pages</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Custom website design</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Mobile-friendly design</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Contact / quote form</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Social media links</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Click-to-call functionality</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Google Maps integration</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Services section</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Reviews / testimonials</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Basic animations</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Conversion-focused UX</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>2 revisions</span></div>
+      <p class="feat-head g-empty">Brand</p>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Business name assistance</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Custom logo</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Brand direction</span></div>
+      <p class="feat-head g-empty">Content</p>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Professional website copy</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Service descriptions</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Calls-to-action</span></div>
+      <p class="feat-head">Visibility</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Basic SEO setup</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Google-ready website structure</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Local business optimization</span></div>
+      <p class="feat-head">After Launch</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>1 month maintenance</span></div>
+      <div class="feat no"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span><span><span class="sr">Not included: </span>Minor updates included</span></div>
+      <a href="payment.html?package=business" class="btn-primary btn-arrow">Get Started <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+
+    <div class="pkg-card">
+      <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-sparkles"/></svg></div>
+      <h2 class="pkg-name">Complete Brand + Website</h2>
+      <div class="pkg-price">$799</div>
+      <p class="pkg-desc">For businesses that want everything handled for them.</p>
+      <p class="feat-head">Website</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Up to 8 pages</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Full custom website design</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Mobile optimization</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Contact / quote forms</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Social media links</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Click-to-call functionality</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Google Maps integration</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Services section</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Reviews / testimonials</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Basic animations</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Conversion-focused UX</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Revisions included</span></div>
+      <p class="feat-head">Brand</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Business name assistance</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Custom logo</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Brand direction</span></div>
+      <p class="feat-head">Content</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Professional website copy</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Service descriptions</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Calls-to-action</span></div>
+      <p class="feat-head">Visibility</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>SEO setup</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Google-ready website structure</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Local business optimization</span></div>
+      <p class="feat-head">After Launch</p>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>2 months maintenance</span></div>
+      <div class="feat"><span class="mark"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span><span>Minor updates included</span></div>
+      <a href="payment.html?package=complete" class="btn-primary btn-arrow">Launch My Website <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── WEBSITE MAKEOVER ─────────────────────────────── -->
+<div class="bg-white" id="makeover">
+  <div class="section">
+    <div class="section-head-center">
+      <h2 class="section-title">Already Have a Website?</h2>
+      <p class="section-sub">Give your existing website a fresh start without rebuilding everything from scratch.</p>
+    </div>
+    <div class="makeover-card">
+      <div>
+        <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg></div>
+        <h3>Website Makeover</h3>
+        <div class="makeover-price">$399</div>
+        <p>Perfect for businesses with an existing website that needs some attention.</p>
+        <a href="contact.html?package=makeover" class="btn-primary btn-arrow">Refresh My Website <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <ul class="checks">
+        <li>Fix layout issues</li>
+        <li>Fix minor bugs</li>
+        <li>Improve mobile experience</li>
+        <li>Refresh the existing design</li>
+        <li>Improve UI/UX</li>
+        <li>Improve branding consistency</li>
+        <li>Improve calls-to-action</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ──────────────────────────────────────────── -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title">Ready to Give Your Business a Better Online Presence?</h2>
+    <p class="cta-sub">Whether you're starting from scratch or your current website needs a refresh, TEC Web Studio can help.</p>
+    <div class="cta-actions">
+      <a href="audit.html" class="btn-primary-lg">Get My Free Website Audit</a>
+      <a href="contact.html" class="btn-outline-light">Contact Us</a>
+    </div>
+    <p class="cta-note">Websites starting at $299</p>
+  </div>
+</div>
+
+<!-- ── FOOTER ───────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <p class="footer-name">TEC Web Studio</p>
+      <p>Professional websites for small businesses.</p>
+    </div>
+    <div class="footer-col" role="navigation" aria-label="Footer navigation">
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="index.html#work">Our Work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="audit.html">Free Website Audit</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Social</h5>
+      <ul>
+        <!-- TODO: replace each href="#" with your real profile URL -->
+        <li><a href="#" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-facebook"/></svg> Facebook</a></li>
+        <li><a href="#" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg> Instagram</a></li>
+        <li><a href="#" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 TEC Web Studio. All rights reserved.</span>
+  </div>
+</footer>
+
+
+<script src="site.js"></script>
+</body>
+</html>

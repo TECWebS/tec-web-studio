@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Free Website Audit – TEC Web Studio</title>
+<meta name="description" content="Request a free website audit from TEC Web Studio. We'll review your current website and show you what could be improved. No pressure. No obligation.">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-fixed-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon-fixed.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #6aabb0;
+    --teal-dark: #3d7a80;
+    --teal-light: #e8f4f5;
+    --gold: #f5c842;
+    --gold-dark: #e0b020;
+    --dark: #1a2e2e;
+    --text: #2d3e3e;
+    --muted: #6b8080;
+    --border: #d0e4e6;
+    --bg: #f4f8f8;
+    --white: #ffffff;
+    --error: #e05252;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 20px 60px;
+  }
+
+  .form-wrapper { max-width: 640px; margin: 0 auto; }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 3px solid rgba(61,122,128,0.45);
+    outline-offset: 2px;
+  }
+
+  /* ── Back link ── */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    text-decoration: none;
+    margin-bottom: 18px;
+    transition: gap 0.2s;
+  }
+  .back-link:hover { gap: 9px; }
+  .back-link svg { width: 16px; height: 16px; }
+
+  /* ── Form header ── */
+  .form-header {
+    background: var(--teal);
+    border-radius: 20px 20px 0 0;
+    padding: 40px 44px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 0%, rgba(245,200,66,0.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .form-header .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #111;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .form-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .form-header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.92);
+    line-height: 1.6;
+    position: relative;
+  }
+
+  /* ── Form card ── */
+  .form-card {
+    background: var(--white);
+    border-radius: 0 0 20px 20px;
+    padding: 36px 44px 44px;
+    box-shadow: 0 8px 40px rgba(26,46,46,0.10);
+  }
+
+  .intro-note {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  /* ── Section divider ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 20px;
+  }
+
+  .section-divider span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    white-space: nowrap;
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Fields ── */
+  .field-group { margin-bottom: 20px; }
+
+  label, .group-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+    letter-spacing: 0.2px;
+  }
+
+  .hint { font-size: 12px; font-weight: 400; color: var(--muted); margin-top: -3px; margin-bottom: 9px; }
+  .req { color: var(--teal-dark); margin-left: 2px; }
+  .opt { font-weight: 400; color: var(--muted); }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+
+  textarea { resize: vertical; min-height: 104px; line-height: 1.55; }
+  input::placeholder, textarea::placeholder { color: #93a8a8; }
+
+  input:focus, textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(106,171,176,0.15);
+  }
+
+  input:disabled { background: #f0f5f5; color: #93a8a8; cursor: not-allowed; }
+
+  input.error, textarea.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(224,82,82,0.10);
+  }
+
+  .error-msg, .error-group-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 5px;
+    display: none;
+  }
+  .error-msg.visible, .error-group-msg.visible { display: block; }
+
+  .char-count { font-size: 11.5px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ── Option cards (radio + checkbox) ── */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .options-grid.single-col { grid-template-columns: 1fr; }
+
+  .option-item { position: relative; }
+
+  .option-item input[type="radio"],
+  .option-item input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .option-item label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    user-select: none;
+    margin-bottom: 0;
+  }
+
+  .option-item label::before {
+    content: '';
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 2px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--white) center / 11px no-repeat;
+  }
+
+  .option-item input[type="radio"] + label::before { border-radius: 50%; }
+  .option-item input[type="checkbox"] + label::before { border-radius: 5px; }
+
+  .option-item input:checked + label {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    font-weight: 500;
+  }
+
+  .option-item input[type="radio"]:checked + label::before {
+    border-color: var(--teal);
+    background: var(--teal);
+    box-shadow: inset 0 0 0 3px var(--white);
+  }
+
+  .option-item input[type="checkbox"]:checked + label::before {
+    border-color: var(--teal);
+    background-color: var(--teal);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  }
+
+  .option-item input:focus-visible + label {
+    outline: 3px solid rgba(61,122,128,0.45);
+    outline-offset: 2px;
+  }
+
+
+  /* ── Style questions ── */
+  .style-intro { font-size: 14px; color: var(--muted); line-height: 1.7; margin: -6px 0 22px; }
+  .sw { display: inline-flex; margin-left: auto; padding-left: 8px; }
+  .sw i { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.14); margin-left: -4px; display: block; }
+  .sw i:first-child { margin-left: 0; }
+  .option-item input:disabled + label { opacity: 0.45; cursor: not-allowed; }
+  .limit-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* ── Honeypot (hidden from people, visible to bots) ── */
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  /* ── Submit ── */
+  .assure {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 26px 0 16px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--gold);
+    color: #111;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(245,200,66,0.35);
+  }
+
+  .submit-btn:hover { background: var(--gold-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,200,66,0.45); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .form-error {
+    display: none;
+    margin-top: 14px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--error);
+    line-height: 1.6;
+  }
+  .form-error.visible { display: block; }
+
+  /* ── Success ── */
+  .success-message { display: none; text-align: center; padding: 40px 20px; }
+  .success-message.visible { display: block; }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--teal-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--teal-dark);
+  }
+  .success-icon svg { width: 30px; height: 30px; }
+
+  .success-message h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--dark); margin-bottom: 10px; }
+  .success-message p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .success-message a { display: inline-block; margin-top: 22px; color: var(--teal-dark); font-weight: 600; font-size: 14px; }
+
+  /* ── Spinner ── */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: #111;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 540px) {
+    .form-card { padding: 28px 22px 36px; }
+    .form-header { padding: 32px 22px 24px; }
+    .options-grid, .two-col { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+    .spinner { animation-duration: 1.5s; }
+  }
+</style>
+</head>
+<body>
+<div class="form-wrapper">
+
+  <a href="index.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Back to TEC Web Studio
+  </a>
+
+  <div class="form-header">
+    <div class="badge">TEC Web Studio</div>
+    <h1>Get Your Free Website Audit</h1>
+    <p>Tell us a little about your business and we'll show you what could be improved. No pressure. No obligation.</p>
+  </div>
+
+  <div class="form-card">
+
+    <div class="success-message" id="successMsg" role="status" tabindex="-1">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Audit request received!</h2>
+      <p>Thank you for reaching out. We'll take a look at your business and be in touch with practical feedback you can use.</p>
+      <a href="index.html">Back to the homepage</a>
+    </div>
+
+    <form id="auditForm" novalidate>
+
+      <!-- Honeypot -->
+      <div class="hp" aria-hidden="true">
+        <label for="companySite">Leave this field empty</label>
+        <input type="text" id="companySite" name="companySite" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <!-- Contact -->
+      <div class="section-divider"><span>About You</span></div>
+
+      <div class="field-group">
+        <label for="fullName">Full Name <span class="req">*</span></label>
+        <input type="text" id="fullName" name="fullName" placeholder="Jane Smith" autocomplete="name" />
+        <div class="error-msg" id="fullNameErr">Please enter your full name.</div>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="example@example.com" autocomplete="email" />
+          <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+        </div>
+        <div class="field-group">
+          <label for="phone">Phone Number <span class="opt">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="businessName">Business Name <span class="req">*</span></label>
+        <input type="text" id="businessName" name="businessName" placeholder="Smith Family Dentistry" autocomplete="organization" />
+        <div class="error-msg" id="businessNameErr">Please enter your business name.</div>
+      </div>
+
+      <!-- Website -->
+      <div class="section-divider"><span>Your Website</span></div>
+
+      <div class="field-group">
+        <span class="group-label" id="startLabel">Where are you starting from? <span class="req">*</span></span>
+        <div class="options-grid single-col" role="radiogroup" aria-labelledby="startLabel">
+          <div class="option-item">
+            <input type="radio" name="startingPoint" id="start_none" value="I don't have a website yet" data-no-site="true" />
+            <label for="start_none">I don't have a website yet</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="startingPoint" id="start_outdated" value="I have a website that needs a refresh" />
+            <label for="start_outdated">I have a website that needs a refresh</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="startingPoint" id="start_all" value="I need everything handled" />
+            <label for="start_all">I need everything handled (design, content, branding)</label>
+          </div>
+        </div>
+        <div class="error-group-msg" id="startErr">Please select an option.</div>
+      </div>
+
+      <div class="field-group">
+        <label for="websiteUrl">Current Website Address <span class="req" id="urlReq">*</span></label>
+        <input type="text" id="websiteUrl" name="websiteUrl" placeholder="yourbusiness.com" autocomplete="url" inputmode="url" />
+        <div class="error-msg" id="websiteUrlErr">Please enter your website address (for example, yourbusiness.com).</div>
+      </div>
+
+      <!-- Style -->
+      <div class="section-divider"><span>Your Style</span></div>
+      <p class="style-intro">Help us picture your ideal website. Your answers guide the sample website we'll design for you at no cost.</p>
+
+      <div class="field-group">
+        <span class="group-label" id="vibeLabel">Overall vibe <span class="opt">(choose up to 3)</span></span>
+        <div class="options-grid" role="group" aria-labelledby="vibeLabel">
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_minimal" value="Clean & minimal" /><label for="v_minimal">Clean &amp; minimal</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_bold" value="Bold & modern" /><label for="v_bold">Bold &amp; modern</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_warm" value="Warm & friendly" /><label for="v_warm">Warm &amp; friendly</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_elegant" value="Elegant & upscale" /><label for="v_elegant">Elegant &amp; upscale</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_playful" value="Playful & colorful" /><label for="v_playful">Playful &amp; colorful</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_pro" value="Professional & trustworthy" /><label for="v_pro">Professional &amp; trustworthy</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_natural" value="Natural & earthy" /><label for="v_natural">Natural &amp; earthy</label></div>
+          <div class="option-item"><input type="checkbox" name="styleVibe" id="v_creative" value="Creative & artistic" /><label for="v_creative">Creative &amp; artistic</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="colorLabel">Color direction <span class="opt">(choose any)</span></span>
+        <div class="options-grid" role="group" aria-labelledby="colorLabel">
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_blue" value="Blues & teals" /><label for="c_blue">Blues &amp; teals<span class="sw" aria-hidden="true"><i style="background:#2f6f8f"></i><i style="background:#6aabb0"></i><i style="background:#cfe8ea"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_green" value="Greens" /><label for="c_green">Greens<span class="sw" aria-hidden="true"><i style="background:#2f6b4f"></i><i style="background:#7fb08a"></i><i style="background:#dcefe0"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_neutral" value="Soft neutrals" /><label for="c_neutral">Soft neutrals<span class="sw" aria-hidden="true"><i style="background:#b89f86"></i><i style="background:#e8dccb"></i><i style="background:#f7f1e8"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_bw" value="Black & white" /><label for="c_bw">Black &amp; white<span class="sw" aria-hidden="true"><i style="background:#111111"></i><i style="background:#8a8a8a"></i><i style="background:#ffffff"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_bold" value="Bold & bright" /><label for="c_bold">Bold &amp; bright<span class="sw" aria-hidden="true"><i style="background:#e63946"></i><i style="background:#f5c842"></i><i style="background:#3bceac"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_pastel" value="Pastels" /><label for="c_pastel">Pastels<span class="sw" aria-hidden="true"><i style="background:#f7c6d0"></i><i style="background:#cfe0f7"></i><i style="background:#d6f0d9"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_earth" value="Earth tones" /><label for="c_earth">Earth tones<span class="sw" aria-hidden="true"><i style="background:#a5583a"></i><i style="background:#c99a5b"></i><i style="background:#6b705c"></i></span></label></div>
+          <div class="option-item"><input type="checkbox" name="styleColors" id="c_jewel" value="Rich jewel tones" /><label for="c_jewel">Rich jewel tones<span class="sw" aria-hidden="true"><i style="background:#5b2a86"></i><i style="background:#0b6e6e"></i><i style="background:#a4243b"></i></span></label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="colorNotes">Specific colors to include or avoid <span class="opt">(optional)</span></label>
+        <input type="text" id="colorNotes" name="colorNotes" maxlength="200" placeholder="e.g. Our logo is navy and gold; please no red" />
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="brandLabel">Do you already have a logo or brand colors?</span>
+        <div class="options-grid single-col" role="radiogroup" aria-labelledby="brandLabel">
+          <div class="option-item"><input type="radio" name="brandAssets" id="b_both" value="I have a logo and brand colors" /><label for="b_both">I have a logo and brand colors</label></div>
+          <div class="option-item"><input type="radio" name="brandAssets" id="b_logo" value="I have a logo only" /><label for="b_logo">I have a logo only</label></div>
+          <div class="option-item"><input type="radio" name="brandAssets" id="b_none" value="I don't have either yet" /><label for="b_none">I don't have either yet</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="modeLabel">Light or dark?</span>
+        <div class="options-grid" role="radiogroup" aria-labelledby="modeLabel">
+          <div class="option-item"><input type="radio" name="styleMode" id="m_light" value="Light & airy" /><label for="m_light">Light &amp; airy</label></div>
+          <div class="option-item"><input type="radio" name="styleMode" id="m_dark" value="Dark & dramatic" /><label for="m_dark">Dark &amp; dramatic</label></div>
+          <div class="option-item"><input type="radio" name="styleMode" id="m_mix" value="A mix of both" /><label for="m_mix">A mix of both</label></div>
+          <div class="option-item"><input type="radio" name="styleMode" id="m_none" value="No preference" /><label for="m_none">No preference</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="typeLabel">Lettering style</span>
+        <div class="options-grid" role="radiogroup" aria-labelledby="typeLabel">
+          <div class="option-item"><input type="radio" name="styleType" id="t_modern" value="Modern & clean" /><label for="t_modern">Modern &amp; clean</label></div>
+          <div class="option-item"><input type="radio" name="styleType" id="t_classic" value="Classic & refined" /><label for="t_classic">Classic &amp; refined</label></div>
+          <div class="option-item"><input type="radio" name="styleType" id="t_friendly" value="Friendly & rounded" /><label for="t_friendly">Friendly &amp; rounded</label></div>
+          <div class="option-item"><input type="radio" name="styleType" id="t_none" value="No preference" /><label for="t_none">No preference</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="group-label" id="imageryLabel">Photos and imagery</span>
+        <div class="options-grid" role="radiogroup" aria-labelledby="imageryLabel">
+          <div class="option-item"><input type="radio" name="styleImagery" id="i_own" value="I'll provide my own photos" /><label for="i_own">I'll provide my own photos</label></div>
+          <div class="option-item"><input type="radio" name="styleImagery" id="i_stock" value="Stock photography is fine" /><label for="i_stock">Stock photography is fine</label></div>
+          <div class="option-item"><input type="radio" name="styleImagery" id="i_illus" value="Illustrations & graphics" /><label for="i_illus">Illustrations &amp; graphics</label></div>
+          <div class="option-item"><input type="radio" name="styleImagery" id="i_unsure" value="Not sure yet" /><label for="i_unsure">Not sure yet</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="inspiration">Websites you love <span class="opt">(optional)</span></label>
+        <textarea id="inspiration" name="inspiration" maxlength="600" placeholder="Share up to three websites you admire and what you like about them."></textarea>
+      </div>
+
+      <!-- Focus -->
+      <div class="section-divider"><span>What Should We Look At?</span></div>
+
+      <div class="field-group">
+        <span class="group-label" id="focusLabel">Focus areas <span class="opt">(optional)</span></span>
+        <p class="hint">Select any you'd like us to pay extra attention to.</p>
+        <div class="options-grid" role="group" aria-labelledby="focusLabel">
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_mobile" value="Mobile experience" /><label for="f_mobile">Mobile experience</label></div>
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_design" value="Design & branding" /><label for="f_design">Design &amp; branding</label></div>
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_nav" value="Navigation" /><label for="f_nav">Navigation</label></div>
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_cta" value="Calls-to-action" /><label for="f_cta">Calls-to-action</label></div>
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_cx" value="Customer experience" /><label for="f_cx">Customer experience</label></div>
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_seo" value="Basic SEO" /><label for="f_seo">Basic SEO</label></div>
+          <div class="option-item"><input type="checkbox" name="focusAreas" id="f_contact" value="Contact options" /><label for="f_contact">Contact options</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="notes">Anything else we should know? <span class="opt">(optional)</span></label>
+        <textarea id="notes" name="notes" maxlength="1000" placeholder="What's frustrating you about your current website, or what would you like your website to do for your business?"></textarea>
+        <div class="char-count"><span id="notesCount">0</span> / 1000</div>
+      </div>
+
+      <p class="assure">No pressure. No obligation. Just practical feedback you can use.</p>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Get My Free Website Audit</button>
+      <div class="form-error" id="formError" role="alert"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+
+  const $ = (id) => document.getElementById(id);
+
+  // ── Website field depends on "where are you starting from" ──
+  function noSiteSelected() {
+    const r = document.querySelector('input[name="startingPoint"]:checked');
+    return !!(r && r.dataset.noSite);
+  }
+
+  function updateUrlField() {
+    const none = noSiteSelected();
+    const url = $('websiteUrl');
+    url.disabled = none;
+    $('urlReq').style.display = none ? 'none' : 'inline';
+    if (none) {
+      url.value = '';
+      showError('websiteUrl', 'websiteUrlErr', false);
+      url.placeholder = 'Not needed — you don\'t have one yet';
+    } else {
+      url.placeholder = 'yourbusiness.com';
+    }
+  }
+
+  document.querySelectorAll('input[name="startingPoint"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      showGroupError('startErr', false);
+      updateUrlField();
+    });
+  });
+
+
+  // ── Overall vibe: choose up to 3 ──
+  const vibeBoxes = Array.from(document.querySelectorAll('input[name="styleVibe"]'));
+  function updateVibeLimit() {
+    const n = vibeBoxes.filter(function(b) { return b.checked; }).length;
+    vibeBoxes.forEach(function(b) { b.disabled = !b.checked && n >= 3; });
+  }
+  vibeBoxes.forEach(function(b) { b.addEventListener('change', updateVibeLimit); });
+
+  $('notes').addEventListener('input', function() { $('notesCount').textContent = this.value.length; });
+
+  // Clear errors as people fix them
+  ['fullName', 'email', 'businessName', 'websiteUrl'].forEach(function(id) {
+    $(id).addEventListener('input', function() { showError(id, id + 'Err', false); });
+  });
+
+  // ── Validation helpers ──
+  function showError(inputId, errId, show) {
+    const input = $(inputId), err = $(errId);
+    if (!input || !err) return;
+    input.classList.toggle('error', show);
+    err.classList.toggle('visible', show);
+  }
+
+  function showGroupError(errId, show) {
+    const err = $(errId);
+    if (err) err.classList.toggle('visible', show);
+  }
+
+  function validateForm() {
+    let firstBad = null;
+    function flag(el) { if (!firstBad) firstBad = el; }
+
+    const fn = $('fullName').value.trim();
+    showError('fullName', 'fullNameErr', !fn);
+    if (!fn) flag($('fullName'));
+
+    const em = $('email').value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    showError('email', 'emailErr', !emailOk);
+    if (!emailOk) flag($('email'));
+
+    const biz = $('businessName').value.trim();
+    showError('businessName', 'businessNameErr', !biz);
+    if (!biz) flag($('businessName'));
+
+    const start = document.querySelector('input[name="startingPoint"]:checked');
+    showGroupError('startErr', !start);
+    if (!start) flag($('start_none'));
+
+    if (!noSiteSelected()) {
+      const u = $('websiteUrl').value.trim();
+      const urlOk = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/\S*)?$/i.test(u);
+      showError('websiteUrl', 'websiteUrlErr', !urlOk);
+      if (!urlOk) flag($('websiteUrl'));
+    }
+
+    if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return !firstBad;
+  }
+
+
+  function checkedValues(name) {
+    const v = Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function(c) { return c.value; });
+    return v.length ? v.join(', ') : 'No preference';
+  }
+  function radioValue(name) {
+    const r = document.querySelector('input[name="' + name + '"]:checked');
+    return r ? r.value : 'No preference';
+  }
+
+  // ── Submit ──
+  $('auditForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    $('formError').classList.remove('visible');
+    if (!validateForm()) return;
+
+    // Honeypot: bots fill this in. Pretend it worked, send nothing.
+    if ($('companySite').value) { showSuccess(); return; }
+
+    const btn = $('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Sending...';
+
+    const focus = Array.from(document.querySelectorAll('input[name="focusAreas"]:checked')).map(function(c) { return c.value; });
+
+    const payload = {
+      formType:      'Website Audit',
+      fullName:      $('fullName').value.trim(),
+      email:         $('email').value.trim(),
+      phone:         $('phone').value.trim(),
+      businessName:  $('businessName').value.trim(),
+      startingPoint: document.querySelector('input[name="startingPoint"]:checked').value,
+      websiteUrl:    noSiteSelected() ? 'None yet' : $('websiteUrl').value.trim(),
+      focusAreas:    focus.length ? focus.join(', ') : 'No preference',
+      notes:         $('notes').value.trim(),
+
+      // Style preferences for the sample website
+      styleVibe:      checkedValues('styleVibe'),
+      styleColors:    checkedValues('styleColors'),
+      colorNotes:     $('colorNotes').value.trim() || 'None',
+      brandAssets:    radioValue('brandAssets'),
+      styleMode:      radioValue('styleMode'),
+      styleType:      radioValue('styleType'),
+      styleImagery:   radioValue('styleImagery'),
+      inspiration:    $('inspiration').value.trim() || 'None provided'
+    };
+
+    try {
+      const formData = new FormData();
+      Object.keys(payload).forEach(function(k) { formData.append(k, payload[k]); });
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData });
+      showSuccess();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Get My Free Website Audit';
+      const fe = $('formError');
+      fe.textContent = 'Something went wrong sending your request. Please check your connection and try again.';
+      fe.classList.add('visible');
+    }
+  });
+
+  function showSuccess() {
+    $('auditForm').style.display = 'none';
+    const s = $('successMsg');
+    s.classList.add('visible');
+    s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    s.focus({ preventScroll: true });
+  }
+
+  updateUrlField();
+</script>
+</body>
+</html>
