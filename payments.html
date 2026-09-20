@@ -15,134 +15,194 @@
       --shadow: 0 4px 24px rgba(106,171,176,0.13); --shadow-hover: 0 8px 36px rgba(106,171,176,0.22);
     }
     body { font-family: 'DM Sans', sans-serif; background-color: #f0f7f8; color: var(--text); min-height: 100vh; }
+    button { font-family: inherit; }
+    button:focus-visible, input:focus-visible, .opt:focus-visible, .check input:focus-visible + .box {
+      outline: 3px solid rgba(61,122,128,0.45); outline-offset: 2px;
+    }
+
+    /* ---------- Icons (SVG sprite) ---------- */
+    .ico { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; vertical-align: middle; }
+    .ico.fill { fill: currentColor; stroke-width: 1; }
+
+    /* ---------- Hero ---------- */
     .hero { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); padding: 52px 24px 44px; text-align: center; position: relative; overflow: hidden; }
     .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; background: rgba(245,200,66,0.12); border-radius: 50%; }
     .hero::after { content: ''; position: absolute; bottom: -80px; left: -40px; width: 220px; height: 220px; background: rgba(255,255,255,0.07); border-radius: 50%; }
-    .hero-badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 6px 18px; border-radius: 50px; margin-bottom: 18px; }
-    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5vw, 42px); color: var(--white); line-height: 1.2; margin-bottom: 12px; }
+    .hero-badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 6px 18px; border-radius: 50px; margin-bottom: 18px; position: relative; z-index: 1; }
+    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5vw, 42px); color: var(--white); line-height: 1.2; margin-bottom: 12px; position: relative; z-index: 1; }
     .hero h1 span { color: var(--gold); }
-    .hero p { font-size: 15px; color: rgba(255,255,255,0.82); max-width: 480px; margin: 0 auto; line-height: 1.6; }
-    .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
-    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .hero p { font-size: 15px; color: rgba(255,255,255,0.82); max-width: 480px; margin: 0 auto; line-height: 1.6; position: relative; z-index: 1; }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 40px 20px 60px; }
+
+    /* ---------- Step headings ---------- */
+    .step { margin-bottom: 44px; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .packages-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
-    @media (max-width: 560px) { .packages-grid { grid-template-columns: 1fr; } }
-    .pkg-card { background: var(--white); border: 2px solid var(--border); border-radius: 14px; padding: 20px; cursor: pointer; transition: all 0.2s ease; position: relative; user-select: none; }
-    .pkg-card:hover { border-color: var(--teal); box-shadow: var(--shadow); transform: translateY(-1px); }
-    .pkg-card.selected { border-color: var(--teal); background: var(--teal-light); box-shadow: var(--shadow-hover); }
-    .pkg-card.selected::after { content: '✓'; position: absolute; top: 14px; right: 14px; width: 24px; height: 24px; background: var(--teal); color: white; border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; line-height: 24px; text-align: center; }
-    .pkg-name { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--dark); margin-bottom: 4px; }
-    .pkg-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
-    .pkg-features { list-style: none; margin-bottom: 14px; }
-    .pkg-features li { font-size: 12px; color: var(--text); padding: 2px 0; padding-left: 16px; position: relative; }
-    .pkg-features li::before { content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: 9px; top: 3px; }
-    .pkg-price { font-size: 22px; font-weight: 700; color: var(--teal-dark); }
-    .pkg-price span { font-size: 13px; font-weight: 500; color: var(--muted); }
-    .glowup-options { display: flex; gap: 8px; margin-top: 12px; }
-    .glowup-opt { flex: 1; border: 2px solid var(--border); border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.18s; text-align: center; background: var(--white); }
-    .glowup-opt:hover { border-color: var(--teal); }
-    .glowup-opt.active { border-color: var(--teal); background: var(--teal-light); }
-    .glowup-opt .go-pages { font-size: 11px; color: var(--muted); }
-    .glowup-opt .go-price { font-size: 16px; font-weight: 700; color: var(--teal-dark); }
-    .addons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
-    @media (max-width: 560px) { .addons-grid { grid-template-columns: 1fr; } }
-    .addon-card { background: var(--white); border: 2px solid var(--border); border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all 0.18s; display: flex; align-items: flex-start; gap: 12px; user-select: none; }
-    .addon-card:hover { border-color: var(--gold); box-shadow: var(--shadow); }
-    .addon-card.selected { border-color: var(--gold); background: #fffbea; }
-    .addon-checkbox { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.18s; background: var(--white); }
-    .addon-card.selected .addon-checkbox { background: var(--gold); border-color: var(--gold); }
-    .addon-card.selected .addon-checkbox::after { content: '✓'; display: block; font-size: 12px; font-weight: 700; color: var(--dark); }
-    .addon-info { flex: 1; }
-    .addon-name { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 2px; }
-    .addon-detail { font-size: 11px; color: var(--muted); line-height: 1.4; }
-    .addon-price { font-size: 15px; font-weight: 700; color: #b08a00; white-space: nowrap; }
-    .maintenance-section { background: var(--white); border: 2px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 32px; }
-    .maintenance-header { background: var(--teal-light); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
-    .maintenance-header span { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--teal-dark); }
-    .maintenance-toggle { font-size: 12px; color: var(--teal-dark); cursor: pointer; font-weight: 600; text-decoration: underline; }
-    .maintenance-options { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
-    .maint-opt { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.18s; user-select: none; }
-    .maint-opt:hover { border-color: var(--teal); }
-    .maint-opt.selected { border-color: var(--teal); background: var(--teal-light); }
-    .maint-radio { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.18s; }
-    .maint-opt.selected .maint-radio { border-color: var(--teal); background: var(--teal); }
-    .maint-opt.selected .maint-radio::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; }
-    .maint-label { flex: 1; font-size: 13px; color: var(--dark); }
-    .maint-label small { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .maint-price { font-size: 14px; font-weight: 700; color: var(--teal-dark); }
-    .hosting-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-    .hosting-card { background: var(--white); border: 2px solid var(--border); border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all 0.18s; display: flex; align-items: flex-start; gap: 14px; user-select: none; }
-    .hosting-card:hover { border-color: var(--teal); box-shadow: var(--shadow); }
-    .hosting-card.selected { border-color: var(--teal); background: var(--teal-light); }
-    .hosting-card-free { border-style: dashed; }
-    .hosting-card-free.selected { border-style: solid; }
-    .hosting-radio-wrap { padding-top: 2px; flex-shrink: 0; }
-    .hosting-radio { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; transition: all 0.18s; display: flex; align-items: center; justify-content: center; }
-    .hosting-card.selected .hosting-radio { border-color: var(--teal); background: var(--teal); }
-    .hosting-card.selected .hosting-radio::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; display: block; }
-    .hosting-info { flex: 1; }
-    .hosting-name { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
-    .hosting-best { font-size: 11px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 4px; }
-    .hosting-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-    .hosting-price { font-size: 13px; font-weight: 700; color: var(--teal-dark); white-space: nowrap; padding-top: 2px; }
-    .hosting-price span { font-size: 11px; font-weight: 500; color: var(--muted); }
-    .hosting-free-badge { background: var(--teal); color: white; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase; }
-    .setup-opt { flex: 1; min-width: 180px; padding: 11px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--dark); background: var(--white); cursor: pointer; transition: all 0.18s; text-align: center; user-select: none; }
-    .setup-opt:hover { border-color: var(--teal); background: var(--teal-light); }
-    .setup-opt.selected { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
+    .step-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
+    .step-sub strong { color: var(--text); }
+    .domain-example { display: inline-block; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 2px 10px; font-weight: 600; color: var(--teal-dark); margin: 4px 0; }
+
+    /* ---------- Grids ---------- */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; padding-top: 14px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: stretch; }
+    @media (max-width: 880px) { .grid-3 { grid-template-columns: 1fr; gap: 24px; } }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ---------- Selectable cards ---------- */
+    .card { background: var(--white); border: 2px solid var(--border); border-radius: 14px; padding: 24px 22px; cursor: pointer; transition: border-color .2s, box-shadow .2s, background .2s; position: relative; display: flex; flex-direction: column; }
+    .card:hover { border-color: var(--teal); box-shadow: var(--shadow); }
+    .card.selected { border-color: var(--teal); background: var(--teal-light); box-shadow: var(--shadow-hover); }
+    .card.selected::after {
+      content: ''; position: absolute; top: 16px; right: 16px; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 14px no-repeat;
+    }
+    .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-right: 30px; }
+    .icon-wrap { width: 40px; height: 40px; border-radius: 12px; background: var(--teal-light); color: var(--teal-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .card.selected .icon-wrap { background: var(--white); }
+    .icon-wrap .ico { width: 20px; height: 20px; }
+    .card-name { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--dark); line-height: 1.2; }
+    .price { font-size: 30px; font-weight: 700; color: var(--teal-dark); line-height: 1; margin-bottom: 10px; }
+    .price .unit { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-left: 4px; }
+    .desc { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 14px; }
+
+    .badge-popular { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--dark); font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 50px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+
+    .feat-title { font-size: 10.5px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--teal-dark); margin: 12px 0 4px; }
+    .feat-title:first-of-type { margin-top: 0; }
+    .feat { list-style: none; margin-bottom: 18px; }
+    .feat li { font-size: 13px; color: var(--text); padding: 3px 0 3px 20px; position: relative; line-height: 1.45; }
+    .feat li::before {
+      content: ''; position: absolute; left: 0; top: 7px; width: 11px; height: 11px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F5C842'%3E%3Cpath d='M12 2c.6 5.4 4.6 9.4 10 10-5.4.6-9.4 4.6-10 10-.6-5.4-4.6-9.4-10-10 5.4-.6 9.4-4.6 10-10z'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+
+    .card-btn { margin-top: auto; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 16px; border-radius: 50px; border: 2px solid var(--teal); background: transparent; color: var(--teal-dark); font-size: 12.5px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; cursor: pointer; transition: background .2s, color .2s; }
+    .card:hover .card-btn, .card.selected .card-btn { background: var(--teal); color: var(--white); }
+
+    /* info-style cards (steps 2-4) */
+    .quote { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 16px; color: var(--dark); line-height: 1.4; margin-bottom: 10px; }
+    .lead { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 8px; line-height: 1.45; }
+    .body { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+    .best-for { font-size: 13px; color: var(--text); line-height: 1.55; background: rgba(106,171,176,0.10); border-radius: 10px; padding: 10px 12px; margin: 4px 0 14px; }
+    .best-for strong { color: var(--teal-dark); }
+    .starting { font-size: 20px; font-weight: 700; color: var(--teal-dark); margin-bottom: 6px; }
+    .note { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 16px; }
+
+    /* ---------- Form fields ---------- */
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 5px; }
+    .field label .opt-tag { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+    .field input[type="text"], .field input[type="email"], .field input[type="tel"] { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--dark); background: var(--white); }
+    .field input:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 0 3px rgba(106,171,176,0.2); }
+
+    .check { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--text); line-height: 1.5; cursor: pointer; margin-bottom: 16px; position: relative; }
+    .check input { position: absolute; opacity: 0; width: 20px; height: 20px; }
+    .check .box { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px; flex-shrink: 0; background: var(--white) center / 13px no-repeat; margin-top: 1px; transition: all .18s; }
+    .check input:checked + .box { background-color: var(--teal); border-color: var(--teal); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); }
+
+    /* ---------- Priority panel ---------- */
+    .panel { background: var(--white); border: 2px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 28px; }
+    .panel-head { background: var(--teal-light); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .panel-title { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--teal-dark); }
+    .panel-title .ico { width: 16px; height: 16px; }
+    .link-btn { display: none; background: none; border: none; font-size: 12px; color: var(--teal-dark); cursor: pointer; font-weight: 600; text-decoration: underline; }
+    .panel-body { padding: 18px 20px 20px; }
+    .panel-body .lead { margin-bottom: 2px; }
+    .panel-body .sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+    .opt-list { display: flex; flex-direction: column; gap: 8px; }
+    .opt { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all .18s; user-select: none; background: var(--white); }
+    .opt:hover { border-color: var(--teal); }
+    .opt.selected { border-color: var(--teal); background: var(--teal-light); }
+    .radio { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .18s; }
+    .opt.selected .radio { border-color: var(--teal); background: var(--teal); }
+    .opt.selected .radio::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; }
+    .opt-label { flex: 1; font-size: 14px; font-weight: 600; color: var(--dark); }
+    .opt-label small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 1px; }
+    .opt-price { font-size: 15px; font-weight: 700; color: var(--teal-dark); white-space: nowrap; }
+    .fineprint { font-size: 11.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+
+    .care-heading { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 -2px; min-height: 18px; }
+    .subscription-notice { display: none; background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #7a5c00; line-height: 1.6; margin-top: 20px; }
+    .subscription-notice .ico { width: 14px; height: 14px; margin-right: 4px; }
+
+    /* ---------- Order summary ---------- */
     .summary-box { background: var(--white); border: 2px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 24px; box-shadow: var(--shadow); }
     .summary-header { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); padding: 16px 24px; }
-    .summary-header h3 { font-family: 'DM Serif Display', serif; font-size: 18px; color: white; }
-    .summary-lines { padding: 20px 24px; }
-    .summary-line { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f0f0f0; color: var(--text); }
+    .summary-header h3 { font-family: 'DM Serif Display', serif; font-size: 18px; color: white; font-weight: 400; }
+    .summary-block { padding: 18px 24px; border-bottom: 1px solid #f0f0f0; }
+    .summary-block-title { font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 12px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+    @media (max-width: 560px) { .info-grid { grid-template-columns: 1fr; } }
+    .summary-line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f3f6f6; }
     .summary-line:last-child { border-bottom: none; }
-    .summary-line.empty-state { color: var(--muted); font-style: italic; justify-content: center; padding: 16px 0; }
-    .summary-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #f8fcfc; border-top: 2px solid var(--border); }
+    .sl-label { color: var(--muted); flex-shrink: 0; }
+    .sl-value { text-align: right; color: var(--text); }
+    .sl-value.muted { color: #9aacad; font-style: italic; }
+    .summary-total { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 24px; background: #f8fcfc; }
     .summary-total .label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal-dark); }
-    .summary-total .amount { font-family: 'DM Serif Display', serif; font-size: 30px; color: var(--dark); }
+    .summary-total .amounts { text-align: right; }
+    .summary-total .amount { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--dark); line-height: 1.1; }
+    .summary-total .recurring { display: none; font-size: 15px; font-weight: 700; color: var(--teal-dark); margin-top: 2px; }
+
+    /* ---------- Payment ---------- */
     .payment-section { background: var(--white); border: 2px solid var(--border); border-radius: 16px; padding: 28px 24px; }
+    .payment-title { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 8px; }
+    .payment-title .ico { width: 15px; height: 15px; }
     .payment-note { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
-    .payment-note strong { color: var(--text); }
-    .disabled-notice { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #7a5c00; margin-bottom: 12px; }
+    .disabled-notice { display: none; background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #7a5c00; margin-bottom: 12px; line-height: 1.5; }
+    .disabled-notice .ico { width: 14px; height: 14px; margin-right: 5px; }
+    .disabled-notice ul { margin: 6px 0 0 20px; }
     #payment-element { margin-bottom: 20px; }
     #express-checkout-element { margin-bottom: 16px; }
-    .pay-btn { width: 100%; background: var(--teal); color: white; border: none; border-radius: 50px; padding: 15px 24px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .pay-btn { width: 100%; display: none; align-items: center; justify-content: center; gap: 10px; background: var(--teal); color: white; border: none; border-radius: 50px; padding: 15px 24px; font-size: 15px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+    .pay-btn .ico { width: 18px; height: 18px; stroke-width: 2.5; }
     .pay-btn:hover { background: var(--teal-dark); }
     .pay-btn:disabled { background: #a0c8cc; cursor: not-allowed; }
     #payment-message { color: #c0392b; font-size: 13px; margin-top: 12px; text-align: center; }
-    .or-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
+    .or-divider { display: none; align-items: center; gap: 12px; margin: 16px 0; }
     .or-divider div { flex: 1; height: 1px; background: var(--border); }
     .or-divider span { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    #stripe-loading { display: none; text-align: center; padding: 20px; color: var(--teal); font-size: 14px; }
+    #stripe-loading .ico { width: 16px; height: 16px; margin-right: 6px; animation: spin 1.2s linear infinite; }
+
     footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); }
-    .pkg-snackbar {
-      display: none;
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #1a3d3d;
-      color: #f5c842;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 14px 28px;
-      border-radius: 50px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-      z-index: 999;
-      white-space: nowrap;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .pkg-snackbar.show {
-      display: block;
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
     footer strong { color: var(--teal-dark); }
+
+    #url-welcome-banner { display: none; background: linear-gradient(135deg,#fffbea,#fff8d6); border: 2px solid var(--gold); border-radius: 14px; padding: 18px 24px; margin-bottom: 28px; align-items: center; gap: 14px; }
+    #url-welcome-banner .ttl { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--dark); margin-bottom: 3px; }
+    #url-welcome-banner .txt { font-size: 13px; color: #7a6000; line-height: 1.5; }
+
+    .pkg-snackbar { display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a3d3d; color: #f5c842; font-size: 14px; font-weight: 600; padding: 14px 28px; border-radius: 50px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); z-index: 999; white-space: nowrap; opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); align-items: center; gap: 8px; }
+    .pkg-snackbar.show { display: flex; opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 480px) { .pkg-snackbar { white-space: normal; width: calc(100% - 32px); text-align: center; justify-content: center; } }
+
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+
+<!-- SVG icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="i-handshake" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/><path d="M10 10.5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5.5a6 6 0 0 0 6 6h2a8 8 0 0 0 8-8v-2a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M18 11a2 2 0 1 1 4 0v3"/></symbol>
+  <symbol id="i-loader" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></symbol>
+</svg>
 
 <div class="hero">
   <div class="hero-badge">TEC Web Studio</div>
@@ -152,630 +212,685 @@
 
 <div class="container">
 
-  <div id="url-welcome-banner" style="display:none;background:linear-gradient(135deg,#fffbea,#fff8d6);border:2px solid #F5C842;border-radius:14px;padding:18px 24px;margin-bottom:28px;align-items:center;gap:14px;">
-    <span style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#b08a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/><path d="M10 10.5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5.5a6 6 0 0 0 6 6h2a8 8 0 0 0 8-8v-2a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M18 11a2 2 0 1 1 4 0v3"/></svg></span>
+  <div id="url-welcome-banner">
+    <span style="color:#b08a00;display:inline-flex;"><svg class="ico" style="width:36px;height:36px;" aria-hidden="true"><use href="#i-hand"/></svg></span>
     <div>
-      <div style="font-family:'DM Serif Display',serif;font-size:17px;color:#1a2e2e;margin-bottom:3px;">We've pre-selected your recommended package!</div>
-      <div style="font-size:13px;color:#7a6000;line-height:1.5;">Review your selection below, add any extras you'd like, then proceed to secure checkout.</div>
+      <div class="ttl">We've pre-selected your recommended package!</div>
+      <div class="txt">Review your selection below, add any extras you'd like, then proceed to secure checkout.</div>
     </div>
   </div>
 
-  <div class="section-label">Step 1 — Choose Your Package</div>
-  <div class="packages-grid">
-    <div class="pkg-card" id="pkg-glowup" onclick="selectPackage('glowup')">
-      <div class="pkg-name">✦ The Glow-Up</div>
-      <div class="pkg-desc">Best for small updates to your existing website</div>
-      <ul class="pkg-features">
-        <li>Minor edits to text, images &amp; formatting</li>
-        <li>Fast turnaround, targeted updates</li>
-      </ul>
-      <div class="glowup-options">
-        <div class="glowup-opt active" id="glowup-sm" onclick="selectGlowup(event,'sm')">
-          <div class="go-pages">1–4 pages</div>
-          <div class="go-price">$200</div>
+  <!-- ================= STEP 1 ================= -->
+  <div class="step" id="step-1">
+    <div class="section-label">Step 1 — Choose Your Website</div>
+    <p class="step-sub">Choose the website package that's right for your business.</p>
+    <div class="grid-3" id="packages-grid"></div>
+  </div>
+
+  <!-- ================= STEP 2 ================= -->
+  <div class="step" id="step-2">
+    <div class="section-label">Step 2 — How Would You Like to Manage Your Website?</div>
+    <p class="step-sub">Choose the experience that's right for you after your website is built.</p>
+    <div class="grid-2">
+
+      <div class="card mgmt-card" id="mgmt-tecweb" onclick="selectMgmt('tecweb')">
+        <div class="card-top">
+          <span class="icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-wrench"/></svg></span>
+          <div class="card-name">TecWeb Managed</div>
         </div>
-        <div class="glowup-opt" id="glowup-lg" onclick="selectGlowup(event,'lg')">
-          <div class="go-pages">5–8 pages</div>
-          <div class="go-price">$300</div>
-        </div>
+        <p class="quote">"I want TecWeb to handle my website."</p>
+        <p class="body">We'll build, launch, host, and manage the technical side of your website for you.</p>
+        <p class="body">You won't need to worry about website hosting, technical setup, or editing code.</p>
+        <p class="best-for"><strong>Best for:</strong> Business owners who want a professional website without having to manage the technical side themselves.</p>
+        <div class="feat-title">Includes:</div>
+        <ul class="feat">
+          <li>Custom website development</li>
+          <li>Website hosting</li>
+          <li>Domain connection</li>
+          <li>SSL/security</li>
+          <li>Technical setup</li>
+          <li>Website deployment</li>
+          <li>Ongoing maintenance options available</li>
+        </ul>
+        <div class="starting">Starting at $299</div>
+        <p class="note">Your website and domain remain yours.</p>
+        <button type="button" class="card-btn" aria-pressed="false">TecWeb will manage it</button>
       </div>
-    </div>
-    <div class="pkg-card" id="pkg-quickfixes" onclick="selectPackage('quickfixes')">
-      <div class="pkg-name"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6AABB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 4 4c0 4 3 8 8 8"/><path d="M12 12c0-5 4-8 8-8 0 4-3 8-8 8"/></svg> Site Refreshers</div>
-      <div class="pkg-desc">Ideal for refreshing and improving your current website</div>
-      <ul class="pkg-features">
-        <li>Fix layout issues &amp; minor bugs</li>
-        <li>Enhance UI/UX and branding</li>
-        <li>Refresh existing design</li>
-      </ul>
-      <div class="pkg-price">$399</div>
-    </div>
-    <div class="pkg-card" id="pkg-doneforyou" onclick="selectPackage('doneforyou')">
-      <div class="pkg-name">Done-for-You</div>
-      <div class="pkg-desc">Starting from scratch — you choose what's included</div>
-      <ul class="pkg-features">
-        <li>Full website design &amp; build</li>
-        <li>First 4 pages, links &amp; animations</li>
-        <li>1 month maintenance included</li>
-      </ul>
-      <div class="glowup-options">
-        <div class="glowup-opt active" id="dfy-nocontent" onclick="selectDFY(event,'nocontent')">
-          <div class="go-pages">I have content</div>
-          <div class="go-price">$500</div>
+
+      <div class="card mgmt-card" id="mgmt-wix" onclick="selectMgmt('wix')">
+        <div class="card-top">
+          <span class="icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-pencil"/></svg></span>
+          <div class="card-name">Wix Website</div>
         </div>
-        <div class="glowup-opt" id="dfy-content" onclick="selectDFY(event,'content')">
-          <div class="go-pages">Write my content</div>
-          <div class="go-price">$600</div>
-        </div>
+        <p class="quote">"I want to be able to edit my website myself."</p>
+        <p class="body">We'll build your website using Wix, giving you access to Wix's visual editor after your site is launched.</p>
+        <p class="body">You'll be able to make changes such as:</p>
+        <ul class="feat">
+          <li>Add or replace photos</li>
+          <li>Edit text</li>
+          <li>Update services</li>
+          <li>Change prices</li>
+          <li>Add blog posts</li>
+          <li>Make other content updates</li>
+        </ul>
+        <p class="best-for"><strong>Best for:</strong> Business owners who want the freedom to make their own changes without needing a developer every time.</p>
+        <div class="starting">Starting at $299</div>
+        <p class="note">Wix subscription, domain, and optional premium features are separate from your TecWeb website package and are purchased directly through Wix. We'll help you determine what your website needs before you purchase your Wix plan.</p>
+        <button type="button" class="card-btn" aria-pressed="false">I want to edit my site</button>
       </div>
-    </div>
-    <div class="pkg-card" id="pkg-allinclusive" onclick="selectPackage('allinclusive')">
-      <div class="pkg-name"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6AABB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> All-Inclusive</div>
-      <div class="pkg-desc">Complete done-for-you experience</div>
-      <ul class="pkg-features">
-        <li>Full custom design + copywriting</li>
-        <li>UX, SEO &amp; brand alignment</li>
-        <li>Name &amp; logo creation</li>
-        <li>2 months maintenance included</li>
-      </ul>
-      <div class="pkg-price">$799</div>
+
     </div>
   </div>
 
-  <div class="section-label">Step 2 — Add-Ons (Optional)</div>
+  <!-- ================= STEP 3 ================= -->
+  <div class="step" id="step-3">
+    <div class="section-label">Step 3 — Your Domain</div>
+    <p class="step-sub">
+      <strong>Do you already have a domain?</strong><br>
+      Your domain is your website address, such as:<br>
+      <span class="domain-example">yourbusiness.com</span><br>
+      Choose the option that applies to you.
+    </p>
+    <div class="grid-2">
 
-  <!-- Expedited Delivery -->
-  <div class="maintenance-section" style="margin-bottom:16px;">
-    <div class="maintenance-header">
-      <span style="display:flex;align-items:center;gap:7px;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3d7a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Expedited Delivery</span>
-    </div>
-    <div class="maintenance-options">
-      <div class="maint-opt" id="addon-expedited" onclick="toggleAddon('expedited',95)" style="cursor:pointer;">
-        <div class="maint-radio"></div>
-        <div class="maint-label">
-          <span>Rush my project to the top of the queue</span>
-          <small>Your project gets prioritized for faster delivery</small>
+      <div class="card dom-card" id="dom-have" onclick="selectDomain('have')">
+        <div class="card-top">
+          <span class="icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-globe"/></svg></span>
+          <div class="card-name">I Already Have a Domain</div>
         </div>
-        <div class="maint-price">+$95</div>
+        <p class="lead">I already purchased my website address.</p>
+        <p class="body">Enter your domain below and TecWeb will help connect it to your new website.</p>
+        <div class="field">
+          <label for="domain-existing">Domain</label>
+          <input type="text" id="domain-existing" placeholder="yourbusiness.com" autocomplete="off" />
+        </div>
+        <p class="note">No additional TecWeb charge.</p>
+        <button type="button" class="card-btn" aria-pressed="false">I have a domain</button>
       </div>
+
+      <div class="card dom-card" id="dom-help" onclick="selectDomain('help')">
+        <div class="card-top">
+          <span class="icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg></span>
+          <div class="card-name">I Need Help Choosing a Domain</div>
+        </div>
+        <p class="lead">I don't have a domain yet.</p>
+        <p class="body">Tell us your business name and we'll help you find an available domain that fits your business.</p>
+        <div class="field">
+          <label for="domain-business">Business Name</label>
+          <input type="text" id="domain-business" autocomplete="organization" />
+        </div>
+        <div class="field">
+          <label for="domain-preferred">Preferred Domain Name <span class="opt-tag">(optional)</span></label>
+          <input type="text" id="domain-preferred" autocomplete="off" />
+        </div>
+        <p class="note">Your domain will be registered using your information and remain under your ownership. Domain registration costs are separate from your TecWeb website package.</p>
+        <button type="button" class="card-btn" aria-pressed="false">Help me choose a domain</button>
+      </div>
+
     </div>
   </div>
 
-  <!-- Maintenance Plans + Last-Minute Fixes combined -->
-  <div class="maintenance-section">
-    <div class="maintenance-header">
-      <span style="display:flex;align-items:center;gap:7px;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3d7a80" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Maintenance Plans (Optional)</span>
-      <span class="maintenance-toggle" onclick="clearMaintenance()">Clear selection</span>
-    </div>
-    <div class="maintenance-options">
-      <div class="maint-opt" id="maint-monthly" onclick="selectMaintenance('monthly',149)">
-        <div class="maint-radio"></div>
-        <div class="maint-label">
-          <span style="display:flex;align-items:center;gap:8px;">Monthly Maintenance <span style="background:#e8f4f5;color:#3d7a80;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;">One-Time</span></span>
-          <small>Up to 4 tasks, ~5–7 day turnaround - no commitment</small>
+  <!-- ================= STEP 4 ================= -->
+  <div class="step" id="step-4">
+    <div class="section-label">Step 4 — Account Setup</div>
+    <p class="step-sub">
+      <strong>Your accounts belong to you. We'll help with the technical setup.</strong><br>
+      You don't need to be technical to get started.<br>
+      Choose the option that's easiest for you.
+    </p>
+    <div class="grid-2">
+
+      <div class="card acct-card" id="acct-self" onclick="selectAcct('self')">
+        <div class="card-top">
+          <span class="icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg></span>
+          <div class="card-name">I'll Set Up My Own Account</div>
         </div>
-        <div class="maint-price">$149</div>
-      </div>
-      <div class="maint-opt" id="maint-active" onclick="selectMaintenance('active',249)" style="border-color:#F5C842;">
-        <div class="maint-radio"></div>
-        <div class="maint-label">
-          <span style="display:flex;align-items:center;gap:8px;">Active Site Maintenance <span style="background:#fff8e1;color:#b08000;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b08000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Recurring</span></span>
-          <small>Up to 8 tasks, Priority queue, cancel anytime</small>
-        </div>
-        <div class="maint-price" style="color:#b08000;">$249<span style="font-size:11px;font-weight:500;color:#888;">/mo</span></div>
-      </div>
-      <div id="subscription-notice" style="display:none;background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:13px;color:#7a5c00;line-height:1.6;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a5c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <strong>Heads up:</strong> The Active Site Maintenance plan is a <strong>recurring monthly subscription of $249</strong>. Your card will be charged automatically each month until you cancel.
+        <p class="body">I'll create my website account and provide TecWeb with the access needed to build and launch my website.</p>
+        <p class="body">I'll remain the account owner and can access my account whenever I need to.</p>
+        <p class="best-for"><strong>Best for:</strong> Customers who are comfortable setting up their own account.</p>
+        <button type="button" class="card-btn" aria-pressed="false">I'll set it up</button>
       </div>
 
-      <!-- Dashed divider -->
-      <hr style="border:none;border-top:1.5px dashed #d0e4e6;margin:8px 0 12px;"/>
+      <div class="card acct-card" id="acct-help" onclick="selectAcct('help')">
+        <div class="card-top">
+          <span class="icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-handshake"/></svg></span>
+          <div class="card-name">TecWeb Will Help Me Set It Up</div>
+        </div>
+        <p class="quote">"I'm not comfortable setting up the technical account myself."</p>
+        <p class="lead">No problem.</p>
+        <p class="body">I'll provide the email address I want associated with my website account, and TecWeb will guide me through the setup process.</p>
+        <p class="body">I'll create my own password and retain access to my account.</p>
+        <p class="body">TecWeb will receive the access necessary to build and maintain my website.</p>
+        <p class="note">Your account remains yours. TecWeb does not need to keep your personal password.</p>
+        <div class="field">
+          <label for="acct-email">Email Address</label>
+          <input type="email" id="acct-email" autocomplete="email" />
+        </div>
+        <label class="check">
+          <input type="checkbox" id="acct-ack" />
+          <span class="box"></span>
+          <span>I understand that this email will be associated with my website account and that I will retain access to the account.</span>
+        </label>
+        <button type="button" class="card-btn" aria-pressed="false">TecWeb will help set it up</button>
+      </div>
 
-      <!-- Last-Minute Fixes sub-section -->
-      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#557070;margin-bottom:4px;display:flex;align-items:center;gap:5px;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#557070" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Last-Minute Fixes</div>
-      <div style="font-size:12px;color:#557070;margin-bottom:10px;line-height:1.5;">When something needs to be handled fast, choose your turnaround. Perfect for text updates, price changes, image swaps, link fixes, and more.</div>
-
-      <div class="maint-opt" id="addon-maint3" onclick="toggleAddon('maint3',154)" style="cursor:pointer;">
-        <div class="maint-radio"></div>
-        <div class="maint-label">
-          <span>3-Day Turnaround</span>
-          <small>One-time updates delivered in 3 days</small>
-        </div>
-        <div class="maint-price">+$154</div>
-      </div>
-      <div class="maint-opt" id="addon-maint2" onclick="toggleAddon('maint2',160)" style="cursor:pointer;">
-        <div class="maint-radio"></div>
-        <div class="maint-label">
-          <span>2-Day Turnaround</span>
-          <small>One-time updates delivered in 2 days</small>
-        </div>
-        <div class="maint-price">+$160</div>
-      </div>
-      <div class="maint-opt" id="addon-maint24" onclick="toggleAddon('maint24',200)" style="cursor:pointer;">
-        <div class="maint-radio"></div>
-        <div class="maint-label">
-          <span>24-Hour Turnaround</span>
-          <small>One-time updates delivered in 24 hours</small>
-        </div>
-        <div class="maint-price">+$200</div>
-      </div>
     </div>
   </div>
 
-  <div class="section-label">Step 3 — Choose Your Hosting Platform</div>
-  <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:#5a4200;line-height:1.7;">
-    <strong>Your website has two parts:</strong> the <strong>design</strong> (what we build) and the <strong>hosting</strong> (where it lives online). Hosting is a separate cost paid directly to the platform. <strong>You'll own your account completely.</strong>
-  </div>
-  <div class="hosting-grid" id="hosting-grid">
-    <div class="hosting-card" id="hosting-wix" onclick="selectHosting('wix')">
-      <div class="hosting-radio-wrap"><div class="hosting-radio"></div></div>
-      <div class="hosting-info">
-        <div class="hosting-name">Wix</div>
-        <div class="hosting-best">Best for: Small businesses, service sites, portfolios</div>
-        <div class="hosting-desc">Drag-and-drop friendly — easy to manage yourself after launch.</div>
-      </div>
-      <div class="hosting-price">~$17<span>/mo</span></div>
-    </div>
-    <div class="hosting-card" id="hosting-squarespace" onclick="selectHosting('squarespace')">
-      <div class="hosting-radio-wrap"><div class="hosting-radio"></div></div>
-      <div class="hosting-info">
-        <div class="hosting-name">Squarespace</div>
-        <div class="hosting-best">Best for: Creatives, photographers, salons</div>
-        <div class="hosting-desc">Known for beautiful, polished designs.</div>
-      </div>
-      <div class="hosting-price">~$16<span>/mo</span></div>
-    </div>
-    <div class="hosting-card" id="hosting-wordpress" onclick="selectHosting('wordpress')">
-      <div class="hosting-radio-wrap"><div class="hosting-radio"></div></div>
-      <div class="hosting-info">
-        <div class="hosting-name">WordPress</div>
-        <div class="hosting-best">Best for: Blogs, growing businesses</div>
-        <div class="hosting-desc">Most flexible option. Ideal if you plan to grow over time.</div>
-      </div>
-      <div class="hosting-price">~$5–15<span>/mo</span></div>
-    </div>
-    <div class="hosting-card" id="hosting-shopify" onclick="selectHosting('shopify')">
-      <div class="hosting-radio-wrap"><div class="hosting-radio"></div></div>
-      <div class="hosting-info">
-        <div class="hosting-name">Shopify</div>
-        <div class="hosting-best">Best for: Online stores, product-based businesses</div>
-        <div class="hosting-desc">The go-to platform for selling products online.</div>
-      </div>
-      <div class="hosting-price">~$29<span>/mo</span></div>
-    </div>
-    <div class="hosting-card hosting-card-free" id="hosting-github" onclick="selectHosting('github')">
-      <div class="hosting-radio-wrap"><div class="hosting-radio"></div></div>
-      <div class="hosting-info">
-        <div class="hosting-name">GitHub Pages <span class="hosting-free-badge">FREE</span></div>
-        <div class="hosting-best">Best for: Simple, static sites</div>
-        <div class="hosting-desc">100% free — no hosting fees, but updates require code (maintenance plans available).</div>
-      </div>
-      <div class="hosting-price" style="color:#3d7a80;">Free</div>
-    </div>
-    <div class="hosting-card" id="hosting-webflow" onclick="selectHosting('webflow')">
-      <div class="hosting-radio-wrap"><div class="hosting-radio"></div></div>
-      <div class="hosting-info">
-        <div class="hosting-name">Webflow</div>
-        <div class="hosting-best">Best for: Design-forward businesses</div>
-        <div class="hosting-desc">Powerful visual builder for highly custom, polished sites.</div>
-      </div>
-      <div class="hosting-price">~$14<span>/mo</span></div>
-    </div>
-  </div>
-  <p style="font-size:11px;color:#9aacad;margin-bottom:16px;line-height:1.6;">* You will own your hosting account — we will only be added as your developer to build your site.</p>
+  <!-- ================= STEP 5 ================= -->
+  <div class="step" id="step-5">
+    <div class="section-label">Step 5 — Customize Your Project</div>
+    <p class="step-sub">Make your project fit your timeline and ongoing needs.</p>
 
-  <div id="setup-assist-wrap" style="display:none;margin-bottom:32px;">
-    <div style="background:#f0f9f9;border:2px solid #6AABB0;border-radius:12px;padding:18px 20px;">
-      <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a2e2e;">Need help getting your hosting account set up?</p>
-      <p style="margin:0 0 14px;font-size:13px;color:#557070;line-height:1.6;">No worries — we can walk you through creating your account and adding us as your developer. It's quick and totally free.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div class="setup-opt" id="setup-yes" onclick="selectSetup('yes')">Yes, please help me get set up</div>
-        <div class="setup-opt" id="setup-no" onclick="selectSetup('no')">No, I can set it up on my own</div>
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title"><svg class="ico" aria-hidden="true"><use href="#i-zap"/></svg> Priority Delivery</span>
+        <button type="button" class="link-btn" id="clear-prio" onclick="clearPriority()">Clear selection</button>
       </div>
+      <div class="panel-body">
+        <p class="lead">Need your website sooner?</p>
+        <p class="sub">Move your project into our priority queue.</p>
+        <div class="opt-list" id="priority-list"></div>
+        <p class="fineprint">Priority delivery is subject to availability and applies to eligible projects.</p>
+      </div>
+    </div>
+
+    <div class="care-heading">
+      <span></span>
+      <button type="button" class="link-btn" id="clear-care" onclick="clearCare()">Clear selection</button>
+    </div>
+    <div class="grid-3" id="care-grid"></div>
+
+    <div class="subscription-notice" id="care-notice">
+      <svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>
+      <strong>Heads up:</strong> <span id="care-notice-text"></span>
     </div>
   </div>
 
-  <div id="order-summary-anchor"></div>
-  <div class="section-label">Step 4 — Your Details &amp; Order Review</div>
-  <div class="summary-box">
-    <div class="summary-header"><h3>Order Summary</h3></div>
-    <!-- Name & Email capture inside summary -->
-    <div style="padding:16px 24px;border-bottom:1px solid #f0f0f0;background:#f8fcfc;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div>
-          <label style="display:block;font-size:12px;font-weight:600;color:#2d3a3a;margin-bottom:5px;">Your Name</label>
-          <input type="text" id="customer-name" placeholder="Jane Smith"
-            style="width:100%;padding:9px 12px;border:1.5px solid #d0e4e6;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;box-sizing:border-box;"
-            onfocus="this.style.borderColor='#6AABB0'" onblur="this.style.borderColor='#d0e4e6'"/>
+  <!-- ================= STEP 6 ================= -->
+  <div class="step" id="step-6">
+    <div class="section-label">Step 6 — Your Details &amp; Order Review</div>
+    <p class="step-sub">Confirm your information and review your order.</p>
+
+    <div class="summary-box">
+      <div class="summary-header"><h3>Order Summary</h3></div>
+
+      <div class="summary-block" style="background:#f8fcfc;">
+        <div class="summary-block-title">Your Information</div>
+        <div class="info-grid">
+          <div class="field">
+            <label for="customer-name">Full Name</label>
+            <input type="text" id="customer-name" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="customer-business">Business Name</label>
+            <input type="text" id="customer-business" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="customer-email">Email Address</label>
+            <input type="email" id="customer-email" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="customer-phone">Phone Number</label>
+            <input type="tel" id="customer-phone" autocomplete="tel" />
+          </div>
         </div>
-        <div>
-          <label style="display:block;font-size:12px;font-weight:600;color:#2d3a3a;margin-bottom:5px;">Your Email</label>
-          <input type="email" id="customer-email" placeholder="you@example.com"
-            style="width:100%;padding:9px 12px;border:1.5px solid #d0e4e6;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;box-sizing:border-box;"
-            onfocus="this.style.borderColor='#6AABB0'" onblur="this.style.borderColor='#d0e4e6'"/>
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-block-title">Your Project</div>
+        <div id="summary-lines"></div>
+      </div>
+
+      <div class="summary-total">
+        <div class="label">Order Total</div>
+        <div class="amounts">
+          <div class="amount" id="total-display">$0</div>
+          <div class="recurring" id="recurring-display"></div>
         </div>
       </div>
     </div>
-    <div class="summary-lines" id="summary-lines">
-      <div class="summary-line empty-state">No package selected yet — choose above to get started!</div>
+
+    <div class="payment-section">
+      <div class="payment-title"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg> Secure Checkout</div>
+      <p class="payment-note">Your payment is securely processed through Stripe. Credit and debit cards, Apple Pay, Google Pay, and other available payment methods are accepted.</p>
+
+      <div class="disabled-notice" id="missing-notice">
+        <svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><strong>Before you check out, please:</strong>
+        <ul id="missing-list"></ul>
+      </div>
+
+      <button type="button" class="pay-btn" id="review-pay-btn" onclick="handleReviewPay()">Complete my order <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <div id="stripe-loading"><svg class="ico" aria-hidden="true"><use href="#i-loader"/></svg> Loading secure payment form...</div>
+      <div id="express-checkout-element"></div>
+      <div class="or-divider" id="or-divider"><div></div><span>or pay with card</span><div></div></div>
+      <div id="payment-element"></div>
+      <button type="button" class="pay-btn" id="pay-btn" onclick="handlePayment()">Pay Now</button>
+      <div id="payment-message"></div>
     </div>
-    <div class="summary-total">
-      <div class="label">Total</div>
-      <div class="amount" id="total-display">$0</div>
-    </div>
-  </div>
-
-
-
-
-
-  <div class="payment-section">
-    <p class="payment-note"><strong>Secure checkout via Stripe.</strong> Apple Pay, Google Pay, Afterpay, Klarna, credit &amp; debit cards all accepted.</p>
-    <div class="disabled-notice" id="no-selection-notice"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7a5c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Please select a package above before proceeding to payment.</div>
-    <div class="disabled-notice" id="no-hosting-notice" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7a5c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Please select a hosting platform in Step 3 before proceeding to payment.</div>
-    <div class="disabled-notice" id="no-setup-notice" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7a5c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Please answer the hosting setup question in Step 3 before proceeding to payment.</div>
-    <button class="pay-btn" id="review-pay-btn" style="display:none;" onclick="handleReviewPay()">Review &amp; Pay →</button>
-    <div id="stripe-loading" style="display:none;text-align:center;padding:20px;color:#6AABB0;font-size:14px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6AABB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;animation:spin 1.2s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Loading secure payment form...</div>
-    <div id="express-checkout-element"></div>
-    <div class="or-divider" id="or-divider" style="display:none;">
-      <div></div><span>or pay with card</span><div></div>
-    </div>
-    <div id="payment-element"></div>
-    <button class="pay-btn" id="pay-btn" style="display:none;" onclick="handlePayment()">Pay Now</button>
-    <div id="payment-message"></div>
   </div>
 
 </div>
 
 <!-- Pre-selected package snackbar -->
-<div class="pkg-snackbar" id="pkgSnackbar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#f5c842" stroke="#f5c842" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Your recommended package has been pre-selected for you!</div>
+<div class="pkg-snackbar" id="pkgSnackbar"><svg class="ico fill" style="width:14px;height:14px;" aria-hidden="true"><use href="#i-star"/></svg> Your recommended package has been pre-selected for you!</div>
 
 <footer>&copy; 2026 <strong>TEC Web Studio</strong> · Secure payments powered by Stripe</footer>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
   var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
-  // ⚠️ IMPORTANT: Replace the URL below with your actual Vercel deployment URL
+  // IMPORTANT: Replace the URL below with your actual Vercel deployment URL
   var VERCEL_FN = 'https://tec-api.vercel.app/api/create-order';
-  var elements, paymentElement, expressElement;
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+
+  /* =====================================================
+     PRICES & DESCRIPTIONS — edit everything here.
+     The cards, summary, totals, and payment amount all
+     read from these three objects.
+     ===================================================== */
+  var PACKAGES = {
+    quickstart: {
+      name: 'Quick Start', icon: 'sprout', price: 299,
+      desc: 'For small businesses that need a professional online presence.',
+      features: ['1–4 page website', 'Custom design', 'Mobile-friendly design', 'Contact form', 'Social media links', 'Basic SEO setup', '1 revision', '1 month of post-launch support'],
+      button: 'Get started'
+    },
+    business: {
+      name: 'Business Website', icon: 'rocket', price: 599, popular: true,
+      desc: 'For businesses ready for a professional website designed to turn visitors into customers.',
+      features: ['Up to 6 pages', 'Custom design', 'Mobile-friendly design', 'Contact / quote form', 'Click-to-call', 'Google Maps', 'Services section', 'Reviews / testimonials', 'Basic SEO setup', 'Basic animations', '2 revisions', '1 month of post-launch support'],
+      button: 'Get started'
+    },
+    complete: {
+      name: 'Complete Brand + Website', icon: 'sparkles', price: 799,
+      desc: 'For businesses that want their website, branding, and content handled in one place.',
+      groups: [
+        { title: 'Branding',    items: ['Custom logo', 'Brand direction', 'Basic visual identity'] },
+        { title: 'Website',     items: ['Full custom design', 'Up to 8 pages', 'Mobile optimization', 'Contact / quote forms', 'Conversion-focused layout'] },
+        { title: 'Content',     items: ['Professional website copy', 'Service descriptions', 'Calls-to-action'] },
+        { title: 'Visibility',  items: ['Basic SEO setup', 'Local business optimization'] },
+        { title: 'After launch', items: ['2 months of post-launch support', 'Minor updates included'] }
+      ],
+      button: 'Launch my website'
+    }
+  };
+
+  var PRIORITY = {
+    d3: { label: '3-Day Delivery',  short: '3-Day',   price: 99,  detail: 'Delivered within 3 business days.' },
+    d2: { label: '2-Day Delivery',  short: '2-Day',   price: 149, detail: 'Delivered within 2 business days.' },
+    d1: { label: '24-Hour Delivery', short: '24-Hour', price: 199, detail: 'Delivered within 24 hours.' }
+  };
+
+  // type: 'once' = added to today's total, 'monthly' = recurring, shown separately
+  var CARE = {
+    pack: {
+      name: 'Website Update Pack', icon: 'wrench', price: 149, type: 'once',
+      lead: 'Need a few changes after your website launches?',
+      features: ['Up to 4 website update requests', 'Text changes', 'Image swaps', 'Price/service changes', 'Link/button updates', 'Approximately 5–7 business day turnaround', 'No subscription', 'One-time payment'],
+      button: 'Add update pack'
+    },
+    care: {
+      name: 'Website Care', icon: 'refresh', price: 99, type: 'monthly',
+      lead: 'Want TecWeb to keep your website updated for you?',
+      features: ['Up to 3 update requests per month', 'Standard turnaround', 'Text &amp; image updates', 'Price/service changes', 'Link/button updates', 'Minor website changes', 'Cancel anytime'],
+      button: 'Add website care'
+    },
+    active: {
+      name: 'Active Website Care', icon: 'rocket', price: 249, type: 'monthly', popular: true,
+      lead: 'For businesses that need more frequent updates and priority service.',
+      features: ['Up to 8 update requests per month', 'Priority queue', 'Text &amp; image updates', 'Price/service changes', 'Link/button updates', 'Minor website fixes', 'Priority turnaround', 'Cancel anytime'],
+      button: 'Add active care'
+    }
+  };
+
+  var MGMT_LABELS   = { tecweb: 'TecWeb Managed', wix: 'Wix Website' };
+  var DOMAIN_LABELS = { have: 'Existing Domain', help: 'Domain Assistance' };
+
+  /* ===================== STATE ===================== */
+  var state = { pkg: null, mgmt: null, domain: null, acct: null, priority: null, care: null };
+  var elements = null, paymentElement = null, expressElement = null;
   var clientSecret = null;
+  var stripeState = 'idle';   // idle | loading | ready
+  var stripeSig = null;       // order signature the current payment form was built for
+  var initToken = 0;
+  var payLabel = 'Pay Now';
 
-  var selectedPackage = null;
-  var glowupSize = 'sm';
-  var addons = {};
-  var maintenancePlan = null;
-  var selectedHosting = null;
-  var needsSetupHelp = null;
-  var currentTotal = 0;
+  /* ===================== HELPERS ===================== */
+  function ico(name, cls) { return '<svg class="ico ' + (cls || '') + '" aria-hidden="true"><use href="#i-' + name + '"/></svg>'; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function validEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+  function featList(items) { return '<ul class="feat">' + items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>'; }
+  function popularBadge() { return '<div class="badge-popular">' + ico('star', 'fill') + ' Most Popular</div>'; }
 
-  var dfyType = 'nocontent';
-  var packages = {
-    glowup:            { label: 'The Glow-Up (1–4 pages)',           price: 200 },
-    glowup_lg:         { label: 'The Glow-Up (5–8 pages)',           price: 300 },
-    quickfixes:        { label: 'Site Refreshers',                   price: 399 },
-    doneforyou:        { label: 'Done-for-You (I have content)',     price: 500 },
-    doneforyou_content:{ label: 'Done-for-You (Content included)',   price: 600 },
-    allinclusive:      { label: 'All-Inclusive',                     price: 799 },
-  };
-
-  var addonData = {
-    expedited: { label: 'Expedited Delivery',      price: 95 },
-    maint3:    { label: '3-Day Turnaround',         price: 154 },
-    maint2:    { label: '2-Day Turnaround',         price: 160 },
-    maint24:   { label: '24-Hour Turnaround',       price: 200 },
-  };
-
-  var maintenanceData = {
-    monthly: { label: 'Monthly Maintenance (One-Time)',              price: 149  },
-    active:  { label: 'Active Site Maintenance (Recurring $249/mo)', price: 249 },
-  };
-
-  function selectPackage(id) {
-    document.querySelectorAll('.pkg-card').forEach(function(c) { c.classList.remove('selected'); });
-    document.getElementById('pkg-' + id).classList.add('selected');
-    selectedPackage = id;
-    updateSummary();
-  }
-
-  function selectGlowup(e, size) {
-    e.stopPropagation();
-    glowupSize = size;
-    document.getElementById('glowup-sm').classList.toggle('active', size === 'sm');
-    document.getElementById('glowup-lg').classList.toggle('active', size === 'lg');
-    selectPackage('glowup');
-  }
-
-  function selectDFY(e, type) {
-    e.stopPropagation();
-    dfyType = type;
-    document.getElementById('dfy-nocontent').classList.toggle('active', type === 'nocontent');
-    document.getElementById('dfy-content').classList.toggle('active', type === 'content');
-    selectPackage('doneforyou');
-  }
-
-  function toggleAddon(id, price) {
-    var card = document.getElementById('addon-' + id);
-    if (addons[id]) {
-      delete addons[id];
-      card.classList.remove('selected');
-      card.querySelector('.maint-radio') && (card.querySelector('.maint-radio').style.borderColor = '');
-    } else {
-      // For last-minute fixes, only allow one at a time
-      if (id === 'maint3' || id === 'maint2' || id === 'maint24') {
-        ['maint3','maint2','maint24'].forEach(function(k) {
-          if (addons[k]) {
-            delete addons[k];
-            var c = document.getElementById('addon-' + k);
-            if (c) c.classList.remove('selected');
-          }
-        });
-      }
-      addons[id] = price;
-      card.classList.add('selected');
-    }
-    updateSummary();
-  }
-
-  function selectMaintenance(id, price) {
-    if (maintenancePlan === id) { clearMaintenance(); return; }
-    document.querySelectorAll('#maint-monthly, #maint-active').forEach(function(o) { o.classList.remove('selected'); });
-    document.getElementById('maint-' + id).classList.add('selected');
-    maintenancePlan = id;
-    var notice = document.getElementById('subscription-notice');
-    if (notice) notice.style.display = (id === 'active') ? 'block' : 'none';
-    updateSummary();
-  }
-
-  function clearMaintenance() {
-    document.querySelectorAll('#maint-monthly, #maint-active').forEach(function(o) { o.classList.remove('selected'); });
-    maintenancePlan = null;
-    var notice = document.getElementById('subscription-notice');
-    if (notice) notice.style.display = 'none';
-    updateSummary();
-  }
-
-  function selectHosting(id) {
-    document.querySelectorAll('.hosting-card').forEach(function(c) { c.classList.remove('selected'); });
-    document.getElementById('hosting-' + id).classList.add('selected');
-    selectedHosting = id;
-    document.getElementById('setup-assist-wrap').style.display = 'block';
-    updateSummary();
-  }
-
-  function selectSetup(choice) {
-    document.querySelectorAll('.setup-opt').forEach(function(o) { o.classList.remove('selected'); });
-    document.getElementById('setup-' + choice).classList.add('selected');
-    needsSetupHelp = choice;
-    updateSummary();
-  }
-
-  function showCashAppForm() {}
-
-  
-
-  function updateSummary() {
-    var lines = document.getElementById('summary-lines');
-    var totalDisplay = document.getElementById('total-display');
-    var noSelectionNotice = document.getElementById('no-selection-notice');
-    var total = 0;
-    var html = '';
-
-    if (selectedPackage) {
-      var key = selectedPackage === 'glowup' ? (glowupSize === 'lg' ? 'glowup_lg' : 'glowup') : selectedPackage === 'doneforyou' ? (dfyType === 'content' ? 'doneforyou_content' : 'doneforyou') : selectedPackage;
-      var pkg = packages[key];
-      total += pkg.price;
-      html += '<div class="summary-line"><span>' + pkg.label + '</span><span><strong>$' + pkg.price + '</strong></span></div>';
-    }
-
-    Object.keys(addons).forEach(function(id) {
-      var a = addonData[id];
-      total += a.price;
-      html += '<div class="summary-line"><span>' + a.label + '</span><span>+$' + a.price + '</span></div>';
+  function setSelected(sel, id) {
+    document.querySelectorAll(sel).forEach(function(el) {
+      var on = el.id === id;
+      el.classList.toggle('selected', on);
+      if (el.hasAttribute('data-choice')) el.setAttribute('aria-pressed', on ? 'true' : 'false');
+      var b = el.querySelector('.card-btn');
+      if (b) b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+  }
 
-    if (maintenancePlan) {
-      var m = maintenanceData[maintenancePlan];
-      total += m.price;
-      var tag = maintenancePlan === 'active'
-        ? '<span style="font-size:10px;background:#fff8e1;color:#b08000;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:6px;display:inline-flex;align-items:center;gap:3px;"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'9\' height=\'9\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'#b08000\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><polyline points=\'23 4 23 10 17 10\'/><polyline points=\'1 20 1 14 7 14\'/><path d=\'M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15\'/></svg> Recurring</span>'
-        : '<span style="font-size:10px;background:#e8f4f5;color:#3d7a80;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:6px;">One-Time</span>';
-      html += '<div class="summary-line"><span>' + m.label.split(' (')[0] + tag + '</span><span>+$' + m.price + (maintenancePlan === 'active' ? '/mo' : '') + '</span></div>';
+  /* ===================== RENDER ===================== */
+  function renderPackages() {
+    var html = '';
+    Object.keys(PACKAGES).forEach(function(k) {
+      var p = PACKAGES[k];
+      var body = p.groups
+        ? p.groups.map(function(g) { return '<div class="feat-title">' + g.title + '</div>' + featList(g.items); }).join('')
+        : featList(p.features);
+      html += '<div class="card pkg-card" id="pkg-' + k + '" onclick="selectPackage(\'' + k + '\')">'
+        + (p.popular ? popularBadge() : '')
+        + '<div class="card-top"><span class="icon-wrap">' + ico(p.icon) + '</span><div class="card-name">' + p.name + '</div></div>'
+        + '<div class="price">$' + p.price + '</div>'
+        + '<p class="desc">' + p.desc + '</p>'
+        + body
+        + '<button type="button" class="card-btn" aria-pressed="false">' + p.button + ' — $' + p.price + '</button>'
+        + '</div>';
+    });
+    document.getElementById('packages-grid').innerHTML = html;
+  }
+
+  function renderPriority() {
+    var html = '';
+    Object.keys(PRIORITY).forEach(function(k) {
+      var p = PRIORITY[k];
+      html += '<div class="opt prio-opt" id="prio-' + k + '" data-choice role="button" tabindex="0" aria-pressed="false" onclick="selectPriority(\'' + k + '\')">'
+        + '<div class="radio"></div>'
+        + '<div class="opt-label">' + p.label + '<small>' + p.detail + '</small></div>'
+        + '<div class="opt-price">+$' + p.price + '</div>'
+        + '</div>';
+    });
+    document.getElementById('priority-list').innerHTML = html;
+  }
+
+  function renderCare() {
+    var html = '';
+    Object.keys(CARE).forEach(function(k) {
+      var c = CARE[k];
+      var unit = c.type === 'monthly' ? '/month' : 'One-time';
+      var btnSuffix = c.type === 'monthly' ? '/mo' : '';
+      html += '<div class="card care-card" id="care-' + k + '" onclick="selectCare(\'' + k + '\')">'
+        + (c.popular ? popularBadge() : '')
+        + '<div class="card-top"><span class="icon-wrap">' + ico(c.icon) + '</span><div class="card-name">' + c.name + '</div></div>'
+        + '<div class="price">$' + c.price + '<span class="unit">' + unit + '</span></div>'
+        + '<p class="desc">' + c.lead + '</p>'
+        + featList(c.features)
+        + '<button type="button" class="card-btn" aria-pressed="false">' + c.button + ' — $' + c.price + btnSuffix + '</button>'
+        + '</div>';
+    });
+    document.getElementById('care-grid').innerHTML = html;
+  }
+
+  /* ===================== SELECTION ===================== */
+  function selectPackage(id) { state.pkg = id;    setSelected('.pkg-card', 'pkg-' + id);   updateSummary(); }
+  function selectMgmt(id)    { state.mgmt = id;   setSelected('.mgmt-card', 'mgmt-' + id); updateSummary(); }
+  function selectDomain(id)  { state.domain = id; setSelected('.dom-card', 'dom-' + id);   updateSummary(); }
+  function selectAcct(id)    { state.acct = id;   setSelected('.acct-card', 'acct-' + id); updateSummary(); }
+
+  function selectPriority(id) {
+    state.priority = (state.priority === id) ? null : id;
+    setSelected('.prio-opt', state.priority ? 'prio-' + id : null);
+    updateSummary();
+  }
+  function clearPriority() { state.priority = null; setSelected('.prio-opt', null); updateSummary(); }
+
+  function selectCare(id) {
+    state.care = (state.care === id) ? null : id;
+    setSelected('.care-card', state.care ? 'care-' + id : null);
+    updateSummary();
+  }
+  function clearCare() { state.care = null; setSelected('.care-card', null); updateSummary(); }
+
+  /* ===================== TOTALS ===================== */
+  function computeTotals() {
+    var one = 0, rec = 0;
+    if (state.pkg) one += PACKAGES[state.pkg].price;
+    if (state.priority) one += PRIORITY[state.priority].price;
+    if (state.care) {
+      var c = CARE[state.care];
+      if (c.type === 'monthly') rec = c.price; else one += c.price;
     }
+    return { one: one, rec: rec };
+  }
 
-    var hostingLabels = { wix:'Hosting: Wix (~$17/mo)', squarespace:'Hosting: Squarespace (~$16/mo)', wordpress:'Hosting: WordPress (~$5–15/mo)', shopify:'Hosting: Shopify (~$29/mo)', github:'Hosting: GitHub Pages (Free)', webflow:'Hosting: Webflow (~$14/mo)' };
-    if (selectedHosting) html += '<div class="summary-line"><span>' + hostingLabels[selectedHosting] + '</span><span style="font-size:11px;color:#9aacad;">separate cost</span></div>';
-    if (needsSetupHelp === 'yes') html += '<div class="summary-line"><span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#557070" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Hosting setup assistance</span><span style="background:#e8f4f5;color:#3d7a80;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">Free &#10003;</span></div>';
-
-    lines.innerHTML = html || '<div class="summary-line empty-state">No package selected yet — choose above to get started!</div>';
-    currentTotal = total;
-    totalDisplay.textContent = '$' + total;
-    noSelectionNotice.style.display = selectedPackage ? 'none' : 'block';
-
-    var noHostingNotice = document.getElementById('no-hosting-notice');
-    var noSetupNotice = document.getElementById('no-setup-notice');
-    if (noHostingNotice) noHostingNotice.style.display = (selectedPackage && !selectedHosting) ? 'block' : 'none';
-    if (noSetupNotice) noSetupNotice.style.display = (selectedPackage && selectedHosting && !needsSetupHelp) ? 'block' : 'none';
-    var isRecurring = maintenancePlan === 'active';
-    updateReviewPayBtn();
+  function careLabel() {
+    if (!state.care) return '';
+    var c = CARE[state.care];
+    return c.name + (c.type === 'monthly' ? ' ($' + c.price + '/month)' : ' ($' + c.price + ' one-time)');
   }
 
   function buildDescription() {
     var parts = [];
-    if (selectedPackage) {
-      var key = selectedPackage === 'glowup' ? (glowupSize === 'lg' ? 'glowup_lg' : 'glowup') : selectedPackage === 'doneforyou' ? (dfyType === 'content' ? 'doneforyou_content' : 'doneforyou') : selectedPackage;
-      parts.push(packages[key].label);
+    if (state.pkg) parts.push(PACKAGES[state.pkg].name);
+    if (state.priority) parts.push(PRIORITY[state.priority].label);
+    if (state.care) {
+      var c = CARE[state.care];
+      parts.push(c.name + (c.type === 'monthly' ? ' ($' + c.price + '/mo recurring)' : ' (one-time)'));
     }
-    Object.keys(addons).forEach(function(id) { parts.push(addonData[id].label); });
-    if (maintenancePlan) parts.push(maintenanceData[maintenancePlan].label);
-    if (selectedHosting) parts.push('Hosting: ' + selectedHosting);
-    if (needsSetupHelp === 'yes') parts.push('Needs hosting setup help');
+    if (state.mgmt) parts.push(MGMT_LABELS[state.mgmt]);
     return parts.join(' + ') || 'TEC Web Studio Services';
   }
 
-  function saveOrderState() {
-    var capturedName = document.getElementById('customer-name') ? document.getElementById('customer-name').value.trim() : '';
-    var capturedEmail = document.getElementById('customer-email') ? document.getElementById('customer-email').value.trim() : '';
-    var key = selectedPackage === 'glowup' ? (glowupSize === 'lg' ? 'glowup_lg' : 'glowup') : selectedPackage === 'doneforyou' ? (dfyType === 'content' ? 'doneforyou_content' : 'doneforyou') : selectedPackage;
-    var hostingMap = { wix:'Wix', squarespace:'Squarespace', wordpress:'WordPress', shopify:'Shopify', github:'GitHub Pages (Free)', webflow:'Webflow' };
-    var addonsList = Object.keys(addons).map(function(id) { return addonData[id].label; });
-    if (maintenancePlan) addonsList.push(maintenanceData[maintenancePlan].label.split(' (')[0]);
-    var state = {
-      name: capturedName,
-      email: capturedEmail,
-      package: selectedPackage ? packages[key].label : 'Not selected',
-      hosting: selectedHosting ? hostingMap[selectedHosting] : 'Not selected',
-      setupHelp: needsSetupHelp === 'yes' ? 'Yes — needs help' : needsSetupHelp === 'no' ? 'No — self-managed' : 'Not answered',
-      total: '$' + currentTotal.toFixed(2),
-      addOns: addonsList.length ? addonsList.join(', ') : 'None'
-    };
-    try { sessionStorage.setItem('tec_order', JSON.stringify(state)); } catch(e) {}
+  function orderSignature() {
+    var t = computeTotals();
+    return JSON.stringify([t.one, t.rec, buildDescription()]);
   }
 
-  function submitToJotform(name, email) {
-    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  /* ===================== SUMMARY ===================== */
+  function row(label, valueHtml, muted) {
+    return '<div class="summary-line"><span class="sl-label">' + label + '</span><span class="sl-value' + (muted ? ' muted' : '') + '">' + valueHtml + '</span></div>';
+  }
 
-    // Try to restore from sessionStorage first (needed after redirect-based payments)
-    var savedOrder = null;
-    try { savedOrder = JSON.parse(sessionStorage.getItem('tec_order') || 'null'); } catch(e) {}
+  function updateSummary() {
+    var t = computeTotals();
+    var html = '';
 
-    // Priority: passed params (already captured before DOM changes) > sessionStorage > DOM fallback
-    // NOTE: do NOT re-read the DOM here as the first priority — showSuccess() may have already
-    // replaced the payment section and destroyed the input fields before this runs.
-    var domName  = document.getElementById('customer-name')  ? document.getElementById('customer-name').value.trim()  : '';
-    var domEmail = document.getElementById('customer-email') ? document.getElementById('customer-email').value.trim() : '';
+    html += state.pkg ? row('Website Package', PACKAGES[state.pkg].name + ' — <strong>$' + PACKAGES[state.pkg].price + '</strong>') : row('Website Package', 'Not selected', true);
+    html += state.mgmt ? row('Website Type', MGMT_LABELS[state.mgmt]) : row('Website Type', 'Not selected', true);
 
-    var finalName    = name  || (savedOrder ? savedOrder.name  : '') || domName  || 'Not provided';
-    var finalEmail   = email || (savedOrder ? savedOrder.email : '') || domEmail || 'Not provided';
+    if (state.domain === 'have') {
+      var d = val('domain-existing');
+      html += row('Domain', DOMAIN_LABELS.have + (d ? ' — ' + esc(d) : ''));
+    } else if (state.domain === 'help') {
+      html += row('Domain', DOMAIN_LABELS.help);
+    } else {
+      html += row('Domain', 'Not selected', true);
+    }
 
-    // Package key resolution
-    var pkgKey = selectedPackage === 'glowup'      ? (glowupSize === 'lg' ? 'glowup_lg' : 'glowup')
-               : selectedPackage === 'doneforyou'  ? (dfyType === 'content' ? 'doneforyou_content' : 'doneforyou')
-               : selectedPackage;
+    html += state.priority
+      ? row('Priority Delivery', PRIORITY[state.priority].short + ' — +$' + PRIORITY[state.priority].price)
+      : row('Priority Delivery', 'None', true);
 
-    var finalPackage = (savedOrder && savedOrder.package && savedOrder.package !== 'Not selected')
-      ? savedOrder.package
-      : (pkgKey && packages[pkgKey] ? packages[pkgKey].label : 'Not selected');
+    html += state.care
+      ? row('Website Care', careLabel().replace(' ($', ' — $').replace(')', ''))
+      : row('Website Care', 'None', true);
 
-    var hostingMap = { wix:'Wix', squarespace:'Squarespace', wordpress:'WordPress', shopify:'Shopify', github:'GitHub Pages (Free)', webflow:'Webflow' };
-    var finalHosting = (savedOrder && savedOrder.hosting && savedOrder.hosting !== 'Not selected')
-      ? savedOrder.hosting
-      : (selectedHosting ? (hostingMap[selectedHosting] || selectedHosting) : 'Not selected');
+    document.getElementById('summary-lines').innerHTML = html;
+    document.getElementById('total-display').textContent = '$' + t.one;
+    var rd = document.getElementById('recurring-display');
+    rd.style.display = t.rec ? 'block' : 'none';
+    rd.textContent = t.rec ? '+ $' + t.rec + '/month' : '';
 
-    var finalSetup = (savedOrder && savedOrder.setupHelp)
-      ? savedOrder.setupHelp
-      : (needsSetupHelp === 'yes' ? 'Yes — needs help' : needsSetupHelp === 'no' ? 'No — self-managed' : 'Not answered');
+    document.getElementById('clear-prio').style.display = state.priority ? 'inline' : 'none';
+    document.getElementById('clear-care').style.display = state.care ? 'inline' : 'none';
 
-    var finalTotal = (savedOrder && savedOrder.total)
-      ? savedOrder.total
-      : ('$' + currentTotal.toFixed(2));
+    var notice = document.getElementById('care-notice');
+    if (state.care && CARE[state.care].type === 'monthly') {
+      var c = CARE[state.care];
+      document.getElementById('care-notice-text').innerHTML = c.name + ' is a <strong>recurring monthly subscription of $' + c.price + '</strong>. Your card will be charged automatically each month until you cancel.';
+      notice.style.display = 'block';
+    } else {
+      notice.style.display = 'none';
+    }
 
-    var finalAddOns = (savedOrder && savedOrder.addOns)
-      ? savedOrder.addOns
-      : 'None';
+    updateReadiness();
+  }
 
-    // Clear saved state after use
-    try { sessionStorage.removeItem('tec_order'); } catch(e) {}
+  /* ===================== READINESS ===================== */
+  function getMissing() {
+    var m = [];
+    if (!state.pkg)    m.push('Choose a website package (Step 1)');
+    if (!state.mgmt)   m.push('Choose how you\'d like to manage your website (Step 2)');
+    if (!state.domain) m.push('Choose a domain option (Step 3)');
+    else if (state.domain === 'have' && !val('domain-existing')) m.push('Enter your domain (Step 3)');
+    else if (state.domain === 'help' && !val('domain-business')) m.push('Enter your business name for domain help (Step 3)');
+    if (!state.acct)   m.push('Choose an account setup option (Step 4)');
+    else if (state.acct === 'help') {
+      if (!validEmail(val('acct-email'))) m.push('Enter the email for your website account (Step 4)');
+      if (!document.getElementById('acct-ack').checked) m.push('Check the account email confirmation (Step 4)');
+    }
+    if (!val('customer-name')) m.push('Enter your full name (Step 6)');
+    if (!validEmail(val('customer-email'))) m.push('Enter a valid email address (Step 6)');
+    return m;
+  }
 
-    var payload = {
-      formType:        'Order Details',
-      fullName:        finalName,
-      email:           finalEmail,
-      package:         finalPackage,
-      hostingPlatform: finalHosting,
-      setupHelp:       finalSetup,
-      orderTotal:      finalTotal,
-      addOns:          finalAddOns
+  function updateReadiness() {
+    var missing = getMissing();
+    var ready = missing.length === 0;
+
+    var notice = document.getElementById('missing-notice');
+    notice.style.display = ready ? 'none' : 'block';
+    document.getElementById('missing-list').innerHTML = missing.map(function(x) { return '<li>' + x + '</li>'; }).join('');
+
+    // Tear down the payment form if the order no longer matches what it was built for
+    if (!ready || (stripeState === 'ready' && stripeSig !== orderSignature())) teardownStripe();
+
+    document.getElementById('review-pay-btn').style.display = (ready && stripeState === 'idle') ? 'flex' : 'none';
+  }
+
+  /* ===================== ORDER PAYLOAD ===================== */
+  function buildOrderPayload() {
+    var t = computeTotals();
+    var addOns = [];
+    if (state.priority) addOns.push(PRIORITY[state.priority].label);
+    if (state.care) addOns.push(careLabel());
+    return {
+      formType:         'Order Details',
+      fullName:         val('customer-name'),
+      businessName:     val('customer-business'),
+      email:            val('customer-email'),
+      phone:            val('customer-phone'),
+      package:          state.pkg ? PACKAGES[state.pkg].name : 'Not selected',
+      websiteType:      state.mgmt ? MGMT_LABELS[state.mgmt] : 'Not selected',
+      hostingPlatform:  state.mgmt ? MGMT_LABELS[state.mgmt] : 'Not selected',
+      domainOption:     state.domain ? DOMAIN_LABELS[state.domain] : 'Not selected',
+      existingDomain:   state.domain === 'have' ? val('domain-existing') : '',
+      domainBusinessName: state.domain === 'help' ? val('domain-business') : '',
+      preferredDomain:  state.domain === 'help' ? val('domain-preferred') : '',
+      accountSetup:     state.acct === 'self' ? 'Customer sets up own account' : state.acct === 'help' ? 'TecWeb will help set up' : 'Not selected',
+      setupHelp:        state.acct === 'help' ? 'Yes — needs help' : state.acct === 'self' ? 'No — self-managed' : 'Not answered',
+      accountEmail:     state.acct === 'help' ? val('acct-email') : '',
+      priorityDelivery: state.priority ? PRIORITY[state.priority].label + ' (+$' + PRIORITY[state.priority].price + ')' : 'None',
+      carePlan:         state.care ? careLabel() : 'None',
+      addOns:           addOns.length ? addOns.join(', ') : 'None',
+      orderTotal:       '$' + t.one.toFixed(2),
+      recurringTotal:   t.rec ? '$' + t.rec.toFixed(2) + '/month' : 'None'
     };
+  }
+
+  function saveOrderState() {
+    try { sessionStorage.setItem('tec_order', JSON.stringify(buildOrderPayload())); } catch (e) {}
+  }
+
+  function submitOrder(name, email) {
+    var saved = null;
+    try { saved = JSON.parse(sessionStorage.getItem('tec_order') || 'null'); } catch (e) {}
+    // Saved state wins (it survives redirect-based payments); fall back to the live page
+    var payload = saved || buildOrderPayload();
+    if (name)  payload.fullName = name;
+    if (email) payload.email = email;
+    payload.fullName = payload.fullName || 'Not provided';
+    payload.email = payload.email || 'Not provided';
+    try { sessionStorage.removeItem('tec_order'); } catch (e) {}
 
     console.log('Submitting order to Apps Script:', payload);
 
-    // Retry up to 3 times on failure
     function attemptSubmit(attemptsLeft) {
       var formData = new FormData();
       Object.keys(payload).forEach(function(key) { formData.append(key, payload[key]); });
       fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData })
         .then(function() {
           console.log('Order logged successfully.');
-          // Send receipt email only after successful log
-          if (finalEmail && finalEmail !== 'Not provided') {
-            sendReceiptEmail(finalName, finalEmail, finalPackage, finalTotal, finalAddOns, finalHosting);
-          }
+          if (payload.email !== 'Not provided') sendReceiptEmail(payload);
         })
         .catch(function(err) {
           console.warn('Order submit failed, attempts left: ' + attemptsLeft, err);
           if (attemptsLeft > 1) {
             setTimeout(function() { attemptSubmit(attemptsLeft - 1); }, 2000);
-          } else {
-            // Even if logging fails, still try to send the receipt
-            if (finalEmail && finalEmail !== 'Not provided') {
-              sendReceiptEmail(finalName, finalEmail, finalPackage, finalTotal, finalAddOns, finalHosting);
-            }
+          } else if (payload.email !== 'Not provided') {
+            sendReceiptEmail(payload);
           }
         });
     }
     attemptSubmit(3);
   }
 
-  function sendReceiptEmail(name, email, pkg, total, addOns, hosting) {
-    // Uses the same Apps Script endpoint with a different formType to trigger the email receipt
-    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  function sendReceiptEmail(p) {
     var formData = new FormData();
     formData.append('formType',   'Receipt');
-    formData.append('fullName',   name);
-    formData.append('email',      email);
-    formData.append('package',    pkg);
-    formData.append('orderTotal', total);
-    formData.append('addOns',     addOns);
-    formData.append('hosting',    hosting);
+    formData.append('fullName',   p.fullName);
+    formData.append('email',      p.email);
+    formData.append('package',    p.package);
+    formData.append('orderTotal', p.orderTotal);
+    formData.append('addOns',     p.addOns);
+    formData.append('hosting',    p.hostingPlatform);
     fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData })
-      .then(function() { console.log('Receipt email triggered for ' + email); })
+      .then(function() { console.log('Receipt email triggered for ' + p.email); })
       .catch(function(err) { console.warn('Receipt email failed:', err); });
   }
 
+  /* ===================== SUCCESS ===================== */
   function showSuccess(name) {
+    document.querySelector('.payment-section').innerHTML =
+      '<div style="text-align:center;padding:32px 24px;">' +
+      '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
+      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
+      '<p style="font-size:14px;color:#557070;line-height:1.6;">Thank you' + (name ? ', ' + esc(name) : '') + '! We\'ll be in touch shortly to get started on your project.</p>' +
+      '</div>';
+  }
+
+  /* ===================== STRIPE ===================== */
+  function teardownStripe() {
+    initToken++;
+    stripeState = 'idle';
+    clientSecret = null;
+    stripeSig = null;
+    try { if (paymentElement) paymentElement.destroy(); } catch (e) {}
+    try { if (expressElement) expressElement.destroy(); } catch (e) {}
+    paymentElement = null; expressElement = null; elements = null;
     document.getElementById('payment-element').innerHTML = '';
     document.getElementById('express-checkout-element').innerHTML = '';
     document.getElementById('or-divider').style.display = 'none';
     document.getElementById('pay-btn').style.display = 'none';
-    document.getElementById('no-selection-notice').style.display = 'none';
-    document.querySelector('.payment-section').innerHTML =
-      '<div style="text-align:center;padding:32px 24px;">' +
-      '<div style="margin-bottom:16px;display:flex;justify-content:center;"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'#6AABB0\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><circle cx=\'12\' cy=\'12\' r=\'10\'/><polyline points=\'9 12 11 14 15 10\'/></svg></div>' +
-      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
-      '<p style="font-size:14px;color:#557070;line-height:1.6;">Thank you' + (name ? ', ' + name : '') + '! We\'ll be in touch shortly to get started on your project.</p>' +
-      '</div>';
-  }
-
-  // Called by updateSummary to show/hide the Review & Pay button
-  function updateReviewPayBtn() {
-    var btn = document.getElementById('review-pay-btn');
-    if (!btn) return;
-    var ready = selectedPackage && currentTotal > 0 && selectedHosting && needsSetupHelp;
-    btn.style.display = ready ? 'block' : 'none';
-    // If selections changed after Stripe was already loaded, tear it down
-    if (!ready) {
-      document.getElementById('payment-element').innerHTML = '';
-      document.getElementById('express-checkout-element').innerHTML = '';
-      document.getElementById('or-divider').style.display = 'none';
-      document.getElementById('pay-btn').style.display = 'none';
-      document.getElementById('stripe-loading').style.display = 'none';
-      if (elements) { elements.destroy(); elements = null; }
-      clientSecret = null;
-    }
+    document.getElementById('stripe-loading').style.display = 'none';
+    document.getElementById('payment-message').textContent = '';
   }
 
   function handleReviewPay() {
-    if (!selectedPackage || currentTotal <= 0 || !selectedHosting || !needsSetupHelp) return;
+    if (getMissing().length) { updateReadiness(); return; }
     document.getElementById('review-pay-btn').style.display = 'none';
     document.getElementById('stripe-loading').style.display = 'block';
     _initStripe();
   }
 
+  function failInit(msg) {
+    teardownStripe();
+    document.getElementById('payment-message').textContent = msg;
+    updateReadiness();
+  }
+
   function _initStripe() {
-    var amountCents = Math.round(currentTotal * 100);
-    // Capture name/email at the moment Stripe is initialised (before any redirect)
-    var initName  = document.getElementById('customer-name')  ? document.getElementById('customer-name').value.trim()  : '';
-    var initEmail = document.getElementById('customer-email') ? document.getElementById('customer-email').value.trim() : '';
+    var t = computeTotals();
+    var amountCents = Math.round(t.one * 100);
+    var mySig = orderSignature();
+    var token = ++initToken;
+    stripeState = 'loading';
+    var care = state.care ? CARE[state.care] : null;
+
     fetch(VERCEL_FN, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -783,55 +898,52 @@
         amount: amountCents,
         description: buildDescription(),
         currency: 'usd',
-        customerName:  initName,
-        customerEmail: initEmail
+        customerName:  val('customer-name'),
+        customerEmail: val('customer-email'),
+        businessName:  val('customer-business'),
+        recurringPlan:     (care && care.type === 'monthly') ? care.name : null,
+        recurringAmount:   t.rec ? t.rec * 100 : 0,
+        recurringInterval: t.rec ? 'month' : null
       })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      if (!data.clientSecret) { console.error('No clientSecret:', data); return; }
+      if (token !== initToken) return;   // order changed while loading
+      if (!data.clientSecret) { console.error('No clientSecret:', data); failInit('Something went wrong loading the payment form. Please try again.'); return; }
       clientSecret = data.clientSecret;
-
-      if (elements) { elements.destroy(); }
+      stripeSig = mySig;
+      stripeState = 'ready';
+      payLabel = 'Pay $' + t.one + ' Now';
 
       elements = stripe.elements({ clientSecret: clientSecret, appearance: {
         theme: 'stripe',
         variables: { colorPrimary: '#6AABB0', borderRadius: '10px', fontFamily: 'DM Sans, sans-serif' }
       }});
 
-      var expressOptions = {
+      expressElement = elements.create('expressCheckout', {
         buttonType: { applePay: 'buy', googlePay: 'buy' },
         layout: { maxColumns: 2, maxRows: 1 }
-      };
-      expressElement = elements.create('expressCheckout', expressOptions);
+      });
       expressElement.mount('#express-checkout-element');
 
-      expressElement.on('confirm', function(event) {
-        // Capture name/email and save order state BEFORE any redirect
-        var eName  = document.getElementById('customer-name')  ? document.getElementById('customer-name').value.trim()  : '';
-        var eEmail = document.getElementById('customer-email') ? document.getElementById('customer-email').value.trim() : '';
+      expressElement.on('confirm', function() {
+        var eName  = val('customer-name');
+        var eEmail = val('customer-email');
         saveOrderState();
         var returnUrl = window.location.origin + window.location.pathname + '?payment=complete';
-        // For Express Checkout (Apple Pay/Google Pay), must use redirect:'if_required'
-        // and pass billing_details so card path and Apple Pay path both capture name/email
         stripe.confirmPayment({
           elements: elements,
           clientSecret: clientSecret,
           confirmParams: {
             return_url: returnUrl,
-            payment_method_data: {
-              billing_details: {
-                name:  eName  || undefined,
-                email: eEmail || undefined
-              }
-            }
+            payment_method_data: { billing_details: { name: eName || undefined, email: eEmail || undefined } }
           },
           redirect: 'if_required'
         }).then(function(result) {
           if (result.error) {
             document.getElementById('payment-message').textContent = result.error.message;
           } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-            submitToJotform(eName, eEmail);
+            submitOrder(eName, eEmail);
             showSuccess(eName);
           }
         });
@@ -843,107 +955,91 @@
         }
       });
 
-      paymentElement = elements.create('payment', {
-        layout: { type: 'accordion', defaultCollapsed: false }
-      });
+      paymentElement = elements.create('payment', { layout: { type: 'accordion', defaultCollapsed: false } });
       paymentElement.mount('#payment-element');
       document.getElementById('stripe-loading').style.display = 'none';
-      document.getElementById('pay-btn').style.display = 'block';
+      var pb = document.getElementById('pay-btn');
+      pb.textContent = payLabel;
+      pb.style.display = 'flex';
     })
     .catch(function(e) {
+      if (token !== initToken) return;
       console.error('Stripe init error:', e);
-      document.getElementById('stripe-loading').style.display = 'none';
-      document.getElementById('review-pay-btn').style.display = 'block';
-      document.getElementById('payment-message').textContent = 'Something went wrong loading the payment form. Please try again.';
+      failInit('Something went wrong loading the payment form. Please try again.');
     });
   }
 
   function handlePayment() {
-    if (!selectedPackage) { alert('Please select a package before paying.'); return; }
+    if (!state.pkg) { alert('Please select a package before paying.'); return; }
     var btn = document.getElementById('pay-btn');
     btn.disabled = true;
     btn.textContent = 'Processing...';
     document.getElementById('payment-message').textContent = '';
 
-    // Capture name & email NOW before any redirect clears the DOM
-    var customerName  = document.getElementById('customer-name')  ? document.getElementById('customer-name').value.trim()  : '';
-    var customerEmail = document.getElementById('customer-email') ? document.getElementById('customer-email').value.trim() : '';
-
-    // Save order state before redirect
+    // Capture before any redirect clears the page
+    var customerName  = val('customer-name');
+    var customerEmail = val('customer-email');
     saveOrderState();
 
     var returnUrl = window.location.origin + window.location.pathname + '?payment=complete';
 
-    // Stripe requires elements.submit() to be called first to validate
-    // and collect the Payment Element data before confirmPayment()
+    // elements.submit() must run before confirmPayment()
     elements.submit().then(function(submitResult) {
       if (submitResult.error) {
-        // Validation error (e.g. incomplete card number) — reset button and show message
         btn.disabled = false;
-        btn.textContent = 'Pay Now';
+        btn.textContent = payLabel;
         document.getElementById('payment-message').textContent = submitResult.error.message;
         return;
       }
-
       stripe.confirmPayment({
         elements: elements,
         clientSecret: clientSecret,
         confirmParams: {
           return_url: returnUrl,
-          payment_method_data: {
-            billing_details: {
-              name:  customerName  || undefined,
-              email: customerEmail || undefined
-            }
-          }
+          payment_method_data: { billing_details: { name: customerName || undefined, email: customerEmail || undefined } }
         },
         redirect: 'if_required'
       }).then(function(result) {
         btn.disabled = false;
-        btn.textContent = 'Pay Now';
+        btn.textContent = payLabel;
         if (result.error) {
           document.getElementById('payment-message').textContent = result.error.message;
         } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-          submitToJotform(customerName, customerEmail);
+          submitOrder(customerName, customerEmail);
           showSuccess(customerName);
         }
       });
     });
   }
 
-  // Handle return from redirect-based payments (Cash App, bank redirects etc)
+  // Return from redirect-based payments (bank redirects, etc.)
   function checkPaymentReturn() {
     var params = new URLSearchParams(window.location.search);
-    if (params.get('payment') === 'complete') {
-      var paymentIntentId = params.get('payment_intent');
-      var clientSecretParam = params.get('payment_intent_client_secret');
-      if (clientSecretParam) {
-        stripe.retrievePaymentIntent(clientSecretParam).then(function(result) {
-          if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-            var eName  = document.getElementById('customer-name')  ? document.getElementById('customer-name').value.trim()  : '';
-            var eEmail = document.getElementById('customer-email') ? document.getElementById('customer-email').value.trim() : '';
-            submitToJotform(eName, eEmail);
-            showSuccess(eName);
-          } else {
-            document.getElementById('payment-message').textContent = 'Payment was not completed. Please try again.';
-          }
-        });
+    if (params.get('payment') !== 'complete') return;
+    var clientSecretParam = params.get('payment_intent_client_secret');
+    if (!clientSecretParam) return;
+    stripe.retrievePaymentIntent(clientSecretParam).then(function(result) {
+      if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+        var saved = null;
+        try { saved = JSON.parse(sessionStorage.getItem('tec_order') || 'null'); } catch (e) {}
+        // Only log the order once: saved state is cleared after the first submit
+        if (saved) submitOrder('', '');
+        showSuccess(saved ? saved.fullName : '');
+      } else {
+        document.getElementById('payment-message').textContent = 'Payment was not completed. Please try again.';
       }
-    }
+    });
   }
 
+  /* ===================== URL PRE-SELECT ===================== */
+  // Supported: ?package=quickstart | business | complete
   function initFromURL() {
     var params = new URLSearchParams(window.location.search);
     var pkg = params.get('package');
-    if (!pkg) return;
+    if (!pkg || !PACKAGES[pkg]) return;
+    selectPackage(pkg);
     var banner = document.getElementById('url-welcome-banner');
     if (banner) banner.style.display = 'flex';
-    if (pkg === 'glowup') { selectPackage('glowup'); selectGlowup({ stopPropagation: function(){} }, 'sm'); }
-    else if (pkg === 'glowup_lg') { selectPackage('glowup'); selectGlowup({ stopPropagation: function(){} }, 'lg'); }
-    else if (pkg === 'quickfixes') { selectPackage('quickfixes'); }
-    else if (pkg === 'doneforyou') { selectPackage('doneforyou'); }
-    else if (pkg === 'allinclusive') { selectPackage('allinclusive'); }
-    // Show pre-selected snackbar
     setTimeout(function() {
       var snackbar = document.getElementById('pkgSnackbar');
       if (snackbar) {
@@ -952,11 +1048,24 @@
       }
     }, 600);
     setTimeout(function() {
-      var anchor = document.getElementById('order-summary-anchor');
+      var anchor = document.getElementById('step-2');
       if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 400);
   }
 
+  /* ===================== INIT ===================== */
+  document.addEventListener('input', function(e) { if (e.target.tagName === 'INPUT') updateSummary(); });
+  document.addEventListener('change', function(e) { if (e.target.tagName === 'INPUT') updateSummary(); });
+  document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.hasAttribute && e.target.hasAttribute('data-choice')) {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+
+  renderPackages();
+  renderPriority();
+  renderCare();
   updateSummary();
   initFromURL();
   checkPaymentReturn();
