@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TEC Builder</title>
+<title>Your Site - TEC Builder</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -151,6 +151,11 @@
   .modal-grid{display:grid;grid-template-columns:1fr 340px;gap:20px;}
   @media (max-width:860px){.modal-grid{grid-template-columns:1fr;}}
   .modal iframe{width:100%;height:520px;border:1px solid var(--line);border-radius:10px;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;margin:2px 0 6px;}
+  .seg button{background:#fff;padding:8px 18px;font-size:13px;color:var(--ink-soft);}
+  .seg button.on{background:var(--ink);color:#fff;}
+  .btn-accent-sm{background:var(--accent);color:var(--ink);border-radius:999px;font-weight:700;}
+  .btn-accent-sm:hover:not(:disabled){background:var(--accent-deep);}
   .issue{font-size:13px;color:#7a5600;background:#fdf0d2;border-radius:8px;padding:8px 10px;margin-bottom:6px;}
 </style>
 </head>
@@ -351,27 +356,42 @@
         (Firebase console → Project settings → Your apps → Web app → Config)
      ===================================================================== */
   var FIREBASE_CONFIG = {
-    apiKey:     "AIzaSyDZKgrxtTjg96WGrE2SEQCNSmicK8bG9Vk",
-    authDomain: "tec-web-studio-builder.firebaseapp.com",
-    projectId:  "tec-web-studio-builder",
-    appId:      "1:101778130496:web:ffb623dc5d7d7a00d8c1a5"
+    apiKey:     "PASTE_API_KEY",
+    authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+    projectId:  "PASTE_PROJECT_ID",
+    appId:      "PASTE_APP_ID"
   };
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec";
+  // Branded emails (sign-in links + "your site is live"). This is the /api/site-mail function on your Vercel project.
+  // If it isn't deployed yet, sign-in links fall back to Firebase's plain email automatically.
+  var MAIL_ENDPOINT = "https://tec-api.vercel.app/api/site-mail";
 
   /* =====================================================================
      2. DATA
      ===================================================================== */
   var THEMES = {
-    signature: { name: "Studio Signature", bg: "#FFFFFF", surface: "#EEF6F4", text: "#1F2E2B", textSoft: "#5B6B68", accent: "#F0B429", accentText: "#1F2E2B", dots: ["#FFFFFF", "#3F8C84", "#F0B429"] },
-    modern:    { name: "Modern Clean", bg: "#FFFFFF", surface: "#F7F8FA", text: "#1A1A1A", textSoft: "#5B5F66", accent: "#0E7C7B", accentText: "#FFFFFF", dots: ["#FFFFFF", "#0E7C7B", "#1A1A1A"] },
-    warm:      { name: "Warm & Approachable", bg: "#FBF6EF", surface: "#F3ECE0", text: "#3A2E22", textSoft: "#6B5C4D", accent: "#D9714E", accentText: "#FFFFFF", dots: ["#FBF6EF", "#D9714E", "#3A2E22"] },
-    bold:      { name: "Bold Minimal", bg: "#121212", surface: "#1C1C1C", text: "#F5F5F5", textSoft: "#AFAFAF", accent: "#C7F03B", accentText: "#121212", dots: ["#121212", "#C7F03B", "#F5F5F5"] },
-    soft:      { name: "Soft Professional", bg: "#F4F6F9", surface: "#FFFFFF", text: "#222B3A", textSoft: "#5A6478", accent: "#3B6EE0", accentText: "#FFFFFF", dots: ["#F4F6F9", "#3B6EE0", "#222B3A"] }
+    signature: { name: "Studio Signature",   bg: "#FFFFFF", surface: "#EEF6F4", text: "#1F2E2B", textSoft: "#5B6B68", accent: "#F0B429", accentText: "#1F2E2B", dots: ["#FFFFFF", "#3F8C84", "#F0B429"] },
+    modern:    { name: "Modern Clean",       bg: "#FFFFFF", surface: "#F7F8FA", text: "#1A1A1A", textSoft: "#5B5F66", accent: "#0E7C7B", accentText: "#FFFFFF", dots: ["#FFFFFF", "#0E7C7B", "#1A1A1A"] },
+    warm:      { name: "Warm & Approachable", bg: "#FBF6EF", surface: "#F3ECE0", text: "#3A2E22", textSoft: "#6B5C4D", accent: "#BF5533", accentText: "#FFFFFF", dots: ["#FBF6EF", "#BF5533", "#3A2E22"] },
+    bold:      { name: "Bold Minimal",       bg: "#121212", surface: "#1C1C1C", text: "#F5F5F5", textSoft: "#AFAFAF", accent: "#C7F03B", accentText: "#121212", dots: ["#121212", "#C7F03B", "#F5F5F5"] },
+    soft:      { name: "Soft Professional",  bg: "#F4F6F9", surface: "#FFFFFF", text: "#222B3A", textSoft: "#5A6478", accent: "#3B6EE0", accentText: "#FFFFFF", dots: ["#F4F6F9", "#3B6EE0", "#222B3A"] },
+    ocean:     { name: "Ocean Blue",         bg: "#F3F9FC", surface: "#E3F1F8", text: "#0F2A3D", textSoft: "#456173", accent: "#176BA0", accentText: "#FFFFFF", dots: ["#F3F9FC", "#176BA0", "#0F2A3D"] },
+    forest:    { name: "Forest Green",       bg: "#F6F8F3", surface: "#E8EFE2", text: "#1E2D22", textSoft: "#526357", accent: "#2A7047", accentText: "#FFFFFF", dots: ["#F6F8F3", "#2A7047", "#1E2D22"] },
+    blush:     { name: "Blush & Rose",       bg: "#FFF7F5", surface: "#FCE9E5", text: "#3B2226", textSoft: "#75565B", accent: "#B8415D", accentText: "#FFFFFF", dots: ["#FFF7F5", "#B8415D", "#3B2226"] },
+    midnight:  { name: "Midnight & Gold",    bg: "#0F1B2D", surface: "#16273E", text: "#F3EFE6", textSoft: "#B4BCC9", accent: "#E2B657", accentText: "#0F1B2D", dots: ["#0F1B2D", "#E2B657", "#F3EFE6"] },
+    lavender:  { name: "Lavender Calm",      bg: "#F7F5FB", surface: "#ECE7F6", text: "#2B2540", textSoft: "#615A7B", accent: "#6444BD", accentText: "#FFFFFF", dots: ["#F7F5FB", "#6444BD", "#2B2540"] },
+    sunset:    { name: "Sunset Orange",      bg: "#FFF8F0", surface: "#FDEBD9", text: "#33241A", textSoft: "#74604E", accent: "#E86A33", accentText: "#2A160B", dots: ["#FFF8F0", "#E86A33", "#33241A"] },
+    copper:    { name: "Charcoal & Copper",  bg: "#F5F3F0", surface: "#E9E4DF", text: "#24211F", textSoft: "#655D57", accent: "#A55C2F", accentText: "#FFFFFF", dots: ["#F5F3F0", "#A55C2F", "#24211F"] }
   };
   var FONTS = {
-    modernsans: { name: "Modern Sans", display: "'Poppins',sans-serif", body: "'Inter',sans-serif", google: "Poppins:wght@600;700&family=Inter:wght@400;500;600" },
-    classic:    { name: "Classic Serif", display: "'Playfair Display',serif", body: "'Source Sans 3',sans-serif", google: "Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600" },
-    friendly:   { name: "Friendly Rounded", display: "'Quicksand',sans-serif", body: "'Nunito',sans-serif", google: "Quicksand:wght@600;700&family=Nunito:wght@400;600" }
+    modernsans: { name: "Modern Sans",      display: "'Poppins',sans-serif",            body: "'Inter',sans-serif",       google: "Poppins:wght@600;700&family=Inter:wght@400;500;600" },
+    classic:    { name: "Classic Serif",    display: "'Playfair Display',serif",        body: "'Source Sans 3',sans-serif", google: "Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600" },
+    friendly:   { name: "Friendly Rounded", display: "'Quicksand',sans-serif",          body: "'Nunito',sans-serif",      google: "Quicksand:wght@600;700&family=Nunito:wght@400;600" },
+    elegant:    { name: "Elegant",          display: "'Cormorant Garamond',serif",      body: "'Montserrat',sans-serif",  google: "Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600" },
+    bookish:    { name: "Warm Bookish",     display: "'Lora',serif",                    body: "'Open Sans',sans-serif",   google: "Lora:wght@600;700&family=Open+Sans:wght@400;600" },
+    clean:      { name: "Clean & Simple",   display: "'DM Serif Display',serif",        body: "'DM Sans',sans-serif",     google: "DM+Serif+Display&family=DM+Sans:wght@400;500;600" },
+    bold:       { name: "Bold & Sharp",     display: "'Raleway',sans-serif",            body: "'Lato',sans-serif",        google: "Raleway:wght@700;800&family=Lato:wght@400;700" },
+    playful:    { name: "Playful",          display: "'Fredoka',sans-serif",            body: "'Nunito',sans-serif",      google: "Fredoka:wght@500;600&family=Nunito:wght@400;600" }
   };
   var SLOTS = { hero: "Top banner photo", g1: "Photo 1", g2: "Photo 2", g3: "Photo 3" };
   var STEP_LABELS = ["Choose what goes on your page", "Pick your look", "Add your details", "Review and publish"];
@@ -380,8 +400,9 @@
     return {
       sections: { about: true, services: true, testimonials: false, gallery: false },
       theme: "signature", font: "modernsans",
-      businessName: "", tagline: "", ctaText: "Contact Us",
-      phone: "", email: "", address: "", hours: "", facebookUrl: "", instagramUrl: "",
+      businessName: "", tagline: "", ctaText: "Contact Us", ctaMode: "contact", ctaUrl: "",
+      phone: "", email: "", address: "", hours: "",
+      facebookUrl: "", instagramUrl: "", tiktokUrl: "", youtubeUrl: "", linkedinUrl: "", xUrl: "",
       aboutText: "", heroPos: 50, imgRev: 0, attest: false,
       services: [{ name: "", desc: "" }, { name: "", desc: "" }, { name: "", desc: "" }],
       testimonials: [{ quote: "", name: "" }, { quote: "", name: "" }],
@@ -394,6 +415,21 @@
         Everything a customer types is treated as untrusted. It is cleaned
         and length-limited here, and escaped again when the page is built.
      ===================================================================== */
+  // Social icons are drawn as inline SVG so they can take on the customer's colors.
+  // A link is only accepted if it really points at that network (so an icon can't lead somewhere else).
+  var SOCIALS = [
+    { key: "facebookUrl",  label: "Facebook",  hosts: ["facebook.com", "fb.com"],   ph: "facebook.com/yourbusiness",   svg: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>' },
+    { key: "instagramUrl", label: "Instagram", hosts: ["instagram.com"],            ph: "instagram.com/yourbusiness",  svg: '<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/>' },
+    { key: "tiktokUrl",    label: "TikTok",    hosts: ["tiktok.com"],               ph: "tiktok.com/@yourbusiness",    svg: '<path d="M21 7.917v4.034a9.948 9.948 0 0 1-5-1.951v4.5a6.5 6.5 0 1 1-8-6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z"/>' },
+    { key: "youtubeUrl",   label: "YouTube",   hosts: ["youtube.com", "youtu.be"],  ph: "youtube.com/@yourbusiness",   svg: '<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>' },
+    { key: "linkedinUrl",  label: "LinkedIn",  hosts: ["linkedin.com"],             ph: "linkedin.com/company/yourbusiness", svg: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>' },
+    { key: "xUrl",         label: "X",         hosts: ["x.com", "twitter.com"],     ph: "x.com/yourbusiness",          svg: '<path d="M4 4l11.733 16h4.267l-11.733-16z"/><path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"/>' }
+  ];
+  function socialUrl(u, hosts) {
+    var s = safeUrl(u); if (!s) return "";
+    var h; try { h = new URL(s).hostname.toLowerCase().replace(/^www\./, "").replace(/^m\./, ""); } catch (e) { return ""; }
+    return hosts.some(function (x) { return h === x || h.slice(-(x.length + 1)) === "." + x; }) ? s : "";
+  }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function str(v, max) { return (typeof v === "string" ? v : "").slice(0, max); }
   function safeUrl(u) {
@@ -419,9 +455,11 @@
     out.businessName = str(raw.businessName, 80).trim();
     out.tagline = str(raw.tagline, 160);
     out.ctaText = str(raw.ctaText, 40) || d.ctaText;
+    out.ctaMode = ["contact", "call", "email", "link"].indexOf(raw.ctaMode) >= 0 ? raw.ctaMode : "contact";
+    out.ctaUrl = str(raw.ctaUrl, 300);
     out.phone = str(raw.phone, 40); out.email = str(raw.email, 120);
     out.address = str(raw.address, 200); out.hours = str(raw.hours, 120);
-    out.facebookUrl = str(raw.facebookUrl, 300); out.instagramUrl = str(raw.instagramUrl, 300);
+    SOCIALS.forEach(function (sc) { out[sc.key] = str(raw[sc.key], 300); });
     out.aboutText = str(raw.aboutText, 1200);
     out.heroPos = num(raw.heroPos, 0, 100, 50);
     out.imgRev = num(raw.imgRev, 0, 1e6, 0);
@@ -444,84 +482,103 @@
      4. THE SITE TEMPLATE
         One function builds the preview, the review copy, and the downloadable
         file. Only fixed themes/fonts are used, so no customer text can ever
-        change the page's code or styling.
+        change the page's code or styling. Layout is fully responsive: on a
+        phone everything stacks and centers by itself.
      ===================================================================== */
   function renderSite(raw, imgsRaw, opts) {
     opts = opts || {};
     var fin = !!opts.final;
     var c = sanitizeContent(raw), t = THEMES[c.theme], f = FONTS[c.font], im = cleanImages(imgsRaw);
-    var ph = function (txt) { return '<span style="opacity:.5">' + esc(txt) + "</span>"; };
+    var ph = function (txt) { return '<span class="ph">' + esc(txt) + "</span>"; };
     var show = function (v, hint) { return v ? esc(v) : (fin ? "" : ph(hint)); };
     var name = c.businessName, year = new Date().getFullYear(), body = "";
-    var H = "font-family:" + f.display + ";", B = "font-family:" + f.body + ";";
 
-    // top banner
-    var onImg = !!im.hero;
-    var heroBg = onImg ? "background-image:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),url('" + im.hero + "');background-size:cover;background-position:center " + c.heroPos + "%;" : "";
-    body += '<header style="padding:84px 24px 72px;text-align:center;background:' + t.bg + ";" + heroBg + '">' +
-      '<h1 style="' + H + "font-size:clamp(28px,5vw,46px);color:" + (onImg ? "#fff" : t.text) + ';margin:0 0 14px;">' + show(name, "Your Business Name") + "</h1>" +
-      ((c.tagline || !fin) ? '<p style="' + B + "font-size:17px;color:" + (onImg ? "#f4f4f4" : t.textSoft) + ';max-width:540px;margin:0 auto 28px;line-height:1.6;">' + show(c.tagline, "A short line about what you do and who you do it for.") + "</p>" : "") +
-      '<a href="#contact" style="display:inline-block;background:' + t.accent + ";color:" + t.accentText + ";" + B + 'font-weight:600;padding:13px 28px;border-radius:8px;text-decoration:none;">' + esc(c.ctaText) + "</a></header>";
+    var css = ":root{--bg:" + t.bg + ";--surface:" + t.surface + ";--text:" + t.text + ";--soft:" + t.textSoft + ";--accent:" + t.accent + ";--on-accent:" + t.accentText + "}" +
+      "*{box-sizing:border-box;margin:0}html{-webkit-text-size-adjust:100%}" +
+      "body{font-family:" + f.body + ";background:var(--bg);color:var(--text);line-height:1.65}" +
+      "h1,h2,h3{font-family:" + f.display + ";line-height:1.2}img{max-width:100%}a{color:inherit}" +
+      ".hero{padding:clamp(56px,12vw,104px) 20px clamp(48px,10vw,88px);text-align:center;background:var(--bg)}" +
+      ".hero h1{font-size:clamp(30px,6.5vw,48px);margin-bottom:14px;overflow-wrap:anywhere}" +
+      ".hero p{font-size:clamp(16px,2.6vw,18px);color:var(--soft);max-width:560px;margin:0 auto 28px}" +
+      ".hero.img h1{color:#fff}.hero.img p{color:#f4f4f4}" +
+      ".btn{display:inline-block;background:var(--accent);color:var(--on-accent);font-weight:600;padding:14px 30px;border-radius:10px;text-decoration:none;max-width:100%}" +
+      ".sec{padding:clamp(44px,8vw,64px) 20px;text-align:center}.sec.alt{background:var(--surface)}" +
+      ".sec h2{font-size:clamp(24px,4.5vw,30px);margin-bottom:clamp(20px,4vw,30px)}" +
+      ".lead{color:var(--soft);max-width:620px;margin:0 auto;line-height:1.75;overflow-wrap:anywhere}" +
+      ".row{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;max-width:920px;margin:0 auto}" +
+      ".card{flex:1 1 240px;max-width:300px;background:var(--surface);border-radius:12px;padding:24px;text-align:center}.sec.alt .card{background:var(--bg)}" +
+      ".card h3{font-size:19px;margin-bottom:8px;overflow-wrap:anywhere}.card p{color:var(--soft);font-size:15px;overflow-wrap:anywhere}" +
+      ".card p.q{font-style:italic;color:var(--text);margin-bottom:10px;font-size:16px}.card p.by{font-weight:600;font-size:14px}" +
+      "figure{flex:1 1 220px;max-width:290px}figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px}" +
+      "figcaption{font-size:13px;color:var(--soft);margin-top:8px}" +
+      ".contact{padding:clamp(44px,8vw,64px) 20px;text-align:center;background:var(--text);color:var(--bg)}" +
+      ".contact h2{font-size:clamp(24px,4.5vw,30px);margin-bottom:16px;color:var(--bg)}" +
+      ".contact p{margin:6px 0;font-size:16px;overflow-wrap:anywhere}.contact .sm{opacity:.85;font-size:15px}.contact a{text-decoration:underline}" +
+      "footer{padding:28px 20px 24px;text-align:center;background:var(--bg);color:var(--soft);font-size:13px}" +
+      ".socials{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px}" +
+      ".social{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:inline-flex;align-items:center;justify-content:center;text-decoration:none}" +
+      ".social svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
+      ".social:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}" +
+      "@media(max-width:600px){.card,figure{flex-basis:100%;max-width:420px}.hero .btn{display:block;max-width:340px;margin:0 auto}}" +
+      (fin ? "" : ".ph{opacity:.5}");
 
-    // about
+    // top banner + big button
+    var mode = c.ctaMode, href = "#contact", ext = "";
+    if (mode === "call" && telHref(c.phone)) href = "tel:" + telHref(c.phone);
+    else if (mode === "email" && c.email.trim()) href = "mailto:" + c.email.trim();
+    else if (mode === "link" && safeUrl(c.ctaUrl)) { href = safeUrl(c.ctaUrl); ext = ' target="_blank" rel="noopener noreferrer"'; }
+    var heroStyle = im.hero ? "background-image:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),url('" + im.hero + "');background-size:cover;background-position:center " + c.heroPos + '%;' : "";
+    body += '<header class="hero' + (im.hero ? " img" : "") + '"' + (heroStyle ? ' style="' + heroStyle + '"' : "") + ">" +
+      "<h1>" + show(name, "Your Business Name") + "</h1>" +
+      ((c.tagline || !fin) ? "<p>" + show(c.tagline, "A short line about what you do and who you do it for.") + "</p>" : "") +
+      '<a class="btn" href="' + esc(href) + '"' + ext + ">" + esc(c.ctaText) + "</a></header>";
+
     if (c.sections.about && (c.aboutText || !fin)) {
-      body += '<section style="padding:60px 24px;background:' + t.surface + ';text-align:center;"><h2 style="' + H + "color:" + t.text + ';font-size:26px;margin:0 0 14px;">About Us</h2>' +
-        '<p style="' + B + "color:" + t.textSoft + ';max-width:600px;margin:0 auto;line-height:1.7;">' + show(c.aboutText, "Share a few sentences about your business and what makes you the right choice.").replace(/\n/g, "<br>") + "</p></section>";
+      body += '<section class="sec alt"><h2>About Us</h2><p class="lead">' + show(c.aboutText, "Share a few sentences about your business and what makes you the right choice.").replace(/\n/g, "<br>") + "</p></section>";
     }
-    // services
     if (c.sections.services) {
-      var svc = c.services.filter(function (s) { return s.name; });
-      if (fin ? svc.length : true) {
-        var list = fin ? svc : c.services;
-        body += '<section style="padding:60px 24px;background:' + t.bg + ';"><h2 style="' + H + "color:" + t.text + ';font-size:26px;text-align:center;margin:0 0 34px;">What We Offer</h2>' +
-          '<div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;max-width:900px;margin:0 auto;">' +
-          list.map(function (s, i) {
-            return '<div style="flex:1;min-width:220px;max-width:280px;background:' + t.surface + ';border-radius:10px;padding:24px;"><h3 style="' + H + "color:" + t.text + ';font-size:18px;margin:0 0 8px;">' + show(s.name, "Service " + (i + 1)) + "</h3>" +
-              ((s.desc || !fin) ? '<p style="' + B + "color:" + t.textSoft + ';font-size:14px;line-height:1.6;margin:0;">' + show(s.desc, "A short description of this service.") + "</p>" : "") + "</div>";
-          }).join("") + "</div></section>";
+      var svc = c.services.filter(function (x) { return x.name; });
+      if (!fin || svc.length) {
+        body += '<section class="sec"><h2>What We Offer</h2><div class="row">' + (fin ? svc : c.services).map(function (x, i) {
+          return '<div class="card"><h3>' + show(x.name, "Service " + (i + 1)) + "</h3>" + ((x.desc || !fin) ? "<p>" + show(x.desc, "A short description of this service.") + "</p>" : "") + "</div>";
+        }).join("") + "</div></section>";
       }
     }
-    // reviews
     if (c.sections.testimonials) {
       var rev = c.testimonials.filter(function (q) { return q.quote && q.name; });
-      if (fin ? rev.length : true) {
-        var rl = fin ? rev : c.testimonials;
-        body += '<section style="padding:60px 24px;background:' + t.surface + ';"><h2 style="' + H + "color:" + t.text + ';font-size:26px;text-align:center;margin:0 0 34px;">What Customers Say</h2>' +
-          '<div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;max-width:760px;margin:0 auto;">' +
-          rl.map(function (q) {
-            return '<div style="flex:1;min-width:260px;background:' + t.bg + ';border-radius:10px;padding:22px;"><p style="' + B + "color:" + t.text + ';font-style:italic;line-height:1.6;margin:0 0 10px;">&ldquo;' + show(q.quote, "A kind word from a happy customer.") + "&rdquo;</p>" +
-              '<p style="' + B + "color:" + t.textSoft + ';font-size:13px;font-weight:600;margin:0;">&mdash; ' + show(q.name, "Customer name") + "</p></div>";
-          }).join("") + "</div></section>";
+      if (!fin || rev.length) {
+        body += '<section class="sec alt"><h2>What Customers Say</h2><div class="row">' + (fin ? rev : c.testimonials).map(function (q) {
+          return '<div class="card"><p class="q">&ldquo;' + show(q.quote, "A kind word from a happy customer.") + '&rdquo;</p><p class="by">&mdash; ' + show(q.name, "Customer name") + "</p></div>";
+        }).join("") + "</div></section>";
       }
     }
-    // photos
     if (c.sections.gallery) {
       var slots = ["g1", "g2", "g3"], have = slots.filter(function (k) { return im[k]; });
-      if (fin ? have.length : true) {
-        var tiles = fin ? have : slots;
-        body += '<section style="padding:60px 24px;background:' + t.bg + ';"><h2 style="' + H + "color:" + t.text + ';font-size:26px;text-align:center;margin:0 0 30px;">Our Work</h2>' +
-          '<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:900px;margin:0 auto;">' +
-          tiles.map(function (k) {
-            var cap = c.captions[slots.indexOf(k)];
-            return im[k]
-              ? '<figure style="margin:0;width:260px;"><img src="' + im[k] + '" alt="' + esc(cap || (name ? name + " photo" : "Photo")) + '" style="display:block;width:260px;height:180px;object-fit:cover;border-radius:8px;">' + (cap ? '<figcaption style="' + B + "font-size:12px;color:" + t.textSoft + ';margin-top:6px;">' + esc(cap) + "</figcaption>" : "") + "</figure>"
-              : '<div style="width:260px;height:180px;border-radius:8px;background:' + t.surface + ";display:flex;align-items:center;justify-content:center;color:" + t.textSoft + ";" + B + 'font-size:12px;opacity:.6;">Photo</div>';
-          }).join("") + "</div></section>";
+      if (!fin || have.length) {
+        body += '<section class="sec"><h2>Our Work</h2><div class="row">' + (fin ? have : slots).map(function (k) {
+          var cap = c.captions[slots.indexOf(k)];
+          return im[k]
+            ? '<figure><img src="' + im[k] + '" alt="' + esc(cap || (name ? name + " photo" : "Photo")) + '">' + (cap ? "<figcaption>" + esc(cap) + "</figcaption>" : "") + "</figure>"
+            : '<figure><div style="aspect-ratio:4/3;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--soft);font-size:13px;opacity:.6">Photo</div></figure>';
+        }).join("") + "</div></section>";
       }
     }
+
     // contact
-    var lk = "color:inherit;text-decoration:underline;";
     var lines = "";
-    if (c.phone || !fin) lines += '<p style="' + B + 'color:' + t.bg + ';font-size:16px;margin:6px 0;">' + (c.phone ? '<a href="tel:' + esc(telHref(c.phone)) + '" style="' + lk + '">' + esc(c.phone) + "</a>" : ph("(555) 555-1234")) + "</p>";
-    if (c.email || !fin) lines += '<p style="' + B + 'color:' + t.bg + ';font-size:16px;margin:6px 0;">' + (c.email ? '<a href="mailto:' + esc(c.email) + '" style="' + lk + '">' + esc(c.email) + "</a>" : ph("hello@yourbusiness.com")) + "</p>";
-    if (c.address) lines += '<p style="' + B + "color:" + t.bg + ';opacity:.8;font-size:14px;margin:6px 0;">' + esc(c.address) + "</p>";
-    if (c.hours) lines += '<p style="' + B + "color:" + t.bg + ';opacity:.8;font-size:14px;margin:6px 0;">' + esc(c.hours) + "</p>";
-    var fb = safeUrl(c.facebookUrl), ig = safeUrl(c.instagramUrl), soc = "";
-    var btn = "display:inline-block;margin:6px 5px 0;padding:9px 18px;border-radius:999px;border:1.5px solid " + t.bg + ";color:" + t.bg + ";" + B + "font-size:13px;font-weight:600;text-decoration:none;";
-    if (fb) soc += '<a href="' + esc(fb) + '" target="_blank" rel="noopener" style="' + btn + '">Facebook</a>';
-    if (ig) soc += '<a href="' + esc(ig) + '" target="_blank" rel="noopener" style="' + btn + '">Instagram</a>';
-    body += '<section id="contact" style="padding:60px 24px;background:' + t.text + ';text-align:center;"><h2 style="' + H + "color:" + t.bg + ';font-size:26px;margin:0 0 16px;">Get In Touch</h2>' + lines + (soc ? "<div>" + soc + "</div>" : "") + "</section>";
-    body += '<footer style="padding:18px;text-align:center;' + B + "font-size:12px;color:" + t.textSoft + ";background:" + t.bg + ';">&copy; ' + year + " " + esc(name || "Your Business") + ". All rights reserved.</footer>";
+    if (c.phone || !fin) lines += "<p>" + (c.phone ? '<a href="tel:' + esc(telHref(c.phone)) + '">' + esc(c.phone) + "</a>" : ph("(555) 555-1234")) + "</p>";
+    if (c.email || !fin) lines += "<p>" + (c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + "</a>" : ph("hello@yourbusiness.com")) + "</p>";
+    if (c.address) lines += '<p class="sm">' + esc(c.address) + "</p>";
+    if (c.hours) lines += '<p class="sm">' + esc(c.hours) + "</p>";
+    body += '<section id="contact" class="contact"><h2>Get In Touch</h2>' + lines + "</section>";
+
+    // footer with social icons (open in a new tab; take the customer's colors)
+    var soc = "", sameAs = [];
+    SOCIALS.forEach(function (sc) {
+      var u = socialUrl(c[sc.key], sc.hosts);
+      if (u) { sameAs.push(u); soc += '<a class="social" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer" aria-label="' + sc.label + '" title="' + sc.label + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + sc.svg + "</svg></a>"; }
+    });
+    body += "<footer>" + (soc ? '<div class="socials">' + soc + "</div>" : "") + "<div>&copy; " + year + " " + esc(name || "Your Business") + ". All rights reserved.</div></footer>";
 
     var desc = c.tagline || c.aboutText.slice(0, 155) || (name ? name : "Welcome");
     var ld = "";
@@ -530,13 +587,14 @@
       if (c.phone) obj.telephone = c.phone;
       if (c.email) obj.email = c.email;
       if (c.address) obj.address = c.address;
+      if (sameAs.length) obj.sameAs = sameAs;
       if (opts.liveUrl && safeUrl(opts.liveUrl)) obj.url = safeUrl(opts.liveUrl);
       ld = '<script type="application/ld+json">' + JSON.stringify(obj).replace(/</g, "\\u003c") + "<\/script>";
     }
     return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       "<title>" + esc(name || "Your Business Name") + '</title><meta name="description" content="' + esc(desc) + '"><meta property="og:title" content="' + esc(name || "Your Business Name") + '"><meta property="og:description" content="' + esc(desc) + '">' + ld +
       '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=' + f.google.replace(/&/g, "&amp;") + '&amp;display=swap" rel="stylesheet">' +
-      "<style>*{box-sizing:border-box}body{margin:0;" + B + "background:" + t.bg + "}img{max-width:100%}</style></head><body>" + body + "</body></html>";
+      "<style>" + css + "</style></head><body>" + body + "</body></html>";
   }
 
   /* what has to be filled in before a site can be published */
@@ -544,6 +602,9 @@
     var c = sanitizeContent(raw), im = cleanImages(imgs), p = [];
     if (!c.businessName) p.push({ msg: "Add your business name", step: 3 });
     if (!c.phone.trim() && !c.email.trim()) p.push({ msg: "Add a phone number or email so customers can reach you", step: 3 });
+    if (c.ctaMode === "link" && !safeUrl(c.ctaUrl)) p.push({ msg: "Your big button needs a web address, or pick a different button action", step: 3 });
+    if (c.ctaMode === "call" && !telHref(c.phone)) p.push({ msg: "Your big button calls your phone number, so add a phone number", step: 3 });
+    if (c.ctaMode === "email" && !c.email.trim()) p.push({ msg: "Your big button sends an email, so add your email address", step: 3 });
     if (c.sections.about && !c.aboutText.trim()) p.push({ msg: "Write your About paragraph, or turn About off", step: 3 });
     if (c.sections.services) {
       if (c.services.some(function (s) { return s.desc.trim() && !s.name.trim(); })) p.push({ msg: "One of your services has a description but no name", step: 3 });
@@ -556,6 +617,7 @@
       else if (!attest) p.push({ msg: "Confirm that your reviews are real (checkbox below)", step: 4 });
     }
     if (c.sections.gallery && !(im.g1 || im.g2 || im.g3)) p.push({ msg: "Add at least one photo, or turn Photos off", step: 3 });
+    SOCIALS.forEach(function (sc) { if (c[sc.key].trim() && !socialUrl(c[sc.key], sc.hosts)) p.push({ msg: "Your " + sc.label + " link doesn't look like a " + sc.label + " address", step: 3 }); });
     if (!(wish && String(wish.first || "").trim())) p.push({ msg: "Tell us the web address you'd like", step: 4 });
     return p;
   }
@@ -599,6 +661,23 @@
      ===================================================================== */
   function actionSettings() { return { url: window.location.origin + window.location.pathname, handleCodeInApp: true }; }
 
+  // Sends the branded sign-in email through your Vercel function; if that's unavailable, Firebase's own email is used instead.
+  function requestLoginLink(email) {
+    if (!MAIL_ENDPOINT) return auth.sendSignInLinkToEmail(email, actionSettings());
+    return fetch(MAIL_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "login", email: email }) })
+      .then(function (r) { if (!r.ok) throw new Error("mail-down"); return r.json(); })
+      .then(function (j) { if (!j || !j.ok) throw new Error("mail-down"); })
+      .catch(function () { return auth.sendSignInLinkToEmail(email, actionSettings()); });
+  }
+  function postMail(payload) {
+    return fetch(MAIL_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .catch(function () { throw new Error("Couldn't reach the email service. Is api/site-mail.js deployed on Vercel?"); })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok || !j.ok) throw new Error(j.error === "forbidden" ? "Not allowed. Sign in as an admin." : "The email service didn't accept that. Check the Vercel settings for api/site-mail.js.");
+        return j;
+      }); });
+  }
+
   function setLoginMode(mode) {
     var confirming = mode === "confirm";
     $("#loginTitle").textContent = confirming ? "Confirm your email" : "Sign in to your site";
@@ -616,9 +695,9 @@
     var btn = $("#loginBtn"); btn.disabled = true; say("#loginMsg", "");
     var job = mode === "confirm"
       ? auth.signInWithEmailLink(email, window.location.href).then(function () { window.history.replaceState(null, "", window.location.pathname); pendingLinkConfirm = false; })
-      : auth.sendSignInLinkToEmail(email, actionSettings()).then(function () {
+      : requestLoginLink(email).then(function () {
           try { localStorage.setItem("tec_signin_email", email); } catch (x) {}
-          say("#loginMsg", "Check your email. We sent a sign-in link to " + email + ". It can take a minute; check spam too.", true);
+          say("#loginMsg", "Check your email. If " + email + " has a Site Starter account, a sign-in link is on its way. It can take a minute; check spam too.", true);
         });
     job.catch(function (err) {
       var expired = err && (err.code === "auth/invalid-action-code" || err.code === "auth/expired-action-code");
@@ -701,8 +780,9 @@
     var out = [], end = account ? toDate(account.termEnd) : null;
     if (!canEdit) out.push('<div class="bad">Your plan ended on ' + esc(fmtDate(end)) + ". You can still look at your site, but editing is turned off. <a href=\"contact.html\">Contact us to renew</a>.</div>");
     else if (end && end.getTime() - Date.now() < 30 * 864e5) out.push('<div class="warn">Your plan ends on ' + esc(fmtDate(end)) + ". <a href=\"contact.html\">Contact us to renew</a> so your site stays online.</div>");
-    if (site && site.status === "live") out.push('<div class="good">Your site is live' + (site.liveUrl ? ': <a href="' + esc(safeUrl(site.liveUrl)) + '" target="_blank" rel="noopener">' + esc(site.liveUrl) + "</a>" : "") + ".</div>");
-    else if (site && site.publishRequested) out.push('<div class="info">Your site is with us for review. We\'ll email you when it\'s live. You can keep editing in the meantime.</div>');
+    if (site && site.liveSentAt) out.push('<div class="good">Your site is live' + (site.liveUrl ? ': <a href="' + esc(safeUrl(site.liveUrl)) + '" target="_blank" rel="noopener">' + esc(site.liveUrl) + "</a>" : "") + ".</div>");
+    else if (site && site.status === "live") out.push('<div class="info">Your site has been approved. We\'re putting it online now and will email you the moment it\'s ready to view.</div>');
+    if (site && site.publishRequested) out.push('<div class="info">' + (site.liveSentAt ? "Your changes are with us for review. Your live site stays as it is until we publish them." : "Your site is with us for review. We'll email you when it's live.") + " You can keep editing in the meantime.</div>");
     $("#notices").innerHTML = out.join("");
     $("#notices").hidden = !out.length;
   }
@@ -784,12 +864,19 @@
   /* ---- step 3 ---- */
   function renderContentForm() {
     var c = content, h = '<div class="eyebrow">Step 3</div><h2>Add your details</h2><div class="sub">Fill in what you have. Anything you leave blank simply won\'t show on your live page.</div>';
+    var mode = c.ctaMode;
     h += '<div class="subgroup"><div class="subgroup-title">Top banner</div>' +
       '<div class="field"><label for="f_businessName">Your business name</label><input type="text" id="f_businessName" data-f="businessName" maxlength="80" value="' + esc(c.businessName) + '" placeholder="Riverside Plumbing Co."></div>' +
       '<div class="field"><label for="f_tagline">One line about what you do</label><input type="text" id="f_tagline" data-f="tagline" maxlength="160" value="' + esc(c.tagline) + '" placeholder="Fast, honest plumbing with same-day service."></div>' +
-      '<div class="field"><label for="f_ctaText">What should the big button say?</label><input type="text" id="f_ctaText" data-f="ctaText" maxlength="40" value="' + esc(c.ctaText) + '" placeholder="Call Us Today"><div class="hint">The button jumps down to your contact details.</div></div>' +
-      photoField("hero", "Banner photo (optional)", false, "Wide, landscape photos work best.");
-    if (images.hero) h += '<div class="reposition-box" id="heroRepo" style="background-image:url(\'' + images.hero + '\');background-position:center ' + c.heroPos + '%;"></div>';
+      '<div class="field"><label for="f_ctaText">What should the big button say?</label><input type="text" id="f_ctaText" data-f="ctaText" maxlength="40" value="' + esc(c.ctaText) + '" placeholder="Call Us Today"></div>' +
+      '<div class="field"><label for="f_ctaMode">Where should the button take people?</label><select id="f_ctaMode" data-f="ctaMode">' +
+        [["contact", "Down to my contact details"], ["call", "Call my phone number"], ["email", "Start an email to me"], ["link", "A web page (booking page, Facebook, and so on)"]].map(function (o) { return '<option value="' + o[0] + '"' + (mode === o[0] ? " selected" : "") + ">" + esc(o[1]) + "</option>"; }).join("") + "</select></div>" +
+      (mode === "link" ? '<div class="field"><label for="f_ctaUrl">Web address for the button</label><input type="text" id="f_ctaUrl" data-f="ctaUrl" maxlength="300" value="' + esc(c.ctaUrl) + '" placeholder="e.g. yourbooking.com/appointments"><div class="hint">It opens in a new tab so visitors never lose your page.</div></div>' : "") +
+      photoField("hero", "Banner photo (optional)", false, "Wide, landscape photos work best. It fills the top of your page and centers itself on phones.");
+    if (images.hero) {
+      h += '<div class="lab">Which part of the photo should show?</div><div class="seg" role="group" aria-label="Photo position">' +
+        [[0, "Top"], [50, "Middle"], [100, "Bottom"]].map(function (o) { var on = Math.abs(c.heroPos - o[0]) < 25; return '<button type="button" class="' + (on ? "on" : "") + '" data-pos="' + o[0] + '" aria-pressed="' + on + '">' + o[1] + "</button>"; }).join("") + "</div>";
+    }
     h += "</div>";
     if (c.sections.about) h += '<div class="subgroup"><div class="subgroup-title">About you</div><div class="field"><label for="f_about">Tell visitors who you are</label><textarea id="f_about" data-f="aboutText" rows="4" maxlength="1200" placeholder="How long you\'ve been in business, what you\'re known for, and why people trust you.">' + esc(c.aboutText) + "</textarea></div></div>";
     if (c.sections.services) {
@@ -804,19 +891,18 @@
     }
     if (c.sections.gallery) {
       h += '<div class="subgroup"><div class="subgroup-title">Photos</div>';
-      ["g1", "g2", "g3"].forEach(function (k, i) { h += photoField(k, "Photo " + (i + 1), true, ""); });
+      ["g1", "g2", "g3"].forEach(function (k, i) { h += photoField(k, "Photo " + (i + 1), true, i === 0 ? "Your photos line up in a row on computers and stack, centered, on phones." : ""); });
       h += "</div>";
     }
     h += '<div class="subgroup"><div class="subgroup-title">How to reach you</div>' +
       '<div class="field-row"><div class="field"><label for="f_phone">Phone</label><input type="text" id="f_phone" data-f="phone" maxlength="40" value="' + esc(c.phone) + '" placeholder="(555) 555-1234"></div>' +
       '<div class="field"><label for="f_email">Email</label><input type="email" id="f_email" data-f="email" maxlength="120" value="' + esc(c.email) + '" placeholder="hello@yourbusiness.com"></div></div>' +
       '<div class="field"><label for="f_address">Address (optional)</label><input type="text" id="f_address" data-f="address" maxlength="200" value="' + esc(c.address) + '" placeholder="123 Main St, Your Town"></div>' +
-      '<div class="field"><label for="f_hours">Hours (optional)</label><input type="text" id="f_hours" data-f="hours" maxlength="120" value="' + esc(c.hours) + '" placeholder="Mon–Fri, 8am–6pm"></div>' +
-      '<div class="field"><label for="f_fb">Your Facebook page (optional)</label><input type="text" id="f_fb" data-f="facebookUrl" maxlength="300" value="' + esc(c.facebookUrl) + '" placeholder="facebook.com/yourbusiness"></div>' +
-      '<div class="field"><label for="f_ig">Your Instagram (optional)</label><input type="text" id="f_ig" data-f="instagramUrl" maxlength="300" value="' + esc(c.instagramUrl) + '" placeholder="instagram.com/yourbusiness"></div></div>';
+      '<div class="field"><label for="f_hours">Hours (optional)</label><input type="text" id="f_hours" data-f="hours" maxlength="120" value="' + esc(c.hours) + '" placeholder="Mon–Fri, 8am–6pm"></div></div>';
+    h += '<div class="subgroup"><div class="subgroup-title">Your social pages (optional)</div><div class="hint" style="margin:-4px 0 10px;">Add any you use. They show as round icons at the bottom of your page, in your colors, and open in a new tab.</div>' +
+      SOCIALS.map(function (sc) { return '<div class="field"><label for="f_' + sc.key + '">' + sc.label + '</label><input type="text" id="f_' + sc.key + '" data-f="' + sc.key + '" maxlength="300" value="' + esc(c[sc.key]) + '" placeholder="' + esc(sc.ph) + '"></div>'; }).join("") + "</div>";
     $("#contentForm").innerHTML = h;
-    if (!canEdit) $$("#contentForm input, #contentForm textarea, #contentForm button").forEach(function (el) { el.disabled = true; });
-    attachReposition();
+    if (!canEdit) $$("#contentForm input, #contentForm textarea, #contentForm select, #contentForm button").forEach(function (el) { el.disabled = true; });
   }
   function photoField(slot, label, withCaption, tip) {
     var has = !!images[slot], i = slot.indexOf("g") === 0 ? +slot.slice(1) - 1 : -1;
@@ -831,7 +917,7 @@
   formEl.addEventListener("input", function (e) {
     if (!canEdit) return;
     var d = e.target.dataset;
-    if (d.f) content[d.f] = e.target.value;
+    if (d.f) { content[d.f] = e.target.value; if (d.f === "ctaMode") renderContentForm(); }
     else if (d.svc != null) content.services[+d.svc][d.k] = e.target.value;
     else if (d.tst != null) content.testimonials[+d.tst][d.k] = e.target.value;
     else if (d.cap != null) content.captions[+d.cap] = e.target.value;
@@ -840,7 +926,10 @@
   });
   formEl.addEventListener("change", function (e) { var s = e.target.dataset.img; if (s && e.target.files[0] && canEdit) handleImage(s, e.target.files[0]); });
   formEl.addEventListener("click", function (e) {
-    var r = e.target.closest("[data-rmimg]"); if (!r || !canEdit) return;
+    if (!canEdit) return;
+    var pos = e.target.closest("[data-pos]");
+    if (pos) { content.heroPos = +pos.dataset.pos; renderContentForm(); changed(); return; }
+    var r = e.target.closest("[data-rmimg]"); if (!r) return;
     var slot = r.dataset.rmimg; delete images[slot];
     siteRef.collection("images").doc(slot).delete().catch(function () {});
     content.imgRev++; renderContentForm(); changed();
@@ -874,15 +963,6 @@
       });
     }).catch(function (err) { setSaveState(err.message || "Photo couldn't be saved", "err"); });
   }
-  function attachReposition() {
-    var box = $("#heroRepo"); if (!box || !canEdit) return;
-    var drag = false, y0 = 0, p0 = 50;
-    box.addEventListener("pointerdown", function (e) { drag = true; y0 = e.clientY; p0 = content.heroPos; box.setPointerCapture(e.pointerId); });
-    box.addEventListener("pointermove", function (e) { if (!drag) return; content.heroPos = Math.max(0, Math.min(100, p0 - (e.clientY - y0) * 0.6)); box.style.backgroundPosition = "center " + content.heroPos + "%"; });
-    var end = function () { if (!drag) return; drag = false; changed(); };
-    box.addEventListener("pointerup", end); box.addEventListener("pointercancel", end);
-  }
-
   /* ---- step 4: checklist + publishing ---- */
   function renderChecklist() {
     var problems = readyProblems();
@@ -955,17 +1035,29 @@
       renderAdmin();
     }).catch(function (err) { $("#adminRows").innerHTML = ""; say("#adminMsg", friendlyError(err), false); });
   }
+  function needsSend(s) {
+    if (!s || s.status !== "live" || !s.liveUrl) return false;
+    var sent = toDate(s.liveSentAt), ap = toDate(s.approvedAt);
+    return !sent || (ap && ap.getTime() > sent.getTime());
+  }
   function renderAdmin() {
-    var needs = adminData.filter(function (r) { return r.site && r.site.publishRequested; }).length;
-    $("#adminCount").textContent = adminData.length + " customer" + (adminData.length === 1 ? "" : "s") + (needs ? " · " + needs + " waiting for review" : "");
-    adminData.sort(function (a, b) { return (b.site && b.site.publishRequested ? 1 : 0) - (a.site && a.site.publishRequested ? 1 : 0) || a.email.localeCompare(b.email); });
+    var todo = adminData.filter(function (r) { return r.site && (r.site.publishRequested || needsSend(r.site)); }).length;
+    $("#adminCount").textContent = adminData.length + " customer" + (adminData.length === 1 ? "" : "s") + (todo ? " · " + todo + " need" + (todo === 1 ? "s" : "") + " your attention" : "");
+    var rank = function (r) { return r.site && r.site.publishRequested ? 0 : (needsSend(r.site) ? 1 : 2); };
+    adminData.sort(function (a, b) { return rank(a) - rank(b) || a.email.localeCompare(b.email); });
     $("#adminRows").innerHTML = adminData.length ? adminData.map(function (r, i) {
-      var a = r.account, s = r.site, end = a ? toDate(a.termEnd) : null, expired = end && end.getTime() < Date.now();
-      var pill = !s ? '<span class="pill">Not started</span>' : s.publishRequested ? '<span class="pill review">Needs review</span>' : s.status === "live" ? '<span class="pill live">Live</span>' : '<span class="pill draft">Draft</span>';
+      var a = r.account, s = r.site, end = a ? toDate(a.termEnd) : null, expired = end && end.getTime() < Date.now(), send = needsSend(s);
+      var pill = !s ? '<span class="pill">Not started</span>'
+        : s.publishRequested ? '<span class="pill review">Needs review</span>'
+        : send ? '<span class="pill review">Approved: send to customer</span>'
+        : s.status === "live" ? '<span class="pill live">Live</span>' : '<span class="pill draft">Draft</span>';
       var status = a && a.active === false ? ' <span class="pill off">Turned off</span>' : (expired ? ' <span class="pill off">Expired</span>' : "");
       var wishTxt = s && s.domainWish && s.domainWish.first ? esc(s.domainWish.first) + (s.domainWish.second ? '<br><span style="color:var(--ink-soft)">or ' + esc(s.domainWish.second) + "</span>" : "") : "";
-      return '<tr class="' + (s && s.publishRequested ? "needs" : "") + '"><td><strong>' + esc(a && a.businessName || (s && s.content && s.content.businessName) || "") + "</strong><br>" + esc(r.email) + "</td><td>" + esc(fmtDate(end)) + status + "</td><td>" + pill + (s && s.liveUrl ? '<br><a href="' + esc(safeUrl(s.liveUrl)) + '" target="_blank" rel="noopener">' + esc(s.liveUrl.replace(/^https?:\/\//, "")) + "</a>" : "") + "</td><td>" + wishTxt + "</td><td>" + esc(s ? fmtDateTime(s.updatedAt) : "") + '</td><td><div class="row-actions">' +
+      var sentTxt = s && s.liveSentAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">Sent ' + esc(fmtDate(s.liveSentAt)) + "</span>" : "";
+      var canSend = s && s.status === "live" && s.liveUrl;
+      return '<tr class="' + (s && (s.publishRequested || send) ? "needs" : "") + '"><td><strong>' + esc(a && a.businessName || (s && s.content && s.content.businessName) || "") + "</strong><br>" + esc(r.email) + "</td><td>" + esc(fmtDate(end)) + status + "</td><td>" + pill + (s && s.liveUrl ? '<br><a href="' + esc(safeUrl(s.liveUrl)) + '" target="_blank" rel="noopener">' + esc(s.liveUrl.replace(/^https?:\/\//, "")) + "</a>" : "") + sentTxt + "</td><td>" + wishTxt + "</td><td>" + esc(s ? fmtDateTime(s.updatedAt) : "") + '</td><td><div class="row-actions">' +
         (s ? '<button type="button" class="btn-primary btn-sm" data-act="review" data-i="' + i + '">Review</button>' : "") +
+        (canSend ? '<button type="button" class="' + (send ? "btn-accent-sm" : "btn-ghost") + ' btn-sm" data-act="send" data-i="' + i + '">' + (send ? "Send site to customer" : "Resend site email") + "</button>" : "") +
         '<button type="button" class="btn-ghost btn-sm" data-act="link" data-i="' + i + '">Send login link</button>' +
         (a ? '<button type="button" class="btn-ghost btn-sm" data-act="extend" data-i="' + i + '">+1 year</button><button type="button" class="btn-ghost btn-sm" data-act="toggle" data-i="' + i + '">' + (a.active === false ? "Turn on" : "Turn off") + "</button>" : "") + "</div></td></tr>";
     }).join("") : '<tr><td colspan="6">No customers yet. Add one above after they buy.</td></tr>';
@@ -979,7 +1071,7 @@
     var now = new Date(), end = addYears(now, years), TSF = firebase.firestore.Timestamp;
     say("#addMsg", "Adding…", true);
     db.collection("accounts").doc(email).set({ active: true, years: years, businessName: biz, termStart: TSF.fromDate(now), termEnd: TSF.fromDate(end), createdAt: TSF.fromDate(now) }).then(function () {
-      return auth.sendSignInLinkToEmail(email, actionSettings());
+      return requestLoginLink(email);
     }).then(function () {
       say("#addMsg", "Added " + email + " (plan ends " + fmtDate(end) + "). We emailed them a sign-in link.", true);
       $("#addForm").reset(); return loadAdmin();
@@ -991,7 +1083,17 @@
     var row = adminData[+b.dataset.i], act = b.dataset.act, TSF = firebase.firestore.Timestamp; b.disabled = true;
     var done = function () { return loadAdmin(); }, fail = function (err) { say("#adminMsg", friendlyError(err), false); b.disabled = false; };
     if (act === "review") { openReview(row).then(function () { b.disabled = false; }).catch(fail); return; }
-    if (act === "link") { auth.sendSignInLinkToEmail(row.email, actionSettings()).then(function () { say("#adminMsg", "Login link sent to " + row.email + ".", true); b.disabled = false; }).catch(fail); return; }
+    if (act === "link") { requestLoginLink(row.email).then(function () { say("#adminMsg", "Login link sent to " + row.email + ".", true); b.disabled = false; }).catch(fail); return; }
+    if (act === "send") {
+      var st = row.site, resend = !needsSend(st);
+      if (!confirm((resend ? "Resend" : "Send") + ' the "your website is live" email to ' + row.email + "?\n\nOnly do this once the file is uploaded, the domain is working, and the site is showing.")) { b.disabled = false; return; }
+      user.getIdToken().then(function (tok) {
+        return postMail({ action: "site-live", idToken: tok, email: row.email, businessName: (row.account && row.account.businessName) || (st.content && st.content.businessName) || "", liveUrl: st.liveUrl, planEnds: row.account ? fmtDate(row.account.termEnd) : "", isUpdate: !!st.liveSentAt });
+      }).then(function () {
+        return db.collection("sites").doc(st._uid).update({ liveSentAt: firebase.firestore.FieldValue.serverTimestamp() });
+      }).then(function () { say("#adminMsg", "Sent the live-site email to " + row.email + ".", true); return done(); }).catch(fail);
+      return;
+    }
     if (act === "extend") {
       var base = Math.max(Date.now(), toDate(row.account.termEnd).getTime());
       db.collection("accounts").doc(row.email).update({ termEnd: TSF.fromDate(addYears(new Date(base), 1)), active: true }).then(done).catch(fail); return;
@@ -1036,13 +1138,13 @@
     if (problems.length && !confirm("This site has open items:\n\n- " + problems.map(function (p) { return p.msg; }).join("\n- ") + "\n\nApprove anyway?")) return;
     btn.disabled = true;
     var ts = firebase.firestore.FieldValue.serverTimestamp(), batch = db.batch();
-    batch.update(b.ref, { status: "live", liveSnapshot: c, liveUrl: url, liveAt: ts, publishRequested: false });
+    batch.update(b.ref, { status: "live", liveSnapshot: c, liveUrl: url, approvedAt: ts, publishRequested: false });
     Object.keys(SLOTS).forEach(function (k) {
       var ref = b.ref.collection("liveImages").doc(k);
       if (b.images[k]) batch.set(ref, { dataUrl: b.images[k], updatedAt: ts }); else batch.delete(ref);
     });
     batch.commit().then(function () {
-      say("#reviewMsg", "Approved. Download the file and upload it to " + url + ", then email the customer.", true);
+      say("#reviewMsg", "Approved. Now download the file and upload it to " + url + ". When the site is showing, close this window and click \"Send site to customer\" in the list.", true);
       b.site.status = "live"; b.site.liveUrl = url; b.site.liveSnapshot = c; b.liveImages = Object.assign({}, b.images);
       $("#reviewDownloadLive").hidden = $("#reviewOffline").hidden = false;
       return loadAdmin();
