@@ -1226,8 +1226,8 @@
       if (typed !== row.email) { say("#adminMsg", typed === null ? "" : "That didn't match — nothing was deleted.", typed === null); b.disabled = false; return; }
       user.getIdToken().then(function (tok) {
         return fetch(MANAGE_ACCOUNT_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, targetEmail: row.email, action: "delete" }) });
-      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't delete that account. Try again in a moment."); }); })
-        .then(function () { return done().then(function () { say("#adminMsg", "Deleted " + row.email + ".", true); }); }).catch(fail);
+      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(j.detail || j.error || "Couldn't delete that account. Try again in a moment."); return j; }); })
+        .then(function (j) { return done().then(function () { say("#adminMsg", (j.warning ? j.warning : "Deleted " + row.email + "."), !j.warning); }); }).catch(fail);
     }
   });
 
