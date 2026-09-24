@@ -154,6 +154,19 @@
 @media (max-width: 640px) {
   .makeover-card .checks { columns: 1; }
 }
+
+/* ── SITE STARTER CALLOUT ────────────────────────── */
+.starter-callout {
+  background: var(--teal-light); border: 1px solid var(--border); border-radius: 16px;
+  padding: 32px 36px; margin-top: 56px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+}
+.starter-callout-tag { display: inline-flex; align-items: center; background: var(--gold); color: var(--ink); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 5px 14px; border-radius: 50px; margin-bottom: 10px; }
+.starter-callout h2 { font-family: var(--serif); font-weight: 400; font-size: 24px; color: var(--teal-deep); margin-bottom: 6px; }
+.starter-callout p { font-size: 14.5px; color: var(--text-muted); line-height: 1.6; max-width: 480px; }
+.starter-callout .price-side { text-align: right; flex-shrink: 0; }
+.starter-callout .amt { font-family: var(--serif); font-size: 40px; color: var(--ink); line-height: 1; }
+.starter-callout .amt-note { font-size: 12.5px; color: var(--text-muted); margin: 2px 0 14px; }
+@media (max-width: 720px) { .starter-callout { flex-direction: column; text-align: center; padding: 28px 24px; } .starter-callout p { max-width: none; } .starter-callout .price-side { text-align: center; } }
 </style>
 </head>
 <body>
@@ -220,6 +233,20 @@
 </div>
 
 <!-- ── PACKAGES ─────────────────────────────────────── -->
+
+  <div class="starter-callout">
+    <div>
+      <span class="starter-callout-tag">Site Starter</span>
+      <h2>Just need something simple?</h2>
+      <p>A one-page website you set up yourself in four guided steps &mdash; your own web address included, ready in minutes. Perfect for marketing your business or moving off Facebook.</p>
+    </div>
+    <div class="price-side">
+      <div class="amt">$50</div>
+      <div class="amt-note">for your first year</div>
+      <a href="starter-checkout.html" class="btn-primary btn-arrow">Get Site Starter <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+
 <section class="section" id="packages" style="padding-top:64px;">
   <div class="pkg-grid" style="--rows:33">
 
