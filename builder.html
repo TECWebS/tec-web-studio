@@ -194,9 +194,11 @@
     <p id="loginIntro">Enter the email you used when you signed up. We'll email you a sign-in link. No password to remember.</p>
     <form id="loginForm" novalidate>
       <div class="field"><label for="loginEmail">Email address</label><input type="email" id="loginEmail" autocomplete="email" required></div>
+      <div class="field" id="loginPasswordField" hidden><label for="loginPassword">Password</label><input type="password" id="loginPassword" autocomplete="current-password"></div>
       <button type="submit" class="btn-accent" id="loginBtn">Email me a sign-in link</button>
       <p class="msg" id="loginMsg" role="status" aria-live="polite"></p>
     </form>
+    <p class="divider-note" id="loginToggleNote"><button type="button" class="bl-link" id="loginToggleBtn" style="font:inherit;">Sign in with a password instead</button></p>
     <p class="divider-note">Haven't signed up yet? <a href="services.html">See what's included</a>.</p>
   </div>
 </div>
@@ -296,6 +298,16 @@
 
 <!-- ============ ADMIN CONSOLE ============ -->
 <div id="screen-admin" class="admin" hidden>
+  <div class="admin-card" id="pwCard">
+    <div class="lab" style="margin-bottom:6px;">Sign in faster next time</div>
+    <p class="bl-muted" style="margin:0 0 10px;">Set a password so you don't need an email link every time. This only affects your own admin login.</p>
+    <div class="add-form" style="grid-template-columns:1fr auto;">
+      <div><label class="lab" for="pwNew">New password (8+ characters)</label><input type="password" id="pwNew" autocomplete="new-password" minlength="8"></div>
+      <button type="button" class="btn-primary" id="pwSaveBtn" style="align-self:end;">Save password</button>
+    </div>
+    <p class="msg" id="pwMsg" role="status" aria-live="polite"></p>
+  </div>
+
   <h2>Customers</h2>
   <div class="admin-card">
     <div class="lab" style="margin-bottom:10px;">Add a customer after they buy</div>
@@ -365,6 +377,7 @@
   // Branded emails (sign-in links + "your site is live"). This is the /api/site-mail function on your Vercel project.
   // If it isn't deployed yet, sign-in links fall back to Firebase's plain email automatically.
   var MAIL_ENDPOINT = "https://tec-api.vercel.app/api/site-mail";
+  var SET_PASSWORD_ENDPOINT = "https://tec-api.vercel.app/api/set-password";
 
   /* =====================================================================
      2. DATA
@@ -678,30 +691,49 @@
       }); });
   }
 
+  var usePassword = false;
   function setLoginMode(mode) {
     var confirming = mode === "confirm";
-    $("#loginTitle").textContent = confirming ? "Confirm your email" : "Sign in to your site";
-    $("#loginIntro").textContent = confirming
-      ? "For your security, please type the email address this sign-in link was sent to."
-      : "Enter the email you used when you signed up. We'll email you a sign-in link. No password to remember.";
-    $("#loginBtn").textContent = confirming ? "Finish signing in" : "Email me a sign-in link";
+    $("#loginPasswordField").hidden = !usePassword;
+    $("#loginToggleNote").hidden = confirming;
+    $("#loginToggleBtn").textContent = usePassword ? "Email me a sign-in link instead" : "Sign in with a password instead";
+    if (usePassword) {
+      $("#loginTitle").textContent = "Sign in to your site";
+      $("#loginIntro").textContent = "Enter your email and password.";
+      $("#loginBtn").textContent = "Sign in";
+    } else {
+      $("#loginTitle").textContent = confirming ? "Confirm your email" : "Sign in to your site";
+      $("#loginIntro").textContent = confirming
+        ? "For your security, please type the email address this sign-in link was sent to."
+        : "Enter the email you used when you signed up. We'll email you a sign-in link. No password to remember.";
+      $("#loginBtn").textContent = confirming ? "Finish signing in" : "Email me a sign-in link";
+    }
     $("#loginForm").dataset.mode = mode;
   }
+  $("#loginToggleBtn").addEventListener("click", function () { usePassword = !usePassword; setLoginMode($("#loginForm").dataset.mode === "confirm" ? "request" : ($("#loginForm").dataset.mode || "request")); });
 
   $("#loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
     var email = $("#loginEmail").value.trim().toLowerCase(), mode = this.dataset.mode || "request";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say("#loginMsg", "Please enter a valid email address.", false); return; }
     var btn = $("#loginBtn"); btn.disabled = true; say("#loginMsg", "");
-    var job = mode === "confirm"
-      ? auth.signInWithEmailLink(email, window.location.href).then(function () { window.history.replaceState(null, "", window.location.pathname); pendingLinkConfirm = false; })
-      : requestLoginLink(email).then(function () {
-          try { localStorage.setItem("tec_signin_email", email); } catch (x) {}
-          say("#loginMsg", "Check your email. If " + email + " has a Site Starter account, a sign-in link is on its way. It can take a minute; check spam too.", true);
-        });
+    var job;
+    if (usePassword) {
+      var pw = $("#loginPassword").value;
+      job = auth.signInWithEmailAndPassword(email, pw);
+    } else if (mode === "confirm") {
+      job = auth.signInWithEmailLink(email, window.location.href).then(function () { window.history.replaceState(null, "", window.location.pathname); pendingLinkConfirm = false; });
+    } else {
+      job = requestLoginLink(email).then(function () {
+        try { localStorage.setItem("tec_signin_email", email); } catch (x) {}
+        say("#loginMsg", "Check your email. If " + email + " has a Site Starter account, a sign-in link is on its way. It can take a minute; check spam too.", true);
+      });
+    }
     job.catch(function (err) {
       var expired = err && (err.code === "auth/invalid-action-code" || err.code === "auth/expired-action-code");
-      say("#loginMsg", expired ? "That link has expired or was already used. Enter your email to get a new one." : friendlyError(err), false);
+      var wrongPw = err && (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential" || err.code === "auth/user-not-found");
+      say("#loginMsg", usePassword && wrongPw ? "That email and password don't match. Use the email link to sign in, then set a password from the Customers screen."
+        : expired ? "That link has expired or was already used. Enter your email to get a new one." : friendlyError(err), false);
       if (expired) { setLoginMode("request"); window.history.replaceState(null, "", window.location.pathname); }
     }).then(function () { btn.disabled = false; });
   });
@@ -1071,6 +1103,18 @@
     }).join("") : '<tr><td colspan="6">No customers yet. Add one above after they buy.</td></tr>';
   }
   $("#adminRefresh").addEventListener("click", loadAdmin);
+
+  $("#pwSaveBtn").addEventListener("click", function () {
+    var pw = $("#pwNew").value, btn = this;
+    if (pw.length < 8) { say("#pwMsg", "Use at least 8 characters.", false); return; }
+    btn.disabled = true; say("#pwMsg", "");
+    user.getIdToken().then(function (tok) {
+      return fetch(SET_PASSWORD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, newPassword: pw }) });
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't save that. Try again in a moment."); }); })
+      .then(function () { $("#pwNew").value = ""; say("#pwMsg", "Password saved. Use it next time you sign in.", true); })
+      .catch(function (err) { say("#pwMsg", err.message, false); })
+      .then(function () { btn.disabled = false; });
+  });
 
   $("#addForm").addEventListener("submit", function (e) {
     e.preventDefault();
