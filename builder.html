@@ -308,28 +308,50 @@
     <p class="msg" id="pwMsg" role="status" aria-live="polite"></p>
   </div>
 
-  <h2>Customers</h2>
-  <div class="admin-card">
-    <div class="lab" style="margin-bottom:10px;">Add a customer after they buy</div>
-    <form id="addForm" class="add-form" novalidate>
-      <div><label class="lab" for="addEmail">Customer email</label><input type="email" id="addEmail" required></div>
-      <div><label class="lab" for="addYears">Plan</label>
-        <select id="addYears"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option></select></div>
-      <div><label class="lab" for="addBiz">Business name (optional)</label><input type="text" id="addBiz"></div>
-      <button type="submit" class="btn-primary">Add + email login link</button>
-    </form>
-    <p class="msg" id="addMsg" role="status" aria-live="polite"></p>
+  <div class="seg" role="tablist" aria-label="Admin section">
+    <button type="button" class="on" data-admintab="starter" role="tab" aria-selected="true">Site Starter</button>
+    <button type="button" data-admintab="audits" role="tab" aria-selected="false">Free Audits</button>
   </div>
-  <div class="admin-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
-      <div class="lab" style="margin:0;" id="adminCount"></div>
-      <button type="button" class="btn-ghost btn-sm" id="adminRefresh">Refresh</button>
+
+  <div id="adminTabStarter">
+    <h2>Customers</h2>
+    <div class="admin-card">
+      <div class="lab" style="margin-bottom:10px;">Add a customer after they buy</div>
+      <form id="addForm" class="add-form" novalidate>
+        <div><label class="lab" for="addEmail">Customer email</label><input type="email" id="addEmail" required></div>
+        <div><label class="lab" for="addYears">Plan</label>
+          <select id="addYears"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option></select></div>
+        <div><label class="lab" for="addBiz">Business name (optional)</label><input type="text" id="addBiz"></div>
+        <button type="submit" class="btn-primary">Add + email login link</button>
+      </form>
+      <p class="msg" id="addMsg" role="status" aria-live="polite"></p>
     </div>
-    <div class="table-scroll"><table>
-      <thead><tr><th>Customer</th><th>Plan ends</th><th>Site</th><th>Web address</th><th>Updated</th><th></th></tr></thead>
-      <tbody id="adminRows"><tr><td colspan="6">Loading…</td></tr></tbody>
-    </table></div>
-    <p class="msg" id="adminMsg" role="status" aria-live="polite"></p>
+    <div class="admin-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="adminCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="adminRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Customer</th><th>Plan ends</th><th>Site</th><th>Web address</th><th>Updated</th><th></th></tr></thead>
+        <tbody id="adminRows"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="adminMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabAudits" hidden>
+    <h2>Free Audits</h2>
+    <div class="admin-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="auditCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="auditRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Lead</th><th>Submitted</th><th>Starting point</th><th>Suggested</th><th>Status</th><th></th></tr></thead>
+        <tbody id="auditRows"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="auditListMsg" role="status" aria-live="polite"></p>
+    </div>
   </div>
 </div>
 
@@ -353,6 +375,27 @@
         <p class="msg" id="reviewMsg" role="status" aria-live="polite"></p>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="auditModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="auditModalTitle" style="max-width:720px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+      <h2 id="auditModalTitle" style="font-size:20px;">Audit</h2>
+      <button type="button" class="btn-ghost btn-sm" id="auditModalClose">Close</button>
+    </div>
+    <div id="auditModalAnswers" style="font-size:13px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px;max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:12px 14px;"></div>
+    <div class="field"><label class="lab" for="auditPackage">Package to recommend</label>
+      <select id="auditPackage">
+        <option value="Website Makeover">Website Makeover — $399</option>
+        <option value="Quick Start">Quick Start — $299</option>
+        <option value="Business Website">Business Website — $599</option>
+        <option value="Complete Brand + Website">Complete Brand + Website — $799</option>
+      </select>
+    </div>
+    <div class="field"><label class="lab" for="auditSampleUrl">Sample website link</label><input type="url" id="auditSampleUrl" placeholder="https://sample.tecwebstudio.com/theirbusiness"></div>
+    <button type="button" class="btn-primary" id="auditSendBtn" style="width:100%;">Send recommendation email</button>
+    <p class="msg" id="auditModalMsg" role="status" aria-live="polite"></p>
   </div>
 </div>
 
@@ -776,6 +819,16 @@
     else { showScreen("app"); $("#switchView").textContent = "Customer list"; $("#saveState").hidden = false; renderPlanChip(); }
   }
   $("#switchView").addEventListener("click", function () { view = view === "admin" ? "app" : "admin"; applyView(); });
+
+  var adminTab = "starter";
+  function showAdminTab(t) {
+    adminTab = t;
+    $$(".seg[role=tablist] button[data-admintab]").forEach(function (b) { var on = b.dataset.admintab === t; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
+    $("#adminTabStarter").hidden = t !== "starter";
+    $("#adminTabAudits").hidden = t !== "audits";
+    if (t === "audits" && !auditsLoadedOnce) loadAudits();
+  }
+  document.querySelectorAll('.seg[role="tablist"] button[data-admintab]').forEach(function (b) { b.addEventListener("click", function () { showAdminTab(b.dataset.admintab); }); });
 
   function renderPlanChip() {
     var chip = $("#planChip"), end = account ? toDate(account.termEnd) : null;
@@ -1206,6 +1259,87 @@
     if (!confirm("Mark this site as offline?")) return;
     reviewCtx.ref.update({ status: "draft", publishRequested: false }).then(function () { say("#reviewMsg", "Marked offline.", true); return loadAdmin(); })
       .catch(function (err) { say("#reviewMsg", friendlyError(err), false); });
+  });
+
+  /* =====================================================================
+     10b. ADMIN — FREE AUDITS
+     Reads/writes go through Apps Script (Google Sheets), not Firestore, so
+     these are separate calls that need the same passcode as order search.
+     ===================================================================== */
+  var auditsLoadedOnce = false, auditData = [], auditCtx = null;
+
+  function getAuditKey(forcePrompt) {
+    var k = null;
+    try { k = sessionStorage.getItem("tec_audit_key"); } catch (e) {}
+    if (!k || forcePrompt) {
+      k = window.prompt("Enter the audits passcode:") || "";
+      if (k) { try { sessionStorage.setItem("tec_audit_key", k); } catch (e) {} }
+    }
+    return k || "";
+  }
+  function clearAuditKey() { try { sessionStorage.removeItem("tec_audit_key"); } catch (e) {} }
+
+  function loadAudits(forcePrompt) {
+    var key = getAuditKey(forcePrompt);
+    if (!key) { say("#auditListMsg", "A passcode is needed to view audits.", false); return; }
+    say("#auditListMsg", "Loading…", true);
+    fetch(APPS_SCRIPT_URL + "?action=audits&key=" + encodeURIComponent(key))
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.status === "unauthorized") { clearAuditKey(); say("#auditListMsg", "That passcode wasn't right.", false); $("#auditRows").innerHTML = '<tr><td colspan="6"><button type="button" class="btn-ghost btn-sm" id="auditRetryBtn">Enter passcode</button></td></tr>'; return; }
+        auditsLoadedOnce = true; auditData = j.results || []; say("#auditListMsg", ""); renderAudits();
+      })
+      .catch(function () { say("#auditListMsg", "Couldn't reach the audits list. Try again in a moment.", false); });
+  }
+  $("#auditRows").addEventListener("click", function (e) { if (e.target.id === "auditRetryBtn") loadAudits(true); });
+  $("#auditRefresh").addEventListener("click", function () { loadAudits(); });
+
+  function renderAudits() {
+    var needsSend = auditData.filter(function (a) { return a.sampleSiteStatus !== "Sent"; }).length;
+    $("#auditCount").textContent = auditData.length + " audit" + (auditData.length === 1 ? "" : "s") + (needsSend ? " · " + needsSend + " waiting on a sample site" : "");
+    var sorted = auditData.slice().sort(function (a, b) { return (a.sampleSiteStatus === "Sent" ? 1 : 0) - (b.sampleSiteStatus === "Sent" ? 1 : 0); });
+    $("#auditRows").innerHTML = sorted.length ? sorted.map(function (a) {
+      var sent = a.sampleSiteStatus === "Sent";
+      var pill = sent ? '<span class="pill live">Sent</span>' : '<span class="pill review">Needs a sample site</span>';
+      return '<tr class="' + (sent ? "" : "needs") + '"><td><strong>' + esc(a.businessName || a.fullName) + '</strong><br>' + esc(a.email) + '</td><td>' + esc(fmtDate(a.timestamp)) + '</td><td>' + esc(a.startingPoint) + '</td><td>' + esc(sent ? (a.packageSent || a.recommendedPackage) : a.recommendedPackage) + '</td><td>' + pill + '</td><td><button type="button" class="btn-primary btn-sm" data-audit-i="' + auditData.indexOf(a) + '">' + (sent ? "View" : "Review & send") + "</button></td></tr>";
+    }).join("") : '<tr><td colspan="6">No audit requests yet.</td></tr>';
+  }
+  $("#auditRows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-audit-i]"); if (!b) return;
+    openAuditModal(auditData[+b.dataset.auditI]);
+  });
+
+  function afield(label, val) { return val ? '<p style="margin:0 0 8px;"><strong style="color:var(--ink);">' + esc(label) + ':</strong> ' + esc(val) + "</p>" : ""; }
+  function openAuditModal(a) {
+    auditCtx = a;
+    $("#auditModalTitle").textContent = a.businessName || a.fullName;
+    $("#auditModalAnswers").innerHTML =
+      afield("Starting point", a.startingPoint) + afield("Current website", a.currentWebsite) + afield("Focus areas", a.focusAreas) + afield("Anything else", a.notes) +
+      afield("Phone", a.phone) +
+      afield("Vibe", a.styleVibe) + afield("Colors", a.styleColors) + afield("Color notes", a.colorNotes) + afield("Logo / brand colors", a.brandAssets) +
+      afield("Light or dark", a.styleMode) + afield("Lettering", a.styleType) + afield("Imagery", a.styleImagery) + afield("Sites they love", a.inspiration);
+    $("#auditPackage").value = (a.sampleSiteStatus === "Sent" ? a.packageSent : a.recommendedPackage) || a.recommendedPackage || "Business Website";
+    $("#auditSampleUrl").value = a.sampleSiteUrl || "";
+    $("#auditSendBtn").textContent = a.sampleSiteStatus === "Sent" ? "Resend recommendation email" : "Send recommendation email";
+    say("#auditModalMsg", "");
+    $("#auditModal").classList.add("open");
+  }
+  $("#auditModalClose").addEventListener("click", function () { $("#auditModal").classList.remove("open"); });
+  $("#auditSendBtn").addEventListener("click", function () {
+    if (!auditCtx) return;
+    var url = $("#auditSampleUrl").value.trim(), pkg = $("#auditPackage").value, btn = this;
+    if (!/^https?:\/\//i.test(url)) { say("#auditModalMsg", "Enter the sample site link, starting with https://", false); return; }
+    btn.disabled = true; say("#auditModalMsg", "Sending…", true);
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ formType: "Send Audit Recommendation", key: getAuditKey(), row: auditCtx.row, email: auditCtx.email, sampleSiteUrl: url, package: pkg, fullName: auditCtx.fullName }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.status !== "success") throw new Error(j.message || "Couldn't send that.");
+        say("#auditModalMsg", "Sent to " + auditCtx.email + ".", true);
+        auditCtx.sampleSiteStatus = "Sent"; auditCtx.sampleSiteUrl = url; auditCtx.packageSent = pkg;
+        renderAudits();
+      })
+      .catch(function (err) { say("#auditModalMsg", err.message, false); })
+      .then(function () { btn.disabled = false; });
   });
 
   /* =====================================================================
