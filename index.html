@@ -637,6 +637,34 @@
 @media (max-width: 640px) {
   .why-grid, .process-grid, .portfolio-grid { grid-template-columns: 1fr; }
 }
+
+/* ── SITE STARTER ────────────────────────────────── */
+.starter { background: var(--teal-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.starter-inner { max-width: 1080px; margin: auto; padding: 88px 24px 40px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; }
+.starter-tag { display: inline-flex; align-items: center; background: var(--gold); color: var(--ink); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 5px 14px; border-radius: 50px; margin-bottom: 16px; }
+.starter-lead { font-size: 17px; color: var(--text-muted); line-height: 1.8; margin-bottom: 22px; }
+.starter .checks { margin-bottom: 26px; }
+.starter .checks li { font-size: 15px; color: var(--ink); }
+.starter .checks li::before { background-color: var(--white); }
+.starter-price { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.starter-price .amt { font-family: var(--serif); font-size: 52px; color: var(--ink); line-height: 1; }
+.starter-price span:last-child { font-size: 14px; color: var(--text-muted); max-width: 230px; line-height: 1.5; }
+.starter-note { margin-top: 18px; font-size: 14px; color: var(--text-muted); }
+.starter-note a { color: var(--teal-dark); font-weight: 600; }
+.starter-steps { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.starter-steps li { display: flex; gap: 16px; align-items: flex-start; background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+.starter-steps .n { width: 42px; height: 42px; border-radius: 50%; background: var(--gold); color: var(--ink); font-family: var(--serif); font-size: 21px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.starter-steps h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.starter-steps p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+.starter-for { max-width: 1080px; margin: auto; padding: 0 24px 88px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.for-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 26px 24px; }
+.for-card h3 { font-family: var(--serif); font-weight: 400; font-size: 21px; color: var(--teal-deep); margin-bottom: 8px; }
+.for-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+@media (max-width: 900px) {
+  .starter-inner { grid-template-columns: 1fr; gap: 32px; padding: 64px 24px 28px; }
+  .starter-for { grid-template-columns: 1fr; padding-bottom: 64px; }
+}
+@media (max-width: 480px) { .starter-price { flex-direction: column; align-items: flex-start; gap: 6px; } }
 </style>
 </head>
 <body>
@@ -846,6 +874,50 @@
 </section>
 
 <!-- ── 6. WHY TEC WEB STUDIO ─────────────────────────── -->
+<!-- ── SITE STARTER ─────────────────────────────────── -->
+<section class="starter" id="site-starter">
+  <div class="starter-inner">
+    <div class="starter-copy">
+      <span class="starter-tag">Site Starter</span>
+      <h2 class="section-title">A Real Website, as Easy as <span style="white-space:nowrap;">1, 2, 3, 4</span></h2>
+      <p class="starter-lead">Need a simple, professional home online? Site Starter is a one-page website you set up yourself in minutes. It's perfect for marketing your business, or for moving off Facebook and onto a page of your own.</p>
+      <ul class="checks">
+        <li>Your own web address, included for a year</li>
+        <li>Hosting and setup handled for you</li>
+        <li>Edit your page any time during your plan</li>
+        <li>Looks great on phones, tablets, and computers</li>
+        <li>Social media icons in your colors</li>
+      </ul>
+      <div class="starter-price"><span class="amt">$50</span><span>for your first year, with your own web address included</span></div>
+      <a href="contact.html?package=starter" class="btn-primary-lg btn-arrow">Get Site Starter <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <p class="starter-note">Need forms, more pages, or a custom design? <a href="services.html">See our full website packages</a>.</p>
+    </div>
+    <ol class="starter-steps">
+      <li><span class="n">1</span><div><h3>Pick what goes on your page</h3><p>About you, what you offer, customer reviews, and photos. Just switch on what you need.</p></div></li>
+      <li><span class="n">2</span><div><h3>Choose your look</h3><p>Pick your colors and fonts from designs that look great on every screen.</p></div></li>
+      <li><span class="n">3</span><div><h3>Add your details</h3><p>Type in your business name, contact info, and social links. Your page saves as you go.</p></div></li>
+      <li><span class="n">4</span><div><h3>Publish</h3><p>Send it to us and we put it online at your own web address. Come back any time to make changes.</p></div></li>
+    </ol>
+  </div>
+  <div class="starter-for">
+    <div class="for-card">
+      <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-target"/></svg></div>
+      <h3>Marketing your business</h3>
+      <p>Put a professional link on your business cards, flyers, ads, and posts, so people land somewhere that builds trust.</p>
+    </div>
+    <div class="for-card">
+      <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg></div>
+      <h3>Moving off Facebook</h3>
+      <p>Own your online home. Get a page you control, with your own address, instead of renting space on someone else's platform.</p>
+    </div>
+    <div class="for-card">
+      <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg></div>
+      <h3>Starting fast</h3>
+      <p>Skip the waiting and the back-and-forth. Set it up in one sitting, on your own schedule.</p>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="why">
   <div class="section-head-center">
     <h2 class="section-title">Why TEC Web Studio?</h2>
