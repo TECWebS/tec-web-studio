@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Your Site - TEC Builder</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -760,7 +760,15 @@
       if (snap.exists) return snap;
       if (!canEdit) { if (!adminAlso) blocked("Your plan has ended", "Your plan ended on " + fmtDate(account.termEnd) + ". Contact us to renew and keep editing."); return null; }
       var now = firebase.firestore.FieldValue.serverTimestamp();
-      var fresh = { ownerEmail: String(user.email).toLowerCase(), status: "draft", content: defaultContent(), domainWish: { first: "", second: "" }, publishRequested: false, createdAt: now, updatedAt: now };
+      // Carry over what they already told us at checkout, so their first draft
+      // isn't blank. account.businessName/phone/domainWish come from the Site
+      // Starter checkout (or were added by hand in the admin console — either
+      // way, missing fields just fall back to blank).
+      var startContent = defaultContent();
+      if (account && account.businessName) startContent.businessName = str(account.businessName, 80);
+      if (account && account.phone) startContent.phone = str(account.phone, 40);
+      var startWish = { first: str(account && account.domainWish && account.domainWish.first, 80), second: str(account && account.domainWish && account.domainWish.second, 80) };
+      var fresh = { ownerEmail: String(user.email).toLowerCase(), status: "draft", content: startContent, domainWish: startWish, publishRequested: false, createdAt: now, updatedAt: now };
       return siteRef.set(fresh).then(function () { return siteRef.get(); });
     }).then(function (snap) {
       if (!snap) return;
