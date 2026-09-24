@@ -171,6 +171,7 @@
     <span id="saveState" class="savepill" hidden></span>
     <span id="planChip" class="chip" hidden></span>
     <span id="whoami"></span>
+    <button type="button" class="btn-ghost btn-sm" id="acctBtn">Account</button>
     <button type="button" class="btn-ghost btn-sm" id="switchView" hidden></button>
     <button type="button" class="btn-ghost btn-sm" id="logoutBtn">Sign out</button>
   </div>
@@ -298,16 +299,6 @@
 
 <!-- ============ ADMIN CONSOLE ============ -->
 <div id="screen-admin" class="admin" hidden>
-  <div class="admin-card" id="pwCard">
-    <div class="lab" style="margin-bottom:6px;">Sign in faster next time</div>
-    <p class="bl-muted" style="margin:0 0 10px;">Set a password so you don't need an email link every time. This only affects your own admin login.</p>
-    <div class="add-form" style="grid-template-columns:1fr auto;">
-      <div><label class="lab" for="pwNew">New password (8+ characters)</label><input type="password" id="pwNew" autocomplete="new-password" minlength="8"></div>
-      <button type="button" class="btn-primary" id="pwSaveBtn" style="align-self:end;">Save password</button>
-    </div>
-    <p class="msg" id="pwMsg" role="status" aria-live="polite"></p>
-  </div>
-
   <div class="seg" role="tablist" aria-label="Admin section">
     <button type="button" class="on" data-admintab="starter" role="tab" aria-selected="true">Site Starter</button>
     <button type="button" data-admintab="audits" role="tab" aria-selected="false">Free Audits</button>
@@ -399,6 +390,19 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="acctModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="acctModalTitle" style="max-width:420px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+      <h2 id="acctModalTitle" style="font-size:20px;">Sign in faster next time</h2>
+      <button type="button" class="btn-ghost btn-sm" id="acctModalClose">Close</button>
+    </div>
+    <p class="sub" style="margin-bottom:14px;">Set a password so you don't need an email link every time you sign in.</p>
+    <div class="field"><label class="lab" for="pwNew">New password (8+ characters)</label><input type="password" id="pwNew" autocomplete="new-password" minlength="8"></div>
+    <button type="button" class="btn-primary" id="pwSaveBtn" style="width:100%;">Save password</button>
+    <p class="msg" id="pwMsg" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -421,6 +425,7 @@
   // If it isn't deployed yet, sign-in links fall back to Firebase's plain email automatically.
   var MAIL_ENDPOINT = "https://tec-api.vercel.app/api/site-mail";
   var SET_PASSWORD_ENDPOINT = "https://tec-api.vercel.app/api/set-password";
+  var MANAGE_ACCOUNT_ENDPOINT = "https://tec-api.vercel.app/api/manage-account";
 
   /* =====================================================================
      2. DATA
@@ -789,6 +794,20 @@
   $("#logoutBtn").addEventListener("click", logout);
   $("#blockedOut").addEventListener("click", logout);
 
+  $("#acctBtn").addEventListener("click", function () { $("#pwNew").value = ""; say("#pwMsg", ""); $("#acctModal").classList.add("open"); });
+  $("#acctModalClose").addEventListener("click", function () { $("#acctModal").classList.remove("open"); });
+  $("#pwSaveBtn").addEventListener("click", function () {
+    var pw = $("#pwNew").value, btn = this;
+    if (pw.length < 8) { say("#pwMsg", "Use at least 8 characters.", false); return; }
+    btn.disabled = true; say("#pwMsg", "");
+    user.getIdToken().then(function (tok) {
+      return fetch(SET_PASSWORD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, newPassword: pw }) });
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't save that. Try again in a moment."); }); })
+      .then(function () { $("#pwNew").value = ""; say("#pwMsg", "Password saved. Use it next time you sign in.", true); })
+      .catch(function (err) { say("#pwMsg", err.message, false); })
+      .then(function () { btn.disabled = false; });
+  });
+
   /* =====================================================================
      8. AFTER SIGN-IN: who is this, and what can they see?
      ===================================================================== */
@@ -1144,7 +1163,7 @@
         : s.publishRequested ? '<span class="pill review">Needs review</span>'
         : send ? '<span class="pill review">Approved: send to customer</span>'
         : s.status === "live" ? '<span class="pill live">Live</span>' : '<span class="pill draft">Draft</span>';
-      var status = a && a.active === false ? ' <span class="pill off">Turned off</span>' : (expired ? ' <span class="pill off">Expired</span>' : "");
+      var status = a && a.active === false ? ' <span class="pill off">Login disabled</span>' : (expired ? ' <span class="pill off">Expired</span>' : "");
       var wishTxt = s && s.domainWish && s.domainWish.first ? esc(s.domainWish.first) + (s.domainWish.second ? '<br><span style="color:var(--ink-soft)">or ' + esc(s.domainWish.second) + "</span>" : "") : "";
       var sentTxt = s && s.liveSentAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">Sent ' + esc(fmtDate(s.liveSentAt)) + "</span>" : "";
       var canSend = s && s.status === "live" && s.liveUrl;
@@ -1152,22 +1171,11 @@
         (s ? '<button type="button" class="btn-primary btn-sm" data-act="review" data-i="' + i + '">Review</button>' : "") +
         (canSend ? '<button type="button" class="' + (send ? "btn-accent-sm" : "btn-ghost") + ' btn-sm" data-act="send" data-i="' + i + '">' + (send ? "Send site to customer" : "Resend site email") + "</button>" : "") +
         '<button type="button" class="btn-ghost btn-sm" data-act="link" data-i="' + i + '">Send login link</button>' +
-        (a ? '<button type="button" class="btn-ghost btn-sm" data-act="extend" data-i="' + i + '">+1 year</button><button type="button" class="btn-ghost btn-sm" data-act="toggle" data-i="' + i + '">' + (a.active === false ? "Turn on" : "Turn off") + "</button>" : "") + "</div></td></tr>";
+        (a ? '<button type="button" class="btn-ghost btn-sm" data-act="extend" data-i="' + i + '">+1 year</button><button type="button" class="btn-ghost btn-sm" data-act="toggle" data-i="' + i + '">' + (a.active === false ? "Re-enable login" : "Disable login") + "</button>" : "") +
+        '<button type="button" class="btn-danger btn-sm" data-act="delete" data-i="' + i + '">Delete</button>' + "</div></td></tr>";
     }).join("") : '<tr><td colspan="6">No customers yet. Add one above after they buy.</td></tr>';
   }
   $("#adminRefresh").addEventListener("click", loadAdmin);
-
-  $("#pwSaveBtn").addEventListener("click", function () {
-    var pw = $("#pwNew").value, btn = this;
-    if (pw.length < 8) { say("#pwMsg", "Use at least 8 characters.", false); return; }
-    btn.disabled = true; say("#pwMsg", "");
-    user.getIdToken().then(function (tok) {
-      return fetch(SET_PASSWORD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, newPassword: pw }) });
-    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't save that. Try again in a moment."); }); })
-      .then(function () { $("#pwNew").value = ""; say("#pwMsg", "Password saved. Use it next time you sign in.", true); })
-      .catch(function (err) { say("#pwMsg", err.message, false); })
-      .then(function () { btn.disabled = false; });
-  });
 
   $("#addForm").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -1196,14 +1204,31 @@
         return postMail({ action: "site-live", idToken: tok, email: row.email, businessName: (row.account && row.account.businessName) || (st.content && st.content.businessName) || "", liveUrl: st.liveUrl, planEnds: row.account ? fmtDate(row.account.termEnd) : "", isUpdate: !!st.liveSentAt });
       }).then(function () {
         return db.collection("sites").doc(st._uid).update({ liveSentAt: firebase.firestore.FieldValue.serverTimestamp() });
-      }).then(function () { say("#adminMsg", "Sent the live-site email to " + row.email + ".", true); return done(); }).catch(fail);
+      }).then(function () { return done().then(function () { say("#adminMsg", "Sent the live-site email to " + row.email + ".", true); }); }).catch(fail);
       return;
     }
     if (act === "extend") {
       var base = Math.max(Date.now(), toDate(row.account.termEnd).getTime());
       db.collection("accounts").doc(row.email).update({ termEnd: TSF.fromDate(addYears(new Date(base), 1)), active: true }).then(done).catch(fail); return;
     }
-    if (act === "toggle") { db.collection("accounts").doc(row.email).update({ active: row.account.active === false }).then(done).catch(fail); }
+    if (act === "toggle") {
+      var turningOn = row.account.active === false;
+      if (!turningOn && !confirm("Disable " + row.email + "'s login? They will not be able to sign in at all until you re-enable it. Their site and data stay untouched.")) { b.disabled = false; return; }
+      user.getIdToken().then(function (tok) {
+        return fetch(MANAGE_ACCOUNT_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, targetEmail: row.email, action: turningOn ? "enable" : "disable" }) });
+      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't do that. Try again in a moment."); }); })
+        .then(done).catch(fail);
+      return;
+    }
+    if (act === "delete") {
+      if (!confirm('Permanently delete ' + row.email + '\'s account? This removes their login, their site, and their photos. This cannot be undone.')) { b.disabled = false; return; }
+      var typed = prompt('Type the customer\'s email to confirm: ' + row.email);
+      if (typed !== row.email) { say("#adminMsg", typed === null ? "" : "That didn't match — nothing was deleted.", typed === null); b.disabled = false; return; }
+      user.getIdToken().then(function (tok) {
+        return fetch(MANAGE_ACCOUNT_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, targetEmail: row.email, action: "delete" }) });
+      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't delete that account. Try again in a moment."); }); })
+        .then(function () { return done().then(function () { say("#adminMsg", "Deleted " + row.email + ".", true); }); }).catch(fail);
+    }
   });
 
   /* ---- review + approve ---- */
