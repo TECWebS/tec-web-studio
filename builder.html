@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TEC Web Studio Builder</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
   :root{
@@ -1331,10 +1331,12 @@
     $("#auditRows").innerHTML = sorted.length ? sorted.map(function (a) {
       var sent = a.sampleSiteStatus === "Sent";
       var pill = sent ? '<span class="pill live">Sent</span>' : '<span class="pill review">Needs a sample site</span>';
-      return '<tr class="' + (sent ? "" : "needs") + '"><td><strong>' + esc(a.businessName || a.fullName) + '</strong><br>' + esc(a.email) + '</td><td>' + esc(fmtDate(a.timestamp)) + '</td><td>' + esc(a.startingPoint) + '</td><td>' + esc(sent ? (a.packageSent || a.recommendedPackage) : a.recommendedPackage) + '</td><td>' + pill + '</td><td><button type="button" class="btn-primary btn-sm" data-audit-i="' + auditData.indexOf(a) + '">' + (sent ? "View" : "Review & send") + "</button></td></tr>";
+      return '<tr class="' + (sent ? "" : "needs") + '"><td><strong>' + esc(a.businessName || a.fullName) + '</strong><br>' + esc(a.email) + '</td><td>' + esc(fmtDate(a.timestamp)) + '</td><td>' + esc(a.startingPoint) + '</td><td>' + esc(sent ? (a.packageSent || a.recommendedPackage) : a.recommendedPackage) + '</td><td>' + pill + '</td><td><div class="row-actions"><button type="button" class="btn-primary btn-sm" data-audit-i="' + auditData.indexOf(a) + '">' + (sent ? "View" : "Review & send") + '</button><button type="button" class="btn-danger btn-sm" data-audit-del="' + auditData.indexOf(a) + '">Delete</button></div></td></tr>';
     }).join("") : '<tr><td colspan="6">No audit requests yet.</td></tr>';
   }
   $("#auditRows").addEventListener("click", function (e) {
+    var d = e.target.closest("[data-audit-del]");
+    if (d) { var x = auditData[+d.dataset.auditDel]; deleteEntry("audit", x.id, "Delete the audit request from " + (x.businessName || x.fullName || x.email) + "?", d, "#auditListMsg", loadAudits); return; }
     var b = e.target.closest("[data-audit-i]"); if (!b) return;
     openAuditModal(auditData[+b.dataset.auditI]);
   });
@@ -1374,6 +1376,15 @@
      10c. ADMIN — REQUESTS, ORDERS, REVIEWS
      These replace looking things up in the Google Sheets tabs.
      ===================================================================== */
+  // Shared delete: asks first, then removes the entry for good.
+  function deleteEntry(kind, id, question, btn, msgSel, after) {
+    if (!confirm(question + "\n\nThis can't be undone.")) return;
+    btn.disabled = true;
+    api("POST", "/admin/delete-entry", { kind: kind, id: id })
+      .then(function () { say(msgSel, "Deleted.", true); after(); })
+      .catch(function (err) { say(msgSel, friendlyError(err), false); btn.disabled = false; });
+  }
+
   // Shared "View" window: a list of label/answer pairs plus a reply button.
   function openInfo(title, pairs, email, subject) {
     $("#infoModalTitle").textContent = title;
@@ -1394,12 +1405,14 @@
       $("#reqCount").textContent = reqData.length + " request" + (reqData.length === 1 ? "" : "s");
       $("#reqRows").innerHTML = reqData.length ? reqData.map(function (r, i) {
         return "<tr><td><strong>" + esc(r.businessName || r.fullName) + "</strong><br>" + esc(r.fullName && r.businessName ? r.fullName + " · " : "") + esc(r.email) + "</td><td>" + esc(fmtDateTime(r.timestamp)) +
-          '</td><td class="clip">' + esc(r.needs) + "</td><td>" + esc(r.packageInterest) + '</td><td><button type="button" class="btn-primary btn-sm" data-req-i="' + i + '">View</button></td></tr>';
+          '</td><td class="clip">' + esc(r.needs) + "</td><td>" + esc(r.packageInterest) + '</td><td><div class="row-actions"><button type="button" class="btn-primary btn-sm" data-req-i="' + i + '">View</button><button type="button" class="btn-danger btn-sm" data-req-del="' + i + '">Delete</button></div></td></tr>';
       }).join("") : '<tr><td colspan="5">No requests yet.</td></tr>';
     }).catch(function (err) { say("#reqMsg", friendlyError(err), false); });
   }
   $("#reqRefresh").addEventListener("click", loadRequests);
   $("#reqRows").addEventListener("click", function (e) {
+    var d = e.target.closest("[data-req-del]");
+    if (d) { var x = reqData[+d.dataset.reqDel]; deleteEntry("consultation", x.id, "Delete the request from " + (x.fullName || x.email) + "?", d, "#reqMsg", loadRequests); return; }
     var b = e.target.closest("[data-req-i]"); if (!b) return;
     var r = reqData[+b.dataset.reqI];
     openInfo(r.businessName || r.fullName, [["Name", r.fullName], ["Business", r.businessName], ["Email", r.email], ["Phone", r.phone], ["Submitted", fmtDateTime(r.timestamp)],
@@ -1416,13 +1429,19 @@
       $("#orderRows").innerHTML = orderData.length ? orderData.map(function (o, i) {
         var monthly = o.recurringTotal && o.recurringTotal !== "None" ? '<span class="pill review">' + esc(o.recurringTotal) + "</span>" : "";
         return "<tr><td><strong>" + esc(o.businessName || o.fullName || o.email) + "</strong><br>" + esc(o.email) + "</td><td>" + esc(fmtDate(o.timestamp)) + "</td><td>" + esc(o.package) +
-          "</td><td>" + esc(o.orderTotal) + "</td><td>" + monthly + '</td><td><button type="button" class="btn-primary btn-sm" data-order-i="' + i + '">View</button></td></tr>';
+          "</td><td>" + esc(o.orderTotal) + "</td><td>" + monthly + '</td><td><div class="row-actions"><button type="button" class="btn-primary btn-sm" data-order-i="' + i + '">View</button><button type="button" class="btn-danger btn-sm" data-order-del="' + i + '">Delete</button></div></td></tr>';
       }).join("") : '<tr><td colspan="6">' + (q ? "No orders match that search." : "No orders yet.") + "</td></tr>";
     }).catch(function (err) { say("#orderMsg", friendlyError(err), false); });
   }
   $("#orderSearchForm").addEventListener("submit", function (e) { e.preventDefault(); loadOrders($("#orderQ").value.trim()); });
   $("#orderClear").addEventListener("click", function () { $("#orderQ").value = ""; loadOrders(""); });
   $("#orderRows").addEventListener("click", function (e) {
+    var d = e.target.closest("[data-order-del]");
+    if (d) {
+      var x = orderData[+d.dataset.orderDel];
+      deleteEntry("order", x.id, "Delete the " + x.package + " order from " + (x.fullName || x.email) + "?\n\nThis only removes it from this list. It does NOT refund the payment; do that in Stripe.", d, "#orderMsg", function () { loadOrders($("#orderQ").value.trim()); });
+      return;
+    }
     var b = e.target.closest("[data-order-i]"); if (!b) return;
     var o = orderData[+b.dataset.orderI];
     openInfo((o.businessName || o.fullName || o.email) + " — " + o.package, [["Name", o.fullName], ["Business", o.businessName], ["Email", o.email], ["Phone", o.phone], ["Date", fmtDateTime(o.timestamp)],
@@ -1447,11 +1466,13 @@
       return "<tr><td><strong>" + esc(r.name || "Anonymous") + "</strong>" + (r.business ? "<br>" + esc(r.business) : "") + "</td><td>" + esc(fmtDate(r.timestamp)) +
         '</td><td><span class="stars" aria-label="' + n + ' out of 5 stars">' + "\u2605".repeat(n) + "\u2606".repeat(5 - n) + '</span></td><td class="clip">' + esc(r.quote) + "</td><td>" +
         (r.approved ? '<span class="pill live">Showing</span>' : '<span class="pill">Hidden</span>') +
-        '</td><td><button type="button" class="' + (r.approved ? "btn-ghost" : "btn-primary") + ' btn-sm" data-rev-i="' + i + '">' + (r.approved ? "Hide" : "Show") + "</button></td></tr>";
+        '</td><td><div class="row-actions"><button type="button" class="' + (r.approved ? "btn-ghost" : "btn-primary") + ' btn-sm" data-rev-i="' + i + '">' + (r.approved ? "Hide" : "Show") + '</button><button type="button" class="btn-danger btn-sm" data-rev-del="' + i + '">Delete</button></div></td></tr>';
     }).join("") : '<tr><td colspan="6">No reviews yet.</td></tr>';
   }
   $("#revRefresh").addEventListener("click", loadReviews);
   $("#revRows").addEventListener("click", function (e) {
+    var d = e.target.closest("[data-rev-del]");
+    if (d) { var x = revData[+d.dataset.revDel]; deleteEntry("review", x.id, "Delete the review from " + (x.name || "Anonymous") + "?" + (x.approved ? " It will also come off your homepage." : ""), d, "#revMsg", loadReviews); return; }
     var b = e.target.closest("[data-rev-i]"); if (!b) return;
     var r = revData[+b.dataset.revI], next = !r.approved;
     b.disabled = true;
