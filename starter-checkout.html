@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TEC Web Studio – Site Starter Checkout</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -13,8 +12,10 @@
       --cream: #FFFDF5; --dark: #1a2e2e; --text: #2d3a3a; --muted: #6b8080;
       --border: #d0e4e6; --white: #ffffff;
       --shadow: 0 4px 24px rgba(106,171,176,0.13); --shadow-hover: 0 8px 36px rgba(106,171,176,0.22);
+      --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --display: Georgia, "Times New Roman", serif;
     }
-    body { font-family: 'DM Sans', sans-serif; background-color: #f0f7f8; color: var(--text); min-height: 100vh; }
+    body { font-family: var(--ui); background-color: #f0f7f8; color: var(--text); min-height: 100vh; }
     button { font-family: inherit; }
     button:focus-visible, input:focus-visible, .opt:focus-visible, .check input:focus-visible + .box {
       outline: 3px solid rgba(61,122,128,0.45); outline-offset: 2px;
@@ -25,7 +26,7 @@
     .hero { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); padding: 48px 24px 40px; text-align: center; position: relative; overflow: hidden; }
     .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; background: rgba(245,200,66,0.12); border-radius: 50%; }
     .hero-badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 6px 18px; border-radius: 50px; margin-bottom: 16px; position: relative; z-index: 1; }
-    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 5vw, 38px); color: var(--white); line-height: 1.2; margin-bottom: 10px; position: relative; z-index: 1; }
+    .hero h1 { font-family: var(--display); font-size: clamp(26px, 5vw, 38px); color: var(--white); line-height: 1.2; margin-bottom: 10px; position: relative; z-index: 1; }
     .hero h1 span { color: var(--gold); }
     .hero p { font-size: 14.5px; color: rgba(255,255,255,0.85); max-width: 480px; margin: 0 auto; line-height: 1.6; position: relative; z-index: 1; }
 
@@ -45,7 +46,7 @@
       background: var(--teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 13px no-repeat;
     }
     .plan-card .badge-popular { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--dark); font-size: 10px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; padding: 4px 12px; border-radius: 50px; white-space: nowrap; }
-    .plan-card .yrs { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--dark); margin-bottom: 6px; }
+    .plan-card .yrs { font-family: var(--display); font-size: 17px; color: var(--dark); margin-bottom: 6px; }
     .plan-card .amt { font-size: 30px; font-weight: 700; color: var(--teal-dark); line-height: 1; }
     .plan-card .per { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
 
@@ -66,10 +67,10 @@
 
     .summary-box { background: var(--white); border: 2px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 22px; box-shadow: var(--shadow); }
     .summary-header { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); padding: 14px 22px; }
-    .summary-header h3 { font-family: 'DM Serif Display', serif; font-size: 17px; color: white; font-weight: 400; }
+    .summary-header h3 { font-family: var(--display); font-size: 17px; color: white; font-weight: 400; }
     .summary-total { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 22px; background: #f8fcfc; }
     .summary-total .label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal-dark); }
-    .summary-total .amount { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--dark); line-height: 1.1; }
+    .summary-total .amount { font-family: var(--display); font-size: 28px; color: var(--dark); line-height: 1.1; }
     .summary-line { display: flex; justify-content: space-between; gap: 14px; padding: 6px 22px; font-size: 13px; color: var(--muted); }
 
     .payment-section { background: var(--white); border: 2px solid var(--border); border-radius: 16px; padding: 26px 22px; }
@@ -185,10 +186,15 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script>
   var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
-  var VERCEL_FN = 'https://tec-api.vercel.app/api/create-order';
-  var ACCOUNT_FN = 'https://tec-api.vercel.app/api/create-starter-account';
+  // Your Cloudflare Worker. It sets the price itself (from the plan), saves
+  // these details on the payment in Stripe, and only creates the account
+  // after Stripe confirms the payment went through.
+  var API = 'https://api.tecwebstudio.com';
+  var INTENT_FN = API + '/checkout/starter-intent';
+  var ACCOUNT_FN = API + '/checkout/starter-complete';
   var AGREEMENT_VERSION = '0.1';
 
+  // Display only — the Worker has its own copy of these prices and that's what's charged.
   var PLANS = {
     1: { label: '1 Year', price: 50,  per: 'includes your web address' },
     2: { label: '2 Years', price: 80,  per: 'includes your web address', popular: true },
@@ -202,6 +208,10 @@
   function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
   function validEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function(c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
+
+  function details() {
+    return { years: state.years, fullName: val('c-name'), businessName: val('c-business'), email: val('c-email'), phone: val('c-phone'), domainFirst: val('c-domain1'), domainSecond: val('c-domain2') };
+  }
 
   function renderPlans() {
     var html = '';
@@ -223,7 +233,9 @@
     updateSummary();
   }
 
-  function orderSignature() { return JSON.stringify([state.years]); }
+  // The order details are stored on the payment when the payment form loads,
+  // so if any of them change afterwards, the form is rebuilt with the new ones.
+  function orderSignature() { return JSON.stringify(details()); }
 
   function updateSummary() {
     var sp = document.getElementById('summary-plan'), td = document.getElementById('total-display');
@@ -284,16 +296,12 @@
   function failInit(msg) { teardownStripe(); document.getElementById('payment-message').textContent = msg; updateReadiness(); }
 
   function _initStripe() {
-    var p = PLANS[state.years], amountCents = p.price * 100, mySig = orderSignature(), token = ++initToken;
+    var p = PLANS[state.years], mySig = orderSignature(), token = ++initToken;
     stripeState = 'loading';
 
-    fetch(VERCEL_FN, {
+    fetch(INTENT_FN, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: amountCents, currency: 'usd',
-        description: 'Site Starter — ' + p.label,
-        customerName: val('c-name'), customerEmail: val('c-email'), businessName: val('c-business')
-      })
+      body: JSON.stringify(details())
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -303,7 +311,7 @@
       payLabel = 'Pay $' + p.price + ' Now';
 
       elements = stripe.elements({ clientSecret: clientSecret, appearance: {
-        theme: 'stripe', variables: { colorPrimary: '#6AABB0', borderRadius: '10px', fontFamily: 'DM Sans, sans-serif' }
+        theme: 'stripe', variables: { colorPrimary: '#6AABB0', borderRadius: '10px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }
       }});
 
       expressElement = elements.create('expressCheckout', { buttonType: { applePay: 'buy', googlePay: 'buy' }, layout: { maxColumns: 2, maxRows: 1 } });
@@ -312,6 +320,7 @@
       expressElement.on('confirm', function() {
         var eName = val('c-name'), eEmail = val('c-email');
         var returnUrl = window.location.origin + window.location.pathname + '?payment=complete';
+        saveCheckoutState();
         stripe.confirmPayment({
           elements: elements, clientSecret: clientSecret,
           confirmParams: { return_url: returnUrl, payment_method_data: { billing_details: { name: eName || undefined, email: eEmail || undefined } } },
@@ -359,21 +368,19 @@
     });
   }
 
+  // Only used to greet them by name on the success screen after a redirect —
+  // the Worker reads the real order details from the payment in Stripe.
   function saveCheckoutState() {
-    try {
-      sessionStorage.setItem('tec_starter_order', JSON.stringify({
-        years: state.years, fullName: val('c-name'), businessName: val('c-business'), email: val('c-email'), phone: val('c-phone'),
-        domainFirst: val('c-domain1'), domainSecond: val('c-domain2')
-      }));
-    } catch (e) {}
+    try { sessionStorage.setItem('tec_starter_order', JSON.stringify(details())); } catch (e) {}
   }
 
-  // Verifies the payment server-side and creates the customer's account + login.
-  // This is the step that actually gives them access — not the Stripe confirmation alone.
+  // Asks the Worker to verify the payment with Stripe and set up the account.
+  // That's the step that actually gives them access — not the Stripe
+  // confirmation in the browser alone.
   function fulfillOrder(paymentIntentId) {
     var saved = null;
     try { saved = JSON.parse(sessionStorage.getItem('tec_starter_order') || 'null'); } catch (e) {}
-    var o = saved || { years: state.years, fullName: val('c-name'), businessName: val('c-business'), email: val('c-email'), phone: val('c-phone'), domainFirst: val('c-domain1'), domainSecond: val('c-domain2') };
+    var o = saved || details();
     try { sessionStorage.removeItem('tec_starter_order'); } catch (e) {}
 
     showProcessing();
@@ -381,11 +388,7 @@
     function attempt(triesLeft) {
       fetch(ACCOUNT_FN, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          paymentIntentId: paymentIntentId, email: o.email, years: o.years,
-          businessName: o.businessName, fullName: o.fullName, phone: o.phone,
-          domainFirst: o.domainFirst, domainSecond: o.domainSecond, agreementVersion: AGREEMENT_VERSION
-        })
+        body: JSON.stringify({ paymentIntentId: paymentIntentId, agreementVersion: AGREEMENT_VERSION })
       })
       .then(function(r) { return r.json(); })
       .then(function(data) {
@@ -412,8 +415,8 @@
     document.querySelector('.payment-section').innerHTML =
       '<div style="text-align:center;padding:32px 24px;">' +
       '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
-      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">You\'re All Set' + (name ? ', ' + esc(name) : '') + '!</p>' +
-      '<p style="font-size:14px;color:#557070;line-height:1.6;">Check your email at <strong>' + esc(email) + '</strong> for your sign-in link. It can take a minute — check spam too. Once you\'re in, you can build your site in four quick steps.</p>' +
+      '<p style="font-family:var(--display);font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">You\'re All Set' + (name ? ', ' + esc(name) : '') + '!</p>' +
+      '<p style="font-size:14px;color:#557070;line-height:1.6;">Check your email' + (email ? ' at <strong>' + esc(email) + '</strong>' : '') + ' for your sign-in link. It can take a minute — check spam too. Once you\'re in, you can build your site in four quick steps.</p>' +
       '</div>';
   }
 
@@ -421,8 +424,8 @@
     document.querySelector('.payment-section').innerHTML =
       '<div style="text-align:center;padding:32px 24px;">' +
       '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
-      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
-      '<p style="font-size:14px;color:#557070;line-height:1.6;">Your payment went through. We\'re finishing setting up your account — if you don\'t get a sign-in email at <strong>' + esc(email) + '</strong> within a little while, just <a href="contact.html">contact us</a> and we\'ll sort it out right away.</p>' +
+      '<p style="font-family:var(--display);font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
+      '<p style="font-size:14px;color:#557070;line-height:1.6;">Your payment went through. We\'re finishing setting up your account — if you don\'t get a sign-in email' + (email ? ' at <strong>' + esc(email) + '</strong>' : '') + ' within a little while, just <a href="contact.html">contact us</a> and we\'ll sort it out right away.</p>' +
       '</div>';
   }
 
