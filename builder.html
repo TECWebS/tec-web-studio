@@ -6,19 +6,19 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#FAFBF8; --ink:#1F2E2B; --ink-soft:#5B6B68; --teal:#3F8C84; --teal-deep:#2D6E68;
     --accent:#F0B429; --accent-deep:#D89E1F; --accent-soft:#FCEEC6; --line:#E1E8E4; --surface:#FFFFFF;
     --success:#3F8C84; --danger:#B3402E; --radius:12px;
+    --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --display:Georgia,"Times New Roman",serif;
   }
   *{box-sizing:border-box;}
   [hidden]{display:none !important;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
-  h1,h2,h3{font-family:'Playfair Display',serif;margin:0;letter-spacing:-0.01em;color:var(--teal-deep);}
-  button{font-family:'Inter';font-weight:600;cursor:pointer;border:none;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--ui);-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-0.01em;color:var(--teal-deep);}
+  button{font-family:var(--ui);font-weight:600;cursor:pointer;border:none;}
   button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,.pickable:focus-visible{outline:3px solid rgba(240,180,41,.9);outline-offset:2px;}
   a{color:var(--teal-deep);}
 
@@ -51,11 +51,12 @@
   .field{margin-bottom:14px;}
   .field label,.lab{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px;}
   .hint{font-size:11.5px;color:var(--ink-soft);margin-top:4px;line-height:1.5;}
-  input[type=text],input[type=email],input[type=url],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:'Inter';font-size:14px;background:#FAFBFD;color:var(--ink);}
+  input[type=text],input[type=email],input[type=url],input[type=number],input[type=password],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:var(--ui);font-size:14px;background:#FAFBFD;color:var(--ink);}
   textarea{resize:vertical;}
   .msg{font-size:13px;min-height:1.3em;margin:8px 0 0;font-weight:600;}
   .msg.ok{color:var(--teal-deep);} .msg.err{color:var(--danger);}
   .divider-note{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:14px;}
+  .bl-link{background:none;color:var(--teal-deep);text-decoration:underline;font-weight:500;padding:0;}
 
   /* ---------- notices ---------- */
   .notice{max-width:1280px;margin:16px auto 0;padding:12px 32px;}
@@ -178,13 +179,6 @@
 </div>
 
 <!-- ============ SCREENS ============ -->
-<div class="screen" id="screen-setup" hidden>
-  <div class="card">
-    <h1>Almost ready</h1>
-    <p id="setupMsg">This page isn't connected to Firebase yet. Paste your Firebase settings into the <code>FIREBASE_CONFIG</code> block near the top of the script in <code>builder.html</code>.</p>
-  </div>
-</div>
-
 <div class="screen" id="screen-loading">
   <div class="card" style="text-align:center;"><p style="margin:0;">Loading…</p></div>
 </div>
@@ -403,29 +397,18 @@
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 (function () {
   "use strict";
 
   /* =====================================================================
-     1. SETTINGS  —  paste your Firebase web app settings here
-        (Firebase console → Project settings → Your apps → Web app → Config)
+     1. SETTINGS
+        Everything (sign-in, saving, photos, admin, audits) goes through
+        your Cloudflare Worker. It must be on a tecwebstudio.com address
+        (not workers.dev) so the browser treats the sign-in cookie as
+        first-party.
      ===================================================================== */
-  var FIREBASE_CONFIG = {
-    apiKey:     "AIzaSyDZKgrxtTjg96WGrE2SEQCNSmicK8bG9Vk",
-    authDomain: "tec-web-studio-builder.firebaseapp.com",
-    projectId:  "tec-web-studio-builder",
-    appId:      "1:101778130496:web:ffb623dc5d7d7a00d8c1a5"
-  };
-  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec";
-  // Branded emails (sign-in links + "your site is live"). This is the /api/site-mail function on your Vercel project.
-  // If it isn't deployed yet, sign-in links fall back to Firebase's plain email automatically.
-  var MAIL_ENDPOINT = "https://tec-api.vercel.app/api/site-mail";
-  var SET_PASSWORD_ENDPOINT = "https://tec-api.vercel.app/api/set-password";
-  var MANAGE_ACCOUNT_ENDPOINT = "https://tec-api.vercel.app/api/manage-account";
+  var API = "https://api.tecwebstudio.com";
 
   /* =====================================================================
      2. DATA
@@ -530,12 +513,22 @@
     out.captions = [0, 1, 2].map(function (i) { return str((raw.captions || [])[i], 80); });
     return out;
   }
+  // Photos now live in your Worker's storage and are referenced by address.
+  // Only addresses of exactly the shape the Worker hands out are accepted,
+  // so nothing else can ever be slipped into a page's image tags or styles.
+  var IMG_RE = new RegExp("^" + API.replace(/[.*+?^${}()|[\]\\\/]/g, "\\$&") + "\\/img\\/sites\\/[a-f0-9]+\\/(hero|g1|g2|g3)\\/\\d+-[a-f0-9]+\\.jpg$");
   function cleanImages(imgs) {
     var out = {};
     Object.keys(SLOTS).forEach(function (k) {
       var v = imgs && imgs[k];
-      if (typeof v === "string" && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(v)) out[k] = v;
+      if (typeof v === "string" && IMG_RE.test(v)) out[k] = v;
     });
+    return out;
+  }
+  // The Worker returns "/img/..." paths; turn them into full addresses.
+  function absImages(map) {
+    var out = {};
+    Object.keys(map || {}).forEach(function (k) { if (SLOTS[k]) out[k] = API + map[k]; });
     return out;
   }
 
@@ -688,7 +681,7 @@
      ===================================================================== */
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
-  function toDate(v) { return v && v.toDate ? v.toDate() : (v ? new Date(v) : null); }
+  function toDate(v) { return v ? new Date(v) : null; }
   function fmtDate(v) { var d = toDate(v); return d ? d.toLocaleDateString([], { year: "numeric", month: "short", day: "numeric" }) : ""; }
   function fmtDateTime(v) { var d = toDate(v); return d ? d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : ""; }
   function say(sel, text, ok) { var m = $(sel); if (!m) return; m.textContent = text || ""; m.className = "msg" + (text ? (ok ? " ok" : " err") : ""); }
@@ -697,98 +690,85 @@
     a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
   }
   function addYears(d, n) { var x = new Date(d.getTime()); x.setFullYear(x.getFullYear() + n); return x; }
+
+  // One way to talk to the Worker. The session cookie rides along
+  // automatically (credentials: "include"); nothing secret lives in this page.
+  function api(method, path, body) {
+    var opts = { method: method, credentials: "include", headers: {} };
+    if (body !== undefined) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+    return fetch(API + path, opts).catch(function () {
+      var e = new Error("Couldn't reach the server. Check your connection and try again."); e.code = "network"; throw e;
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok || j.ok === false) { var e = new Error(j.message || ""); e.code = j.error || ("http-" + r.status); e.status = r.status; e.data = j; throw e; }
+        return j;
+      });
+    });
+  }
   function friendlyError(err) {
     var code = err && err.code || "";
-    if (code === "permission-denied") return "That wasn't allowed. Your plan may have ended. Please contact us.";
-    if (code === "unavailable" || code === "network-request-failed") return "Couldn't reach the server. Check your connection and try again.";
-    return (err && err.message) || "Something went wrong. Please try again.";
+    if (err && err.message) return err.message;
+    if (code === "forbidden") return "You've been signed out, or that isn't allowed. Refresh the page and sign in again.";
+    if (code === "no-active-plan") return "Your plan isn't active. Please contact us.";
+    if (code === "cannot-manage-self") return "You can't disable or delete your own admin account.";
+    if (code === "target-is-admin") return "That email is an admin, so it can't be changed from here.";
+    if (code === "confirm-mismatch") return "The confirmation email didn't match. Nothing was deleted.";
+    if (code === "too-large") return "That's too much content to save. Shorten some text and try again.";
+    if (code === "image-too-large") return "That photo is too large. Try a smaller one.";
+    return "Something went wrong. Please try again.";
   }
 
   /* =====================================================================
      6. STATE
      ===================================================================== */
-  var auth, db, user = null, isAdmin = false, account = null, canEdit = false;
-  var siteRef = null, site = null, content = defaultContent(), images = {}, wish = { first: "", second: "" };
-  var view = "app", step = 1, dirty = false, saveTimer = null, previewTimer = null, saving = null, pendingLinkConfirm = false;
+  var me = null, account = null, canEdit = false;
+  var site = null, content = defaultContent(), images = {}, wish = { first: "", second: "" };
+  var view = "app", step = 1, dirty = false, saveTimer = null, previewTimer = null, saving = null;
   var adminData = [], reviewCtx = null;
 
   function showScreen(name) {
-    ["setup", "loading", "login", "blocked", "app", "admin"].forEach(function (n) { var el = $("#screen-" + n); if (el) el.hidden = (n !== name); });
-    $("#topbar").hidden = (name === "setup" || name === "loading" || name === "login");
+    ["loading", "login", "blocked", "app", "admin"].forEach(function (n) { var el = $("#screen-" + n); if (el) el.hidden = (n !== name); });
+    $("#topbar").hidden = (name === "loading" || name === "login");
   }
 
   /* =====================================================================
-     7. SIGN-IN  (email link, no passwords)
+     7. SIGN-IN  (email link, or a password once they've set one)
      ===================================================================== */
-  function actionSettings() { return { url: window.location.origin + window.location.pathname, handleCodeInApp: true }; }
-
-  // Sends the branded sign-in email through your Vercel function; if that's unavailable, Firebase's own email is used instead.
-  function requestLoginLink(email) {
-    if (!MAIL_ENDPOINT) return auth.sendSignInLinkToEmail(email, actionSettings());
-    return fetch(MAIL_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "login", email: email }) })
-      .then(function (r) { if (!r.ok) throw new Error("mail-down"); return r.json(); })
-      .then(function (j) { if (!j || !j.ok) throw new Error("mail-down"); })
-      .catch(function () { return auth.sendSignInLinkToEmail(email, actionSettings()); });
-  }
-  function postMail(payload) {
-    return fetch(MAIL_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-      .catch(function () { throw new Error("Couldn't reach the email service. Is api/site-mail.js deployed on Vercel?"); })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) {
-        if (!r.ok || !j.ok) throw new Error(j.error === "forbidden" ? "Not allowed. Sign in as an admin." : "The email service didn't accept that. Check the Vercel settings for api/site-mail.js.");
-        return j;
-      }); });
-  }
-
   var usePassword = false;
-  function setLoginMode(mode) {
-    var confirming = mode === "confirm";
+  function setLoginMode() {
     $("#loginPasswordField").hidden = !usePassword;
-    $("#loginToggleNote").hidden = confirming;
     $("#loginToggleBtn").textContent = usePassword ? "Email me a sign-in link instead" : "Sign in with a password instead";
-    if (usePassword) {
-      $("#loginTitle").textContent = "Sign in to your site";
-      $("#loginIntro").textContent = "Enter your email and password.";
-      $("#loginBtn").textContent = "Sign in";
-    } else {
-      $("#loginTitle").textContent = confirming ? "Confirm your email" : "Sign in to your site";
-      $("#loginIntro").textContent = confirming
-        ? "For your security, please type the email address this sign-in link was sent to."
-        : "Enter the email you used when you signed up. We'll email you a sign-in link. No password to remember.";
-      $("#loginBtn").textContent = confirming ? "Finish signing in" : "Email me a sign-in link";
-    }
-    $("#loginForm").dataset.mode = mode;
+    $("#loginIntro").textContent = usePassword
+      ? "Enter your email and password."
+      : "Enter the email you used when you signed up. We'll email you a sign-in link. No password to remember.";
+    $("#loginBtn").textContent = usePassword ? "Sign in" : "Email me a sign-in link";
   }
-  $("#loginToggleBtn").addEventListener("click", function () { usePassword = !usePassword; setLoginMode($("#loginForm").dataset.mode === "confirm" ? "request" : ($("#loginForm").dataset.mode || "request")); });
+  $("#loginToggleBtn").addEventListener("click", function () { usePassword = !usePassword; say("#loginMsg", ""); setLoginMode(); });
 
   $("#loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var email = $("#loginEmail").value.trim().toLowerCase(), mode = this.dataset.mode || "request";
+    var email = $("#loginEmail").value.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say("#loginMsg", "Please enter a valid email address.", false); return; }
     var btn = $("#loginBtn"); btn.disabled = true; say("#loginMsg", "");
     var job;
     if (usePassword) {
-      var pw = $("#loginPassword").value;
-      job = auth.signInWithEmailAndPassword(email, pw);
-    } else if (mode === "confirm") {
-      job = auth.signInWithEmailLink(email, window.location.href).then(function () { window.history.replaceState(null, "", window.location.pathname); pendingLinkConfirm = false; });
+      job = api("POST", "/auth/login", { email: email, password: $("#loginPassword").value }).then(function () { $("#loginPassword").value = ""; return boot(); });
     } else {
-      job = requestLoginLink(email).then(function () {
-        try { localStorage.setItem("tec_signin_email", email); } catch (x) {}
+      job = api("POST", "/auth/request-link", { email: email }).then(function () {
         say("#loginMsg", "Check your email. If " + email + " has a Site Starter account, a sign-in link is on its way. It can take a minute; check spam too.", true);
       });
     }
     job.catch(function (err) {
-      var expired = err && (err.code === "auth/invalid-action-code" || err.code === "auth/expired-action-code");
-      var wrongPw = err && (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential" || err.code === "auth/user-not-found");
-      say("#loginMsg", usePassword && wrongPw ? "That email and password don't match. Use the email link to sign in, then set a password from the Customers screen."
-        : expired ? "That link has expired or was already used. Enter your email to get a new one." : friendlyError(err), false);
-      if (expired) { setLoginMode("request"); window.history.replaceState(null, "", window.location.pathname); }
+      if (err.code === "wrong-credentials") say("#loginMsg", "That email and password don't match. Use the email link to sign in, then set a password from the Account button.", false);
+      else if (err.code === "no-active-plan") say("#loginMsg", "We couldn't find an active plan for " + email + ". Contact us if that's not right.", false);
+      else say("#loginMsg", friendlyError(err), false);
     }).then(function () { btn.disabled = false; });
   });
 
   function logout() {
-    flushSave().catch(function () {}).then(function () { return auth.signOut(); }).then(function () {
-      user = null; isAdmin = false; account = null; siteRef = null; site = null; dirty = false; showScreen("login"); setLoginMode("request");
+    flushSave().catch(function () {}).then(function () { return api("POST", "/auth/logout").catch(function () {}); }).then(function () {
+      me = null; account = null; site = null; dirty = false; images = {};
+      showScreen("login"); setLoginMode();
     });
   }
   $("#logoutBtn").addEventListener("click", logout);
@@ -800,35 +780,35 @@
     var pw = $("#pwNew").value, btn = this;
     if (pw.length < 8) { say("#pwMsg", "Use at least 8 characters.", false); return; }
     btn.disabled = true; say("#pwMsg", "");
-    user.getIdToken().then(function (tok) {
-      return fetch(SET_PASSWORD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, newPassword: pw }) });
-    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't save that. Try again in a moment."); }); })
+    api("POST", "/auth/set-password", { newPassword: pw })
       .then(function () { $("#pwNew").value = ""; say("#pwMsg", "Password saved. Use it next time you sign in.", true); })
-      .catch(function (err) { say("#pwMsg", err.message, false); })
+      .catch(function (err) { say("#pwMsg", err.code === "password-too-short" ? "Use at least 8 characters." : friendlyError(err), false); })
       .then(function () { btn.disabled = false; });
   });
 
   /* =====================================================================
      8. AFTER SIGN-IN: who is this, and what can they see?
      ===================================================================== */
-  function bootUser(u) {
-    user = u; showScreen("loading");
-    var email = String(u.email || "").toLowerCase();
-    Promise.all([db.collection("admins").doc(email).get(), db.collection("accounts").doc(email).get()]).then(function (r) {
-      isAdmin = r[0].exists; account = r[1].exists ? r[1].data() : null;
-      var end = account ? toDate(account.termEnd) : null;
-      canEdit = !!(account && account.active === true && end && end.getTime() > Date.now());
-      $("#whoami").textContent = email;
-      if (isAdmin) {
-        $("#switchView").hidden = !account;
-        view = "admin"; applyView(); loadAdmin();
-        if (account) openCustomer(true);
-        return;
-      }
-      $("#switchView").hidden = true;
-      if (!account || account.active !== true) return blocked("We couldn't find an active plan for " + email + ".", "If you just signed up, give us a little time to set you up. If you used a different email, sign out and try that one.");
-      return openCustomer(false);
-    }).catch(function (err) { blocked("Something went wrong", friendlyError(err)); });
+  function boot() {
+    showScreen("loading");
+    return api("GET", "/auth/me").then(function (m) {
+      me = { email: String(m.email || "").toLowerCase(), isAdmin: !!m.isAdmin };
+      return bootUser();
+    }).catch(function (err) {
+      showScreen("login"); setLoginMode();
+      if (err.code === "network") say("#loginMsg", friendlyError(err), false);
+    });
+  }
+
+  function bootUser() {
+    $("#whoami").textContent = me.email;
+    if (me.isAdmin) {
+      view = "admin"; applyView(); loadAdmin();
+      // An admin may also have their own Site Starter account to edit.
+      return loadMySite(true).then(function (has) { $("#switchView").hidden = !has; });
+    }
+    $("#switchView").hidden = true;
+    return loadMySite(false);
   }
 
   function blocked(title, msg) { $("#blockedTitle").textContent = title; $("#blockedMsg").textContent = msg || ""; showScreen("blocked"); $("#topbar").hidden = false; }
@@ -858,33 +838,26 @@
   /* =====================================================================
      9. CUSTOMER EDITOR
      ===================================================================== */
-  function openCustomer(adminAlso) {
-    siteRef = db.collection("sites").doc(user.uid);
-    return siteRef.get().then(function (snap) {
-      if (snap.exists) return snap;
-      if (!canEdit) { if (!adminAlso) blocked("Your plan has ended", "Your plan ended on " + fmtDate(account.termEnd) + ". Contact us to renew and keep editing."); return null; }
-      var now = firebase.firestore.FieldValue.serverTimestamp();
-      // Carry over what they already told us at checkout, so their first draft
-      // isn't blank. account.businessName/phone/domainWish come from the Site
-      // Starter checkout (or were added by hand in the admin console — either
-      // way, missing fields just fall back to blank).
-      var startContent = defaultContent();
-      if (account && account.businessName) startContent.businessName = str(account.businessName, 80);
-      if (account && account.phone) startContent.phone = str(account.phone, 40);
-      var startWish = { first: str(account && account.domainWish && account.domainWish.first, 80), second: str(account && account.domainWish && account.domainWish.second, 80) };
-      var fresh = { ownerEmail: String(user.email).toLowerCase(), status: "draft", content: startContent, domainWish: startWish, publishRequested: false, createdAt: now, updatedAt: now };
-      return siteRef.set(fresh).then(function () { return siteRef.get(); });
-    }).then(function (snap) {
-      if (!snap) return;
-      site = snap.data();
-      return siteRef.collection("images").get().then(function (qs) {
-        images = {}; qs.forEach(function (d) { images[d.id] = d.data().dataUrl; });
-        content = sanitizeContent(site.content);
-        wish = { first: str((site.domainWish || {}).first, 80), second: str((site.domainWish || {}).second, 80) };
-        buildEditor();
-        if (!adminAlso) { view = "app"; applyView(); }
-      });
-    }).catch(function (err) { if (!adminAlso) blocked("Something went wrong", friendlyError(err)); });
+  // Loads (or, on a first visit, creates) the signed-in person's site.
+  // Resolves true if they have one to edit.
+  function loadMySite(adminAlso) {
+    return api("GET", "/sites/me").then(function (j) {
+      account = j.account; canEdit = !!j.canEdit; site = j.site;
+      images = absImages(j.images);
+      content = sanitizeContent(site.content);
+      wish = { first: str((site.domainWish || {}).first, 80), second: str((site.domainWish || {}).second, 80) };
+      buildEditor();
+      if (!adminAlso) { view = "app"; applyView(); }
+      return true;
+    }).catch(function (err) {
+      if (adminAlso) return false;
+      if (err.code === "no-active-plan") {
+        var ended = err.data && err.data.termEnd;
+        if (ended) blocked("Your plan has ended", "Your plan ended on " + fmtDate(ended) + ". Contact us to renew and keep editing.");
+        else blocked("We couldn't find an active plan for " + me.email + ".", "If you just signed up, give us a little time to set you up. If you used a different email, sign out and try that one.");
+      } else blocked("Something went wrong", friendlyError(err));
+      return false;
+    });
   }
 
   /* ---- notices ---- */
@@ -908,12 +881,15 @@
   }
   function flushSave() {
     clearTimeout(saveTimer);
-    if (!dirty || !siteRef || !canEdit) return saving || Promise.resolve();
+    if (!dirty || !site || !canEdit) return saving || Promise.resolve();
     dirty = false; setSaveState("Saving…", "");
-    var data = { content: sanitizeContent(content), domainWish: wish, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
-    saving = siteRef.set(data, { merge: true }).then(function () {
+    saving = api("POST", "/sites/save", { content: sanitizeContent(content), domainWish: wish }).then(function () {
       if (!dirty) setSaveState("All changes saved", "");
-    }).catch(function (err) { dirty = true; setSaveState("Couldn't save. Retrying when you type", "err"); throw err; });
+    }).catch(function (err) {
+      dirty = true;
+      setSaveState(err.code === "forbidden" ? "Signed out. Refresh to sign in again" : "Couldn't save. Retrying when you type", "err");
+      throw err;
+    });
     return saving;
   }
   window.addEventListener("beforeunload", function (e) { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
@@ -1019,7 +995,7 @@
   function photoField(slot, label, withCaption, tip) {
     var has = !!images[slot], i = slot.indexOf("g") === 0 ? +slot.slice(1) - 1 : -1;
     return '<div class="field"><div class="lab">' + esc(label) + '</div><div class="photo-row">' +
-      '<span class="thumb" style="' + (has ? "background-image:url('" + images[slot] + "')" : "") + '"></span>' +
+      '<span class="thumb" style="' + (has ? "background-image:url('" + esc(images[slot]) + "')" : "") + '"></span>' +
       '<label class="file-btn">' + (has ? "Change photo" : "Choose photo") + '<input type="file" accept="image/*" style="display:none" data-img="' + slot + '"></label>' +
       (has ? '<button type="button" class="link-btn" data-rmimg="' + slot + '">Remove</button>' : "") + "</div>" +
       (withCaption && i >= 0 ? '<input type="text" aria-label="Caption for ' + esc(label) + '" data-cap="' + i + '" maxlength="80" value="' + esc(content.captions[i]) + '" placeholder="Caption (optional)">' : "") +
@@ -1043,7 +1019,7 @@
     if (pos) { content.heroPos = +pos.dataset.pos; renderContentForm(); changed(); return; }
     var r = e.target.closest("[data-rmimg]"); if (!r) return;
     var slot = r.dataset.rmimg; delete images[slot];
-    siteRef.collection("images").doc(slot).delete().catch(function () {});
+    api("DELETE", "/sites/image?slot=" + encodeURIComponent(slot)).catch(function () {});
     content.imgRev++; renderContentForm(); changed();
   });
 
@@ -1069,11 +1045,12 @@
     });
   }
   function handleImage(slot, file) {
+    setSaveState("Uploading photo…", "");
     shrink(file).then(function (dataUrl) {
-      return siteRef.collection("images").doc(slot).set({ dataUrl: dataUrl, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function () {
-        images[slot] = dataUrl; if (slot === "hero") content.heroPos = 50; content.imgRev++; renderContentForm(); changed();
-      });
-    }).catch(function (err) { setSaveState(err.message || "Photo couldn't be saved", "err"); });
+      return api("POST", "/sites/image", { slot: slot, dataUrl: dataUrl });
+    }).then(function (j) {
+      images[slot] = API + j.url; if (slot === "hero") content.heroPos = 50; content.imgRev++; renderContentForm(); changed();
+    }).catch(function (err) { setSaveState(friendlyError(err) || "Photo couldn't be saved", "err"); });
   }
   /* ---- step 4: checklist + publishing ---- */
   function renderChecklist() {
@@ -1106,20 +1083,17 @@
     var b = e.target.closest("button"); if (!b) return;
     say("#publishMsg", ""); b.disabled = true;
     if (b.id === "publishBtn") {
-      var isUpdate = site.status === "live";
       dirty = true;
+      // Save first, so what you review is exactly what they see. The Worker
+      // emails you about the request on its own.
       flushSave().then(function () {
-        var ts = firebase.firestore.FieldValue.serverTimestamp();
-        return siteRef.update({ publishRequested: true, publishRequestedAt: ts, updatedAt: ts });
+        return api("POST", "/sites/publish-request");
       }).then(function () {
         site.publishRequested = true; renderNotices(); renderPublish();
         say("#publishMsg", "Sent! We'll email you when it's live.", true);
-        return user.getIdToken().then(function (tok) {
-          fetch(APPS_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ formType: "Publish Request", idToken: tok, businessName: content.businessName, domainFirst: wish.first, domainSecond: wish.second, isUpdate: isUpdate }) }).catch(function () {});
-        });
       }).catch(function (err) { say("#publishMsg", friendlyError(err), false); b.disabled = false; });
     } else if (b.id === "withdrawBtn") {
-      siteRef.update({ publishRequested: false, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function () {
+      api("POST", "/sites/withdraw-request").then(function () {
         site.publishRequested = false; renderNotices(); renderPublish();
       }).catch(function (err) { say("#publishMsg", friendlyError(err), false); b.disabled = false; });
     }
@@ -1138,12 +1112,10 @@
      ===================================================================== */
   function loadAdmin() {
     say("#adminMsg", "");
-    return Promise.all([db.collection("accounts").get(), db.collection("sites").get()]).then(function (r) {
-      var accounts = {}, sites = {};
-      r[0].forEach(function (d) { accounts[d.id] = d.data(); });
-      r[1].forEach(function (d) { var s = d.data(); s._uid = d.id; sites[String(s.ownerEmail || "").toLowerCase()] = s; });
-      var emails = {}; Object.keys(accounts).concat(Object.keys(sites)).forEach(function (e) { emails[e] = 1; });
-      adminData = Object.keys(emails).sort().map(function (e) { return { email: e, account: accounts[e] || null, site: sites[e] || null }; });
+    return api("GET", "/admin/customers").then(function (j) {
+      adminData = (j.customers || []).map(function (c) {
+        return { email: c.email, account: c.account, site: c.site, images: absImages(c.images), liveImages: absImages(c.liveImages) };
+      });
       renderAdmin();
     }).catch(function (err) { $("#adminRows").innerHTML = ""; say("#adminMsg", friendlyError(err), false); });
   }
@@ -1181,10 +1153,10 @@
     e.preventDefault();
     var email = $("#addEmail").value.trim().toLowerCase(), years = +$("#addYears").value, biz = $("#addBiz").value.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say("#addMsg", "Enter a valid email address.", false); return; }
-    var now = new Date(), end = addYears(now, years), TSF = firebase.firestore.Timestamp;
+    var end = addYears(new Date(), years);
     say("#addMsg", "Adding…", true);
-    db.collection("accounts").doc(email).set({ active: true, years: years, businessName: biz, termStart: TSF.fromDate(now), termEnd: TSF.fromDate(end), createdAt: TSF.fromDate(now) }).then(function () {
-      return requestLoginLink(email);
+    api("POST", "/admin/add-customer", { email: email, years: years, businessName: biz }).then(function () {
+      return api("POST", "/auth/request-link", { email: email });
     }).then(function () {
       say("#addMsg", "Added " + email + " (plan ends " + fmtDate(end) + "). We emailed them a sign-in link.", true);
       $("#addForm").reset(); return loadAdmin();
@@ -1193,64 +1165,46 @@
 
   $("#adminRows").addEventListener("click", function (e) {
     var b = e.target.closest("[data-act]"); if (!b) return;
-    var row = adminData[+b.dataset.i], act = b.dataset.act, TSF = firebase.firestore.Timestamp; b.disabled = true;
+    var row = adminData[+b.dataset.i], act = b.dataset.act; b.disabled = true;
     var done = function () { return loadAdmin(); }, fail = function (err) { say("#adminMsg", friendlyError(err), false); b.disabled = false; };
-    if (act === "review") { openReview(row).then(function () { b.disabled = false; }).catch(fail); return; }
-    if (act === "link") { requestLoginLink(row.email).then(function () { say("#adminMsg", "Login link sent to " + row.email + ".", true); b.disabled = false; }).catch(fail); return; }
+    if (act === "review") { openReview(row); b.disabled = false; return; }
+    if (act === "link") { api("POST", "/auth/request-link", { email: row.email }).then(function () { say("#adminMsg", "Login link sent to " + row.email + ".", true); b.disabled = false; }).catch(fail); return; }
     if (act === "send") {
-      var st = row.site, resend = !needsSend(st);
+      var resend = !needsSend(row.site);
       if (!confirm((resend ? "Resend" : "Send") + ' the "your website is live" email to ' + row.email + "?\n\nOnly do this once the file is uploaded, the domain is working, and the site is showing.")) { b.disabled = false; return; }
-      user.getIdToken().then(function (tok) {
-        return postMail({ action: "site-live", idToken: tok, email: row.email, businessName: (row.account && row.account.businessName) || (st.content && st.content.businessName) || "", liveUrl: st.liveUrl, planEnds: row.account ? fmtDate(row.account.termEnd) : "", isUpdate: !!st.liveSentAt });
-      }).then(function () {
-        return db.collection("sites").doc(st._uid).update({ liveSentAt: firebase.firestore.FieldValue.serverTimestamp() });
-      }).then(function () { return done().then(function () { say("#adminMsg", "Sent the live-site email to " + row.email + ".", true); }); }).catch(fail);
+      api("POST", "/admin/send-live", { email: row.email })
+        .then(function () { return done().then(function () { say("#adminMsg", "Sent the live-site email to " + row.email + ".", true); }); }).catch(fail);
       return;
     }
-    if (act === "extend") {
-      var base = Math.max(Date.now(), toDate(row.account.termEnd).getTime());
-      db.collection("accounts").doc(row.email).update({ termEnd: TSF.fromDate(addYears(new Date(base), 1)), active: true }).then(done).catch(fail); return;
-    }
+    if (act === "extend") { api("POST", "/admin/extend", { email: row.email }).then(done).catch(fail); return; }
     if (act === "toggle") {
       var turningOn = row.account.active === false;
-      if (!turningOn && !confirm("Disable " + row.email + "'s login? They will not be able to sign in at all until you re-enable it. Their site and data stay untouched.")) { b.disabled = false; return; }
-      user.getIdToken().then(function (tok) {
-        return fetch(MANAGE_ACCOUNT_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, targetEmail: row.email, action: turningOn ? "enable" : "disable" }) });
-      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("Couldn't do that. Try again in a moment."); }); })
-        .then(done).catch(fail);
+      if (!turningOn && !confirm("Disable " + row.email + "'s login? They will be signed out everywhere and won't be able to sign in until you re-enable it. Their site and data stay untouched.")) { b.disabled = false; return; }
+      api("POST", "/admin/manage-account", { action: turningOn ? "enable" : "disable", targetEmail: row.email })
+        .then(function (j) { return done().then(function () { if (turningOn && j.termExpired) say("#adminMsg", "Re-enabled, but their plan has ended. Click +1 year so they can sign in.", false); }); }).catch(fail);
       return;
     }
     if (act === "delete") {
       if (!confirm('Permanently delete ' + row.email + '\'s account? This removes their login, their site, and their photos. This cannot be undone.')) { b.disabled = false; return; }
       var typed = prompt('Type the customer\'s email to confirm: ' + row.email);
-      if (typed !== row.email) { say("#adminMsg", typed === null ? "" : "That didn't match — nothing was deleted.", typed === null); b.disabled = false; return; }
-      user.getIdToken().then(function (tok) {
-        return fetch(MANAGE_ACCOUNT_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: tok, targetEmail: row.email, action: "delete" }) });
-      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(j.detail || j.error || "Couldn't delete that account. Try again in a moment."); return j; }); })
-        .then(function (j) { return done().then(function () { say("#adminMsg", (j.warning ? j.warning : "Deleted " + row.email + "."), !j.warning); }); }).catch(fail);
+      if (typed === null) { b.disabled = false; return; }
+      if (typed.trim().toLowerCase() !== row.email) { say("#adminMsg", "That didn't match — nothing was deleted.", false); b.disabled = false; return; }
+      api("POST", "/admin/manage-account", { action: "delete", targetEmail: row.email, confirmEmail: typed.trim() })
+        .then(function () { return done().then(function () { say("#adminMsg", "Deleted " + row.email + ".", true); }); }).catch(fail);
     }
   });
 
   /* ---- review + approve ---- */
-  function loadBundle(row) {
-    var ref = db.collection("sites").doc(row.site._uid);
-    return Promise.all([ref.get(), ref.collection("images").get(), ref.collection("liveImages").get()]).then(function (r) {
-      var im = {}, li = {}; r[1].forEach(function (d) { im[d.id] = d.data().dataUrl; }); r[2].forEach(function (d) { li[d.id] = d.data().dataUrl; });
-      return { ref: ref, site: r[0].data(), images: im, liveImages: li, row: row };
-    });
-  }
   function openReview(row) {
-    return loadBundle(row).then(function (b) {
-      reviewCtx = b;
-      var c = sanitizeContent(b.site.content), wishFirst = (b.site.domainWish || {}).first || "";
-      $("#reviewTitle").textContent = (c.businessName || row.email) + " — " + (b.site.status === "live" ? "live site update" : "first publish");
-      $("#reviewFrame").srcdoc = renderSite(c, b.images, { final: true, liveUrl: b.site.liveUrl });
-      var problems = checkReady(c, b.images, b.site.domainWish, c.attest);
-      $("#reviewIssues").innerHTML = problems.length ? problems.map(function (p) { return '<div class="issue">' + esc(p.msg) + "</div>"; }).join("") : '<div class="issue" style="background:#e3f3e8;color:#23623c;">Passes the ready-to-publish checks.</div>';
-      $("#reviewUrl").value = b.site.liveUrl || (wishFirst ? "https://" + wishFirst.replace(/^https?:\/\//, "") : "");
-      $("#reviewDownloadLive").hidden = $("#reviewOffline").hidden = b.site.status !== "live";
-      say("#reviewMsg", ""); $("#reviewModal").classList.add("open");
-    });
+    reviewCtx = { row: row, site: row.site, images: row.images, liveImages: row.liveImages };
+    var s = row.site, c = sanitizeContent(s.content), wishFirst = (s.domainWish || {}).first || "";
+    $("#reviewTitle").textContent = (c.businessName || row.email) + " — " + (s.status === "live" ? "live site update" : "first publish");
+    $("#reviewFrame").srcdoc = renderSite(c, row.images, { final: true, liveUrl: s.liveUrl });
+    var problems = checkReady(c, row.images, s.domainWish, c.attest);
+    $("#reviewIssues").innerHTML = problems.length ? problems.map(function (p) { return '<div class="issue">' + esc(p.msg) + "</div>"; }).join("") : '<div class="issue" style="background:#e3f3e8;color:#23623c;">Passes the ready-to-publish checks.</div>';
+    $("#reviewUrl").value = s.liveUrl || (wishFirst ? "https://" + wishFirst.replace(/^https?:\/\//, "") : "");
+    $("#reviewDownloadLive").hidden = $("#reviewOffline").hidden = s.status !== "live";
+    say("#reviewMsg", ""); $("#reviewModal").classList.add("open");
   }
   $("#reviewClose").addEventListener("click", function () { $("#reviewModal").classList.remove("open"); });
   $("#reviewDownload").addEventListener("click", function () {
@@ -1267,13 +1221,7 @@
     var c = sanitizeContent(b.site.content), problems = checkReady(c, b.images, b.site.domainWish, c.attest);
     if (problems.length && !confirm("This site has open items:\n\n- " + problems.map(function (p) { return p.msg; }).join("\n- ") + "\n\nApprove anyway?")) return;
     btn.disabled = true;
-    var ts = firebase.firestore.FieldValue.serverTimestamp(), batch = db.batch();
-    batch.update(b.ref, { status: "live", liveSnapshot: c, liveUrl: url, approvedAt: ts, publishRequested: false });
-    Object.keys(SLOTS).forEach(function (k) {
-      var ref = b.ref.collection("liveImages").doc(k);
-      if (b.images[k]) batch.set(ref, { dataUrl: b.images[k], updatedAt: ts }); else batch.delete(ref);
-    });
-    batch.commit().then(function () {
+    api("POST", "/admin/approve", { email: b.row.email, liveUrl: url }).then(function () {
       say("#reviewMsg", "Approved. Now download the file and upload it to " + url + ". When the site is showing, close this window and click \"Send site to customer\" in the list.", true);
       b.site.status = "live"; b.site.liveUrl = url; b.site.liveSnapshot = c; b.liveImages = Object.assign({}, b.images);
       $("#reviewDownloadLive").hidden = $("#reviewOffline").hidden = false;
@@ -1282,41 +1230,22 @@
   });
   $("#reviewOffline").addEventListener("click", function () {
     if (!confirm("Mark this site as offline?")) return;
-    reviewCtx.ref.update({ status: "draft", publishRequested: false }).then(function () { say("#reviewMsg", "Marked offline.", true); return loadAdmin(); })
+    api("POST", "/admin/offline", { email: reviewCtx.row.email }).then(function () { reviewCtx.site.status = "draft"; say("#reviewMsg", "Marked offline.", true); return loadAdmin(); })
       .catch(function (err) { say("#reviewMsg", friendlyError(err), false); });
   });
 
   /* =====================================================================
      10b. ADMIN — FREE AUDITS
-     Reads/writes go through Apps Script (Google Sheets), not Firestore, so
-     these are separate calls that need the same passcode as order search.
+     Your admin sign-in is all that's needed (no separate passcode).
      ===================================================================== */
   var auditsLoadedOnce = false, auditData = [], auditCtx = null;
 
-  function getAuditKey(forcePrompt) {
-    var k = null;
-    try { k = sessionStorage.getItem("tec_audit_key"); } catch (e) {}
-    if (!k || forcePrompt) {
-      k = window.prompt("Enter the audits passcode:") || "";
-      if (k) { try { sessionStorage.setItem("tec_audit_key", k); } catch (e) {} }
-    }
-    return k || "";
-  }
-  function clearAuditKey() { try { sessionStorage.removeItem("tec_audit_key"); } catch (e) {} }
-
-  function loadAudits(forcePrompt) {
-    var key = getAuditKey(forcePrompt);
-    if (!key) { say("#auditListMsg", "A passcode is needed to view audits.", false); return; }
+  function loadAudits() {
     say("#auditListMsg", "Loading…", true);
-    fetch(APPS_SCRIPT_URL + "?action=audits&key=" + encodeURIComponent(key))
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        if (j.status === "unauthorized") { clearAuditKey(); say("#auditListMsg", "That passcode wasn't right.", false); $("#auditRows").innerHTML = '<tr><td colspan="6"><button type="button" class="btn-ghost btn-sm" id="auditRetryBtn">Enter passcode</button></td></tr>'; return; }
-        auditsLoadedOnce = true; auditData = j.results || []; say("#auditListMsg", ""); renderAudits();
-      })
-      .catch(function () { say("#auditListMsg", "Couldn't reach the audits list. Try again in a moment.", false); });
+    api("GET", "/admin/audits").then(function (j) {
+      auditsLoadedOnce = true; auditData = j.results || []; say("#auditListMsg", ""); renderAudits();
+    }).catch(function (err) { say("#auditListMsg", friendlyError(err), false); });
   }
-  $("#auditRows").addEventListener("click", function (e) { if (e.target.id === "auditRetryBtn") loadAudits(true); });
   $("#auditRefresh").addEventListener("click", function () { loadAudits(); });
 
   function renderAudits() {
@@ -1355,35 +1284,37 @@
     var url = $("#auditSampleUrl").value.trim(), pkg = $("#auditPackage").value, btn = this;
     if (!/^https?:\/\//i.test(url)) { say("#auditModalMsg", "Enter the sample site link, starting with https://", false); return; }
     btn.disabled = true; say("#auditModalMsg", "Sending…", true);
-    fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ formType: "Send Audit Recommendation", key: getAuditKey(), row: auditCtx.row, email: auditCtx.email, sampleSiteUrl: url, package: pkg, fullName: auditCtx.fullName }) })
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        if (j.status !== "success") throw new Error(j.message || "Couldn't send that.");
+    api("POST", "/admin/audits/send", { id: auditCtx.id, email: auditCtx.email, sampleSiteUrl: url, package: pkg })
+      .then(function () {
         say("#auditModalMsg", "Sent to " + auditCtx.email + ".", true);
         auditCtx.sampleSiteStatus = "Sent"; auditCtx.sampleSiteUrl = url; auditCtx.packageSent = pkg;
         renderAudits();
       })
-      .catch(function (err) { say("#auditModalMsg", err.message, false); })
+      .catch(function (err) { say("#auditModalMsg", friendlyError(err), false); })
       .then(function () { btn.disabled = false; });
   });
 
   /* =====================================================================
      11. START
+     A sign-in link from email lands here as ?signin=<token>. It's swapped
+     for a session right away and removed from the address bar, so it
+     never lingers in history or gets shared by accident.
      ===================================================================== */
   function start() {
-    if (typeof firebase === "undefined") { $("#setupMsg").textContent = "The sign-in service couldn't load. Check your connection and refresh the page."; showScreen("setup"); return; }
-    if (String(FIREBASE_CONFIG.apiKey).indexOf("PASTE") === 0) { showScreen("setup"); return; }
-    firebase.initializeApp(FIREBASE_CONFIG); auth = firebase.auth(); db = firebase.firestore();
-    setLoginMode("request");
-    var linkPresent = auth.isSignInWithEmailLink(window.location.href), stored = "";
-    try { stored = localStorage.getItem("tec_signin_email") || ""; } catch (x) {}
-    if (linkPresent) {
-      if (stored) {
-        auth.signInWithEmailLink(stored, window.location.href).then(function () { window.history.replaceState(null, "", window.location.pathname); try { localStorage.removeItem("tec_signin_email"); } catch (x) {} })
-          .catch(function () { setLoginMode("request"); showScreen("login"); say("#loginMsg", "That link has expired or was already used. Enter your email to get a new one.", false); window.history.replaceState(null, "", window.location.pathname); });
-      } else { pendingLinkConfirm = true; setLoginMode("confirm"); showScreen("login"); }
+    setLoginMode();
+    var token = new URLSearchParams(window.location.search).get("signin");
+    if (token) {
+      window.history.replaceState(null, "", window.location.pathname);
+      showScreen("loading");
+      api("GET", "/auth/verify?token=" + encodeURIComponent(token)).then(boot).catch(function (err) {
+        showScreen("login");
+        say("#loginMsg", err.code === "no-active-plan" ? "We couldn't find an active plan for this account. Contact us if that's not right."
+          : err.code === "network" ? friendlyError(err)
+          : "That sign-in link has expired or was already used. Enter your email to get a new one.", false);
+      });
+      return;
     }
-    auth.onAuthStateChanged(function (u) { if (u) bootUser(u); else if (!pendingLinkConfirm && !(linkPresent && stored && !user)) showScreen("login"); });
+    boot();
   }
   start();
 })();
