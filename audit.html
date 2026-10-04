@@ -574,7 +574,8 @@
 </div>
 
 <script>
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  // Your Cloudflare Worker (replaces the Apps Script URL)
+  const FORM_URL = 'https://api.tecwebstudio.com/forms/audit';
 
   const $ = (id) => document.getElementById(id);
 
@@ -692,7 +693,6 @@
     const focus = Array.from(document.querySelectorAll('input[name="focusAreas"]:checked')).map(function(c) { return c.value; });
 
     const payload = {
-      formType:      'Website Audit',
       fullName:      $('fullName').value.trim(),
       email:         $('email').value.trim(),
       phone:         $('phone').value.trim(),
@@ -714,9 +714,11 @@
     };
 
     try {
-      const formData = new FormData();
-      Object.keys(payload).forEach(function(k) { formData.append(k, payload[k]); });
-      await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData });
+      // Unlike the old Apps Script call, this gets a real answer back, so the
+      // visitor only sees "received" if it actually arrived.
+      const res = await fetch(FORM_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await res.json().catch(function() { return {}; });
+      if (!res.ok || !data.ok) throw new Error('not saved');
       showSuccess();
     } catch (err) {
       btn.disabled = false;
