@@ -1262,8 +1262,8 @@
 <script src="site.js"></script>
 <script>
   // ── REVIEWS: submit + auto-populate ──────────────────────
-  // Paste the SAME Apps Script Web App URL your other forms (contact.html, etc.) already use.
-  const REVIEWS_API_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  // Your Cloudflare Worker (replaces the Apps Script URL)
+  const API = 'https://api.tecwebstudio.com';
 
   const AVATAR_CLASSES = ['av-blue', 'av-teal', 'av-purple'];
 
@@ -1308,16 +1308,17 @@
   }
 
   async function loadReviews() {
-    if (!REVIEWS_API_URL || REVIEWS_API_URL.indexOf('PASTE_YOUR') === 0) return;
     try {
-      const res = await fetch(`${REVIEWS_API_URL}?action=reviews`);
+      const res = await fetch(API + '/reviews');
       const data = await res.json();
-      if (data.status !== 'ok' || !Array.isArray(data.reviews)) return;
+      if (!data.ok || !Array.isArray(data.reviews)) return;
 
       const grid = document.getElementById('testimonialsGrid');
       if (!grid) return;
 
-      data.reviews.forEach((review, idx) => {
+      // Reviews arrive newest first. Each one is added to the top, so go
+      // through them oldest-first to end up with the newest at the very top.
+      data.reviews.slice().reverse().forEach((review, idx) => {
         grid.insertAdjacentHTML('afterbegin', buildReviewCard(review, idx));
       });
     } catch (err) {
@@ -1346,27 +1347,19 @@
         statusMsg.classList.add('show', 'err');
         return;
       }
-      if (!REVIEWS_API_URL || REVIEWS_API_URL.indexOf('PASTE_YOUR') === 0) {
-        statusMsg.textContent = 'Review submissions are not connected yet. Please contact us directly.';
-        statusMsg.classList.add('show', 'err');
-        return;
-      }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Submitting...';
 
       try {
-        await fetch(REVIEWS_API_URL, {
+        const res = await fetch(API + '/forms/review', {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            formType: 'Review',
-            name: name,
-            business: business,
-            rating: ratingInput.value,
-            quote: quote
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, business: business, rating: ratingInput.value, quote: quote })
         });
+        const data = await res.json().catch(function() { return {}; });
+        // Only say "thank you" if it was actually saved.
+        if (!res.ok || !data.ok) throw new Error('not saved');
 
         const ratingNum = parseInt(ratingInput.value, 10);
         statusMsg.textContent = ratingNum >= 3
