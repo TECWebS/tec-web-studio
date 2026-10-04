@@ -153,6 +153,13 @@
   @media (max-width:860px){.modal-grid{grid-template-columns:1fr;}}
   .modal iframe{width:100%;height:520px;border:1px solid var(--line);border-radius:10px;}
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;margin:2px 0 6px;}
+  .seg.admin-tabs{max-width:100%;overflow-x:auto;}
+  .seg.admin-tabs button{white-space:nowrap;}
+  .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+  .search-row input{flex:1;min-width:200px;}
+  .clip{max-width:360px;overflow-wrap:anywhere;}
+  .stars{color:var(--accent-deep);letter-spacing:1px;white-space:nowrap;}
+  .info-answers p{margin:0 0 8px;}
   .seg button{background:#fff;padding:8px 18px;font-size:13px;color:var(--ink-soft);}
   .seg button.on{background:var(--ink);color:#fff;}
   .btn-accent-sm{background:var(--accent);color:var(--ink);border-radius:999px;font-weight:700;}
@@ -293,9 +300,12 @@
 
 <!-- ============ ADMIN CONSOLE ============ -->
 <div id="screen-admin" class="admin" hidden>
-  <div class="seg" role="tablist" aria-label="Admin section">
+  <div class="seg admin-tabs" role="tablist" aria-label="Admin section">
     <button type="button" class="on" data-admintab="starter" role="tab" aria-selected="true">Site Starter</button>
     <button type="button" data-admintab="audits" role="tab" aria-selected="false">Free Audits</button>
+    <button type="button" data-admintab="requests" role="tab" aria-selected="false">Requests</button>
+    <button type="button" data-admintab="orders" role="tab" aria-selected="false">Orders</button>
+    <button type="button" data-admintab="reviews" role="tab" aria-selected="false">Reviews</button>
   </div>
 
   <div id="adminTabStarter">
@@ -337,6 +347,66 @@
       </table></div>
       <p class="msg" id="auditListMsg" role="status" aria-live="polite"></p>
     </div>
+  </div>
+
+  <div id="adminTabRequests" hidden>
+    <h2>Consultation Requests</h2>
+    <div class="admin-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="reqCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="reqRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Who</th><th>Submitted</th><th>What they need</th><th>Package interest</th><th></th></tr></thead>
+        <tbody id="reqRows"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="reqMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabOrders" hidden>
+    <h2>Orders</h2>
+    <div class="admin-card">
+      <form class="search-row" id="orderSearchForm" role="search">
+        <label class="lab" for="orderQ" style="margin:0;">Search</label>
+        <input type="text" id="orderQ" placeholder="Name, email, business, or package" autocomplete="off">
+        <button type="submit" class="btn-primary btn-sm">Search</button>
+        <button type="button" class="btn-ghost btn-sm" id="orderClear">Show all</button>
+      </form>
+      <div class="lab" style="margin:0 0 10px;" id="orderCount"></div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Customer</th><th>Date</th><th>Package</th><th>Paid</th><th>Monthly</th><th></th></tr></thead>
+        <tbody id="orderRows"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="orderMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabReviews" hidden>
+    <h2>Reviews</h2>
+    <div class="admin-card">
+      <p class="sub" style="margin-bottom:12px;">Reviews of 3 stars and up show on your homepage automatically; lower ones stay hidden. Use Show or Hide to change any of them.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="revCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="revRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>From</th><th>Date</th><th>Rating</th><th>Review</th><th>On homepage</th><th></th></tr></thead>
+        <tbody id="revRows"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="revMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="infoModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle" style="max-width:640px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+      <h2 id="infoModalTitle" style="font-size:20px;">Details</h2>
+      <button type="button" class="btn-ghost btn-sm" id="infoModalClose">Close</button>
+    </div>
+    <div id="infoModalAnswers" class="info-answers" style="font-size:13.5px;line-height:1.6;color:var(--ink-soft);border:1px solid var(--line);border-radius:10px;padding:14px 16px;max-height:420px;overflow:auto;"></div>
+    <div style="margin-top:14px;"><a class="btn-primary" id="infoModalReply" href="#" style="display:inline-block;text-decoration:none;">Reply by email</a></div>
   </div>
 </div>
 
@@ -825,7 +895,13 @@
     $$(".seg[role=tablist] button[data-admintab]").forEach(function (b) { var on = b.dataset.admintab === t; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
     $("#adminTabStarter").hidden = t !== "starter";
     $("#adminTabAudits").hidden = t !== "audits";
+    $("#adminTabRequests").hidden = t !== "requests";
+    $("#adminTabOrders").hidden = t !== "orders";
+    $("#adminTabReviews").hidden = t !== "reviews";
     if (t === "audits" && !auditsLoadedOnce) loadAudits();
+    if (t === "requests" && !reqLoadedOnce) loadRequests();
+    if (t === "orders" && !ordersLoadedOnce) loadOrders("");
+    if (t === "reviews" && !revLoadedOnce) loadReviews();
   }
   document.querySelectorAll('.seg[role="tablist"] button[data-admintab]').forEach(function (b) { b.addEventListener("click", function () { showAdminTab(b.dataset.admintab); }); });
 
@@ -1292,6 +1368,97 @@
       })
       .catch(function (err) { say("#auditModalMsg", friendlyError(err), false); })
       .then(function () { btn.disabled = false; });
+  });
+
+  /* =====================================================================
+     10c. ADMIN — REQUESTS, ORDERS, REVIEWS
+     These replace looking things up in the Google Sheets tabs.
+     ===================================================================== */
+  // Shared "View" window: a list of label/answer pairs plus a reply button.
+  function openInfo(title, pairs, email, subject) {
+    $("#infoModalTitle").textContent = title;
+    $("#infoModalAnswers").innerHTML = pairs.map(function (p) { return afield(p[0], p[1]); }).join("") || "<p>No details.</p>";
+    var r = $("#infoModalReply");
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { r.hidden = false; r.href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject || "TEC Web Studio"); }
+    else r.hidden = true;
+    $("#infoModal").classList.add("open");
+  }
+  $("#infoModalClose").addEventListener("click", function () { $("#infoModal").classList.remove("open"); });
+
+  /* ---- requests (contact page) ---- */
+  var reqLoadedOnce = false, reqData = [];
+  function loadRequests() {
+    say("#reqMsg", "Loading…", true);
+    api("GET", "/admin/consultations").then(function (j) {
+      reqLoadedOnce = true; reqData = j.results || []; say("#reqMsg", "");
+      $("#reqCount").textContent = reqData.length + " request" + (reqData.length === 1 ? "" : "s");
+      $("#reqRows").innerHTML = reqData.length ? reqData.map(function (r, i) {
+        return "<tr><td><strong>" + esc(r.businessName || r.fullName) + "</strong><br>" + esc(r.fullName && r.businessName ? r.fullName + " · " : "") + esc(r.email) + "</td><td>" + esc(fmtDateTime(r.timestamp)) +
+          '</td><td class="clip">' + esc(r.needs) + "</td><td>" + esc(r.packageInterest) + '</td><td><button type="button" class="btn-primary btn-sm" data-req-i="' + i + '">View</button></td></tr>';
+      }).join("") : '<tr><td colspan="5">No requests yet.</td></tr>';
+    }).catch(function (err) { say("#reqMsg", friendlyError(err), false); });
+  }
+  $("#reqRefresh").addEventListener("click", loadRequests);
+  $("#reqRows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-req-i]"); if (!b) return;
+    var r = reqData[+b.dataset.reqI];
+    openInfo(r.businessName || r.fullName, [["Name", r.fullName], ["Business", r.businessName], ["Email", r.email], ["Phone", r.phone], ["Submitted", fmtDateTime(r.timestamp)],
+      ["Current website", r.currentWebsite], ["What they need", r.needs], ["Package interest", r.packageInterest], ["About their business", r.notes]], r.email, "Your website consultation with TEC Web Studio");
+  });
+
+  /* ---- orders (payments page + Site Starter) ---- */
+  var ordersLoadedOnce = false, orderData = [];
+  function loadOrders(q) {
+    say("#orderMsg", "Loading…", true);
+    api("GET", "/admin/orders" + (q ? "?q=" + encodeURIComponent(q) : "")).then(function (j) {
+      ordersLoadedOnce = true; orderData = j.results || []; say("#orderMsg", "");
+      $("#orderCount").textContent = (q ? orderData.length + " match" + (orderData.length === 1 ? "" : "es") + " for \u201c" + q + "\u201d" : orderData.length + " order" + (orderData.length === 1 ? "" : "s") + (orderData.length >= 200 ? " (newest 200)" : ""));
+      $("#orderRows").innerHTML = orderData.length ? orderData.map(function (o, i) {
+        var monthly = o.recurringTotal && o.recurringTotal !== "None" ? '<span class="pill review">' + esc(o.recurringTotal) + "</span>" : "";
+        return "<tr><td><strong>" + esc(o.businessName || o.fullName || o.email) + "</strong><br>" + esc(o.email) + "</td><td>" + esc(fmtDate(o.timestamp)) + "</td><td>" + esc(o.package) +
+          "</td><td>" + esc(o.orderTotal) + "</td><td>" + monthly + '</td><td><button type="button" class="btn-primary btn-sm" data-order-i="' + i + '">View</button></td></tr>';
+      }).join("") : '<tr><td colspan="6">' + (q ? "No orders match that search." : "No orders yet.") + "</td></tr>";
+    }).catch(function (err) { say("#orderMsg", friendlyError(err), false); });
+  }
+  $("#orderSearchForm").addEventListener("submit", function (e) { e.preventDefault(); loadOrders($("#orderQ").value.trim()); });
+  $("#orderClear").addEventListener("click", function () { $("#orderQ").value = ""; loadOrders(""); });
+  $("#orderRows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-order-i]"); if (!b) return;
+    var o = orderData[+b.dataset.orderI];
+    openInfo((o.businessName || o.fullName || o.email) + " — " + o.package, [["Name", o.fullName], ["Business", o.businessName], ["Email", o.email], ["Phone", o.phone], ["Date", fmtDateTime(o.timestamp)],
+      ["Package", o.package], ["Website type", o.hostingPlatform], ["Domain", o.domainOption], ["Account setup", o.accountSetup], ["Account email", o.accountEmail],
+      ["Priority delivery", o.priorityDelivery && o.priorityDelivery !== "None" ? o.priorityDelivery : ""], ["Care plan", o.carePlan && o.carePlan !== "None" ? o.carePlan : ""],
+      ["Add-ons", o.addOns && o.addOns !== "None" ? o.addOns : ""], ["Paid", o.orderTotal], ["Monthly", o.recurringTotal && o.recurringTotal !== "None" ? o.recurringTotal : ""]], o.email, "Your TEC Web Studio order");
+  });
+
+  /* ---- reviews ---- */
+  var revLoadedOnce = false, revData = [];
+  function loadReviews() {
+    say("#revMsg", "Loading…", true);
+    api("GET", "/admin/reviews").then(function (j) {
+      revLoadedOnce = true; revData = j.results || []; say("#revMsg", ""); renderReviews();
+    }).catch(function (err) { say("#revMsg", friendlyError(err), false); });
+  }
+  function renderReviews() {
+    var shown = revData.filter(function (r) { return r.approved; }).length;
+    $("#revCount").textContent = revData.length + " review" + (revData.length === 1 ? "" : "s") + " · " + shown + " on your homepage";
+    $("#revRows").innerHTML = revData.length ? revData.map(function (r, i) {
+      var n = Math.max(0, Math.min(5, +r.rating || 0));
+      return "<tr><td><strong>" + esc(r.name || "Anonymous") + "</strong>" + (r.business ? "<br>" + esc(r.business) : "") + "</td><td>" + esc(fmtDate(r.timestamp)) +
+        '</td><td><span class="stars" aria-label="' + n + ' out of 5 stars">' + "\u2605".repeat(n) + "\u2606".repeat(5 - n) + '</span></td><td class="clip">' + esc(r.quote) + "</td><td>" +
+        (r.approved ? '<span class="pill live">Showing</span>' : '<span class="pill">Hidden</span>') +
+        '</td><td><button type="button" class="' + (r.approved ? "btn-ghost" : "btn-primary") + ' btn-sm" data-rev-i="' + i + '">' + (r.approved ? "Hide" : "Show") + "</button></td></tr>";
+    }).join("") : '<tr><td colspan="6">No reviews yet.</td></tr>';
+  }
+  $("#revRefresh").addEventListener("click", loadReviews);
+  $("#revRows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-rev-i]"); if (!b) return;
+    var r = revData[+b.dataset.revI], next = !r.approved;
+    b.disabled = true;
+    api("POST", "/admin/reviews/approve", { id: r.id, approved: next }).then(function () {
+      r.approved = next; renderReviews();
+      say("#revMsg", next ? "Now showing on your homepage." : "Hidden from your homepage.", true);
+    }).catch(function (err) { say("#revMsg", friendlyError(err), false); b.disabled = false; });
   });
 
   /* =====================================================================
