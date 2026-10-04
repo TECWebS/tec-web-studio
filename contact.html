@@ -251,7 +251,7 @@
       </div>
       <div class="email-alt">
         Prefer to email?
-        <br><a href="mailto:webstudiotec@gmail.com?subject=Website%20inquiry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>info@tecwebstudio.com</a>
+        <br><a href="mailto:info@tecwebstudio.com?subject=Website%20inquiry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>info@tecwebstudio.com</a>
       </div>
     </aside>
 
@@ -293,7 +293,8 @@
 
 <script src="site.js"></script>
 <script>
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  // Your Cloudflare Worker (replaces the Apps Script URL)
+  const FORM_URL = 'https://api.tecwebstudio.com/forms/consultation';
   const $ = (id) => document.getElementById(id);
 
   // "I'm not sure yet" is exclusive with the other needs
@@ -372,7 +373,6 @@
 
     const needs = Array.from(document.querySelectorAll('input[name="needs"]:checked')).map(function(c) { return c.value; });
     const payload = {
-      formType:       'Consultation Request',
       fullName:       $('fullName').value.trim(),
       businessName:   $('businessName').value.trim(),
       email:          $('email').value.trim(),
@@ -384,15 +384,17 @@
     };
 
     try {
-      const fd = new FormData();
-      Object.keys(payload).forEach(function(k) { fd.append(k, payload[k]); });
-      await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: fd });
+      // Unlike the old Apps Script call, this gets a real answer back, so the
+      // visitor only sees "Request received!" if it actually arrived.
+      const res = await fetch(FORM_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await res.json().catch(function() { return {}; });
+      if (!res.ok || !data.ok) throw new Error('not saved');
       showSuccess();
     } catch (err) {
       btn.disabled = false;
       btn.textContent = 'Request a Free Consultation';
       const fe = $('formError');
-      fe.textContent = 'Something went wrong sending your request. Please check your connection and try again.';
+      fe.textContent = 'Something went wrong sending your request. Please check your connection and try again, or email us at info@tecwebstudio.com.';
       fe.classList.add('visible');
     }
   });
