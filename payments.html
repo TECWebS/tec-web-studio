@@ -4,7 +4,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment</title>
+  <title>TEC Web Studio Payment</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -505,14 +505,19 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script>
   var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
-  // IMPORTANT: Replace the URL below with your actual Vercel deployment URL
-  var VERCEL_FN = 'https://tec-api.vercel.app/api/create-order';
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+  // Your Cloudflare Worker. It prices the order itself from the choices below
+  // (so the amount can't be edited in the browser), and only records the
+  // order and sends the receipt after Stripe confirms the payment.
+  var API = 'https://api.tecwebstudio.com';
+  var INTENT_FN = API + '/checkout/order-intent';
+  var COMPLETE_FN = API + '/checkout/order-complete';
 
   /* =====================================================
      PRICES & DESCRIPTIONS — edit everything here.
-     The cards, summary, totals, and payment amount all
-     read from these three objects.
+     The cards, summary and totals on this page read from these
+     three objects. IMPORTANT: if you change a price, change it in
+     checkout.js on the Worker too (ORDER_PACKAGES / ORDER_PRIORITY /
+     ORDER_CARE). The Worker's prices are what's actually charged.
      ===================================================== */
   var PACKAGES = {
     quickstart: {
@@ -688,22 +693,24 @@
     return c.name + (c.type === 'monthly' ? ' ($' + c.price + '/month)' : ' ($' + c.price + ' one-time)');
   }
 
-  function buildDescription() {
-    var parts = [];
-    if (state.pkg) parts.push(PACKAGES[state.pkg].name);
-    if (state.priority) parts.push(PRIORITY[state.priority].label);
-    if (state.care) {
-      var c = CARE[state.care];
-      parts.push(c.name + (c.type === 'monthly' ? ' ($' + c.price + '/mo recurring)' : ' (one-time)'));
-    }
-    if (state.mgmt) parts.push(MGMT_LABELS[state.mgmt]);
-    return parts.join(' + ') || 'TEC Web Studio Services';
+  // Everything the Worker needs to price and record the order. Only choices
+  // and contact details go over — never a dollar amount.
+  function orderDetails() {
+    return {
+      pkg: state.pkg, mgmt: state.mgmt, domain: state.domain, acct: state.acct,
+      priority: state.priority || '', care: state.care || '',
+      existingDomain:     state.domain === 'have' ? val('domain-existing') : '',
+      domainBusinessName: state.domain === 'help' ? val('domain-business') : '',
+      preferredDomain:    state.domain === 'help' ? val('domain-preferred') : '',
+      accountEmail:       state.acct === 'help' ? val('acct-email') : '',
+      fullName: val('customer-name'), businessName: val('customer-business'),
+      email: val('customer-email'), phone: val('customer-phone')
+    };
   }
 
-  function orderSignature() {
-    var t = computeTotals();
-    return JSON.stringify([t.one, t.rec, buildDescription()]);
-  }
+  // The details are saved on the payment when the form loads, so if anything
+  // changes afterwards the payment form is rebuilt with the new details.
+  function orderSignature() { return JSON.stringify(orderDetails()); }
 
   /* ===================== SUMMARY ===================== */
   function row(label, valueHtml, muted) {
@@ -787,85 +794,42 @@
     document.getElementById('review-pay-btn').style.display = (ready && stripeState === 'idle') ? 'flex' : 'none';
   }
 
-  /* ===================== ORDER PAYLOAD ===================== */
-  function buildOrderPayload() {
-    var t = computeTotals();
-    var addOns = [];
-    if (state.priority) addOns.push(PRIORITY[state.priority].label);
-    if (state.care) addOns.push(careLabel());
-    return {
-      formType:         'Order Details',
-      fullName:         val('customer-name'),
-      businessName:     val('customer-business'),
-      email:            val('customer-email'),
-      phone:            val('customer-phone'),
-      package:          state.pkg ? PACKAGES[state.pkg].name : 'Not selected',
-      websiteType:      state.mgmt ? MGMT_LABELS[state.mgmt] : 'Not selected',
-      hostingPlatform:  state.mgmt ? MGMT_LABELS[state.mgmt] : 'Not selected',
-      domainOption:     state.domain ? DOMAIN_LABELS[state.domain] : 'Not selected',
-      existingDomain:   state.domain === 'have' ? val('domain-existing') : '',
-      domainBusinessName: state.domain === 'help' ? val('domain-business') : '',
-      preferredDomain:  state.domain === 'help' ? val('domain-preferred') : '',
-      accountSetup:     state.acct === 'self' ? 'Customer sets up own account' : state.acct === 'help' ? 'TEC Web Studio will help set up' : 'Not selected',
-      setupHelp:        state.acct === 'help' ? 'Yes — needs help' : state.acct === 'self' ? 'No — self-managed' : 'Not answered',
-      accountEmail:     state.acct === 'help' ? val('acct-email') : '',
-      priorityDelivery: state.priority ? PRIORITY[state.priority].label + ' (+$' + PRIORITY[state.priority].price + ')' : 'None',
-      carePlan:         state.care ? careLabel() : 'None',
-      addOns:           addOns.length ? addOns.join(', ') : 'None',
-      orderTotal:       '$' + t.one.toFixed(2),
-      recurringTotal:   t.rec ? '$' + t.rec.toFixed(2) + '/month' : 'None'
-    };
-  }
-
+  /* ===================== AFTER PAYMENT ===================== */
+  // Only used to greet them by name after a redirect-based payment. The
+  // Worker reads the real order details from the payment in Stripe.
   function saveOrderState() {
-    try { sessionStorage.setItem('tec_order', JSON.stringify(buildOrderPayload())); } catch (e) {}
+    try { sessionStorage.setItem('tec_order', JSON.stringify({ fullName: val('customer-name'), email: val('customer-email') })); } catch (e) {}
   }
 
-  function submitOrder(name, email) {
-    var saved = null;
-    try { saved = JSON.parse(sessionStorage.getItem('tec_order') || 'null'); } catch (e) {}
-    // Saved state wins (it survives redirect-based payments); fall back to the live page
-    var payload = saved || buildOrderPayload();
-    if (name)  payload.fullName = name;
-    if (email) payload.email = email;
-    payload.fullName = payload.fullName || 'Not provided';
-    payload.email = payload.email || 'Not provided';
+  // Asks the Worker to confirm the payment with Stripe, record the order, and
+  // send the receipt. Retries a few times in case of a brief connection blip.
+  function fulfillOrder(paymentIntentId, name, email) {
     try { sessionStorage.removeItem('tec_order'); } catch (e) {}
-
-    console.log('Submitting order to Apps Script:', payload);
-
-    function attemptSubmit(attemptsLeft) {
-      var formData = new FormData();
-      Object.keys(payload).forEach(function(key) { formData.append(key, payload[key]); });
-      fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData })
-        .then(function() {
-          console.log('Order logged successfully.');
-          if (payload.email !== 'Not provided') sendReceiptEmail(payload);
-        })
-        .catch(function(err) {
-          console.warn('Order submit failed, attempts left: ' + attemptsLeft, err);
-          if (attemptsLeft > 1) {
-            setTimeout(function() { attemptSubmit(attemptsLeft - 1); }, 2000);
-          } else if (payload.email !== 'Not provided') {
-            sendReceiptEmail(payload);
-          }
-        });
+    showProcessing();
+    function attempt(triesLeft) {
+      fetch(COMPLETE_FN, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentIntentId: paymentIntentId })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data && data.ok) showSuccess(name);
+        else if (triesLeft > 1) setTimeout(function() { attempt(triesLeft - 1); }, 2500);
+        else showPaidButPending(email);
+      })
+      .catch(function() {
+        if (triesLeft > 1) setTimeout(function() { attempt(triesLeft - 1); }, 2500);
+        else showPaidButPending(email);
+      });
     }
-    attemptSubmit(3);
+    attempt(3);
   }
 
-  function sendReceiptEmail(p) {
-    var formData = new FormData();
-    formData.append('formType',   'Receipt');
-    formData.append('fullName',   p.fullName);
-    formData.append('email',      p.email);
-    formData.append('package',    p.package);
-    formData.append('orderTotal', p.orderTotal);
-    formData.append('addOns',     p.addOns);
-    formData.append('hosting',    p.hostingPlatform);
-    fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData })
-      .then(function() { console.log('Receipt email triggered for ' + p.email); })
-      .catch(function(err) { console.warn('Receipt email failed:', err); });
+  function showProcessing() {
+    document.querySelector('.payment-section').innerHTML =
+      '<div style="text-align:center;padding:32px 24px;">' +
+      '<svg class="ico" style="width:40px;height:40px;color:#6AABB0;animation:spin 1.2s linear infinite;" aria-hidden="true"><use href="#i-loader"/></svg>' +
+      '<p style="margin-top:14px;font-size:14px;color:#557070;">Payment received — finishing up your order...</p></div>';
   }
 
   /* ===================== SUCCESS ===================== */
@@ -874,7 +838,16 @@
       '<div style="text-align:center;padding:32px 24px;">' +
       '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
       '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
-      '<p style="font-size:14px;color:#557070;line-height:1.6;">Thank you' + (name ? ', ' + esc(name) : '') + '! We\'ll be in touch shortly to get started on your project.</p>' +
+      '<p style="font-size:14px;color:#557070;line-height:1.6;">Thank you' + (name ? ', ' + esc(name) : '') + '! Your receipt is on its way by email, and we\'ll be in touch shortly to get started on your project.</p>' +
+      '</div>';
+  }
+
+  function showPaidButPending(email) {
+    document.querySelector('.payment-section').innerHTML =
+      '<div style="text-align:center;padding:32px 24px;">' +
+      '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
+      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
+      '<p style="font-size:14px;color:#557070;line-height:1.6;">Your payment went through. We\'re finishing up your order — if you don\'t get a receipt' + (email ? ' at <strong>' + esc(email) + '</strong>' : '') + ' within a little while, just <a href="contact.html">contact us</a> and we\'ll sort it out right away.</p>' +
       '</div>';
   }
 
@@ -910,26 +883,14 @@
 
   function _initStripe() {
     var t = computeTotals();
-    var amountCents = Math.round(t.one * 100);
     var mySig = orderSignature();
     var token = ++initToken;
     stripeState = 'loading';
-    var care = state.care ? CARE[state.care] : null;
 
-    fetch(VERCEL_FN, {
+    fetch(INTENT_FN, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: amountCents,
-        description: buildDescription(),
-        currency: 'usd',
-        customerName:  val('customer-name'),
-        customerEmail: val('customer-email'),
-        businessName:  val('customer-business'),
-        recurringPlan:     (care && care.type === 'monthly') ? care.name : null,
-        recurringAmount:   t.rec ? t.rec * 100 : 0,
-        recurringInterval: t.rec ? 'month' : null
-      })
+      body: JSON.stringify(orderDetails())
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -968,8 +929,7 @@
           if (result.error) {
             document.getElementById('payment-message').textContent = result.error.message;
           } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-            submitOrder(eName, eEmail);
-            showSuccess(eName);
+            fulfillOrder(result.paymentIntent.id, eName, eEmail);
           }
         });
       });
@@ -1030,8 +990,7 @@
         if (result.error) {
           document.getElementById('payment-message').textContent = result.error.message;
         } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-          submitOrder(customerName, customerEmail);
-          showSuccess(customerName);
+          fulfillOrder(result.paymentIntent.id, customerName, customerEmail);
         }
       });
     });
@@ -1047,9 +1006,8 @@
       if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
         var saved = null;
         try { saved = JSON.parse(sessionStorage.getItem('tec_order') || 'null'); } catch (e) {}
-        // Only log the order once: saved state is cleared after the first submit
-        if (saved) submitOrder('', '');
-        showSuccess(saved ? saved.fullName : '');
+        // Safe to call even if it already ran: the Worker only applies each payment once.
+        fulfillOrder(result.paymentIntent.id, saved ? saved.fullName : '', saved ? saved.email : '');
       } else {
         document.getElementById('payment-message').textContent = 'Payment was not completed. Please try again.';
       }
