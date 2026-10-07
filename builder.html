@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TEC Web Studio Builder</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
   :root{
@@ -307,6 +307,7 @@
     <button type="button" data-admintab="orders" role="tab" aria-selected="false">Orders</button>
     <button type="button" data-admintab="reviews" role="tab" aria-selected="false">Reviews</button>
     <button type="button" data-admintab="subs" role="tab" aria-selected="false">Subscriptions</button>
+    <button type="button" data-admintab="discounts" role="tab" aria-selected="false">Discounts</button>
   </div>
 
   <div id="adminTabStarter">
@@ -399,6 +400,35 @@
     </div>
   </div>
 
+  <div id="adminTabDiscounts" hidden>
+    <h2>Discounts</h2>
+    <div class="admin-card">
+      <div class="lab" style="margin-bottom:6px;">Create an outreach code</div>
+      <p class="sub" style="margin-bottom:14px;">For a business you contacted that wrote back: a one-time code for <strong>40% off Complete Brand + Website</strong> ($799 to $479.40). It only works with their email address and expires in 30 days. Reminders go out automatically a week before and on the last day, unless they use it or unsubscribe.</p>
+      <form id="outreachForm" novalidate>
+        <div class="field-row">
+          <div class="field"><label class="lab" for="orBiz">Business name</label><input type="text" id="orBiz" maxlength="120"></div>
+          <div class="field"><label class="lab" for="orName">Contact's name</label><input type="text" id="orName" maxlength="80" placeholder="First name is enough"></div>
+        </div>
+        <div class="field"><label class="lab" for="orEmail">Their email</label><input type="email" id="orEmail" maxlength="200"></div>
+        <div class="field"><label class="lab" for="orNote">Personal note (optional)</label><textarea id="orNote" rows="3" maxlength="1000" placeholder="Shows near the top of the email, e.g. something you liked about their business."></textarea></div>
+        <div class="row-actions"><button type="submit" class="btn-primary">Preview email</button></div>
+      </form>
+      <p class="msg" id="orMsg" role="status" aria-live="polite"></p>
+    </div>
+    <div class="admin-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="discCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="discRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Code</th><th>Offer</th><th>When</th><th>Status</th><th>Used</th><th></th></tr></thead>
+        <tbody id="discRows"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="discMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
   <div id="adminTabSubs" hidden>
     <h2>Website Care Subscriptions</h2>
     <div class="admin-card">
@@ -416,6 +446,19 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="orPreviewModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="orPreviewTitle" style="max-width:720px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
+      <h2 id="orPreviewTitle" style="font-size:20px;">Preview</h2>
+      <button type="button" class="btn-ghost btn-sm" id="orPreviewClose">Back to edit</button>
+    </div>
+    <p class="sub" id="orPreviewMeta" style="margin-bottom:10px;"></p>
+    <iframe id="orPreviewFrame" title="Email preview" sandbox="" style="width:100%;height:520px;border:1px solid var(--line);border-radius:10px;"></iframe>
+    <p class="hint" style="margin:8px 0 12px;">The real email gets its own code (shown here as TEC-XXXXXX).</p>
+    <button type="button" class="btn-primary" id="orSendBtn" style="width:100%;">Send to this business</button>
+    <p class="msg" id="orSendMsg" role="status" aria-live="polite"></p>
+  </div>
+</div>
 <div class="modal-backdrop" id="infoModal">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle" style="max-width:640px;">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
@@ -459,7 +502,6 @@
     <div id="auditModalAnswers" style="font-size:13px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px;max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:12px 14px;"></div>
     <div class="field"><label class="lab" for="auditPackage">Package to recommend</label>
       <select id="auditPackage">
-        <option value="Website Makeover">Website Makeover — $399</option>
         <option value="Quick Start">Quick Start — $299</option>
         <option value="Business Website">Business Website — $599</option>
         <option value="Complete Brand + Website">Complete Brand + Website — $799</option>
@@ -916,11 +958,13 @@
     $("#adminTabOrders").hidden = t !== "orders";
     $("#adminTabReviews").hidden = t !== "reviews";
     $("#adminTabSubs").hidden = t !== "subs";
+    $("#adminTabDiscounts").hidden = t !== "discounts";
     if (t === "audits" && !auditsLoadedOnce) loadAudits();
     if (t === "requests" && !reqLoadedOnce) loadRequests();
     if (t === "orders" && !ordersLoadedOnce) loadOrders("");
     if (t === "reviews" && !revLoadedOnce) loadReviews();
     if (t === "subs" && !subsLoadedOnce) loadSubs();
+    if (t === "discounts" && !discLoadedOnce) loadDiscounts();
   }
   document.querySelectorAll('.seg[role="tablist"] button[data-admintab]').forEach(function (b) { b.addEventListener("click", function () { showAdminTab(b.dataset.admintab); }); });
 
@@ -1466,7 +1510,7 @@
     openInfo((o.businessName || o.fullName || o.email) + " — " + o.package, [["Name", o.fullName], ["Business", o.businessName], ["Email", o.email], ["Phone", o.phone], ["Date", fmtDateTime(o.timestamp)],
       ["Package", o.package], ["Website type", o.hostingPlatform], ["Domain", o.domainOption], ["Account setup", o.accountSetup], ["Account email", o.accountEmail],
       ["Priority delivery", o.priorityDelivery && o.priorityDelivery !== "None" ? o.priorityDelivery : ""], ["Care plan", o.carePlan && o.carePlan !== "None" ? o.carePlan : ""],
-      ["Add-ons", o.addOns && o.addOns !== "None" ? o.addOns : ""], ["Paid", o.orderTotal], ["Monthly", o.recurringTotal && o.recurringTotal !== "None" ? o.recurringTotal : ""]], o.email, "Your TEC Web Studio order");
+      ["Add-ons", o.addOns && o.addOns !== "None" ? o.addOns : ""], ["Discount code", o.discountCode ? o.discountCode + (o.discountTotal ? " (" + o.discountTotal + ")" : "") : ""], ["Paid", o.orderTotal], ["Monthly", o.recurringTotal && o.recurringTotal !== "None" ? o.recurringTotal : ""]], o.email, "Your TEC Web Studio order");
   });
 
   /* ---- reviews ---- */
@@ -1499,6 +1543,67 @@
       r.approved = next; renderReviews();
       say("#revMsg", next ? "Now showing on your homepage." : "Hidden from your homepage.", true);
     }).catch(function (err) { say("#revMsg", friendlyError(err), false); b.disabled = false; });
+  });
+
+  /* ---- Discounts + outreach codes ---- */
+  var discLoadedOnce = false, discData = [];
+  var DISC_STATUS = { active: ["live", "On now"], scheduled: ["draft", "Scheduled"], paused: ["off", "Paused"], sent: ["review", "Sent"], used: ["live", "Used"], expired: ["", "Expired"], unsubscribed: ["off", "Unsubscribed"] };
+  function loadDiscounts() {
+    say("#discMsg", "Loading…", true);
+    api("GET", "/admin/discounts").then(function (j) { discLoadedOnce = true; discData = j.results || []; say("#discMsg", ""); renderDiscounts(); })
+      .catch(function (err) { say("#discMsg", friendlyError(err), false); });
+  }
+  function renderDiscounts() {
+    var promos = discData.filter(function (d) { return d.kind !== "outreach"; }), out = discData.filter(function (d) { return d.kind === "outreach"; });
+    var on = promos.filter(function (d) { return d.status === "active"; }).map(function (d) { return d.code; });
+    $("#discCount").textContent = promos.length + " promotions" + (on.length ? " · on now: " + on.join(", ") : " · none running today") + " · " + out.length + " outreach code" + (out.length === 1 ? "" : "s");
+    function rowHtml(d, i) {
+      var st = DISC_STATUS[d.status] || ["", d.status];
+      var offer = d.kind === "twoforone" ? "2-for-1" : d.percentOff + "% off";
+      offer += "<br><span style=\"color:var(--ink-soft);font-size:12px;\">" + esc(d.appliesTo) + (d.emailRule === "edu" ? " · .edu emails only" : "") + "</span>";
+      var codeCell = '<strong style="font-family:monospace;letter-spacing:1px;">' + esc(d.code) + "</strong>" +
+        (d.kind === "outreach" ? "<br>" + esc(d.businessName || "") + "<br><span style=\"color:var(--ink-soft);font-size:12px;\">" + esc(d.allowedEmail || "") + "</span>" : "<br><span style=\"color:var(--ink-soft);font-size:12px;\">" + esc(d.label) + "</span>");
+      var reminders = d.kind === "outreach" && d.status === "sent" ? "<br><span style=\"color:var(--ink-soft);font-size:12px;\">Reminders: " + (d.reminded7d ? "week ✓" : "week") + " · " + (d.reminded24h ? "last day ✓" : "last day") + "</span>" : "";
+      var act = d.kind === "outreach" ? "" : '<button type="button" class="btn-ghost btn-sm" data-disc-pause="' + i + '">' + (d.status === "paused" ? "Resume" : "Pause") + "</button>";
+      return "<tr><td>" + codeCell + "</td><td>" + offer + "</td><td>" + esc(d.when) + '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + reminders + "</td><td>" + d.uses + "</td><td>" + act + "</td></tr>";
+    }
+    $("#discRows").innerHTML = discData.length ? discData.map(rowHtml).join("") : '<tr><td colspan="6">No codes yet.</td></tr>';
+  }
+  $("#discRefresh").addEventListener("click", loadDiscounts);
+  $("#discRows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-disc-pause]"); if (!b) return;
+    var d = discData[+b.dataset.discPause], pausing = d.status !== "paused";
+    if (pausing && !confirm("Pause " + d.code + "? It stops working right away, even during its dates, until you resume it.")) return;
+    b.disabled = true;
+    api("POST", "/admin/discounts/pause", { code: d.code, paused: pausing }).then(function () { say("#discMsg", d.code + (pausing ? " paused." : " resumed."), true); loadDiscounts(); })
+      .catch(function (err) { say("#discMsg", friendlyError(err), false); b.disabled = false; });
+  });
+  function outreachInput() { return { businessName: $("#orBiz").value.trim(), contactName: $("#orName").value.trim(), email: $("#orEmail").value.trim(), note: $("#orNote").value.trim() }; }
+  $("#outreachForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var i = outreachInput();
+    if (!i.businessName) { say("#orMsg", "Enter the business name.", false); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.email)) { say("#orMsg", "Enter a valid email address.", false); return; }
+    say("#orMsg", "Building preview…", true);
+    api("POST", "/admin/outreach/preview", i).then(function (j) {
+      say("#orMsg", "");
+      $("#orPreviewMeta").textContent = "To: " + i.email + "  ·  Subject: " + j.subject;
+      $("#orPreviewFrame").srcdoc = j.html;
+      say("#orSendMsg", j.mailingAddressSet ? "" : "Add your mailing address (PO box) to wrangler.jsonc and deploy before you can send. Sales emails must include one.", !!j.mailingAddressSet);
+      $("#orSendBtn").disabled = !j.mailingAddressSet;
+      $("#orPreviewModal").classList.add("open");
+    }).catch(function (err) { say("#orMsg", friendlyError(err), false); });
+  });
+  $("#orPreviewClose").addEventListener("click", function () { $("#orPreviewModal").classList.remove("open"); });
+  $("#orSendBtn").addEventListener("click", function () {
+    var i = outreachInput(), btn = this;
+    btn.disabled = true; say("#orSendMsg", "Sending…", true);
+    api("POST", "/admin/outreach/send", i).then(function (j) {
+      $("#orPreviewModal").classList.remove("open");
+      $("#outreachForm").reset();
+      say("#orMsg", "Sent to " + i.email + " with code " + j.code + ". It expires " + fmtDate(j.expiresAt) + ".", true);
+      loadDiscounts();
+    }).catch(function (err) { say("#orSendMsg", friendlyError(err), false); }).then(function () { btn.disabled = false; });
   });
 
   /* ---- Website Care subscriptions ---- */
