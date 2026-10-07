@@ -118,41 +118,12 @@
 }
 
 
-/* ── MAKEOVER ────────────────────────────────────── */
-.makeover-card {
-  margin-top: 44px;
-  background: var(--cream);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 36px;
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 48px;
-  align-items: center;
-}
-.makeover-card h3 {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 400;
-  color: var(--teal-deep);
-  margin-bottom: 4px;
-}
-.makeover-price { font-family: var(--serif); font-size: 40px; color: var(--ink); line-height: 1.1; margin-bottom: 12px; }
-.makeover-card > div:first-child p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 22px; }
-.makeover-card .checks { columns: 2; column-gap: 24px; }
-.makeover-card .checks li { break-inside: avoid; }
-
-
 /* ── SERVICES RESPONSIVE ─────────────────────────── */
 @media (max-width: 900px) {
   .pkg-grid { grid-template-columns: 1fr; gap: 32px; }
   .pkg-grid .pkg-card { display: flex; flex-direction: column; grid-row: auto; grid-template-rows: none; }
   .pkg-card .feat.no, .pkg-card .feat-head.g-empty { display: none; }
   .pkg-card .btn-primary { align-self: stretch; }
-  .makeover-card { grid-template-columns: 1fr; gap: 28px; padding: 28px 22px; }
-}
-@media (max-width: 640px) {
-  .makeover-card .checks { columns: 1; }
 }
 
 /* ── SITE STARTER CALLOUT ────────────────────────── */
@@ -361,34 +332,6 @@
 
   </div>
 </section>
-
-<!-- ── WEBSITE MAKEOVER ─────────────────────────────── -->
-<div class="bg-white" id="makeover">
-  <div class="section">
-    <div class="section-head-center">
-      <h2 class="section-title">Already Have a Website?</h2>
-      <p class="section-sub">Give your existing website a fresh start without rebuilding everything from scratch.</p>
-    </div>
-    <div class="makeover-card">
-      <div>
-        <div class="icon-tile"><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg></div>
-        <h3>Website Makeover</h3>
-        <div class="makeover-price">$399</div>
-        <p>Perfect for businesses with an existing website that needs some attention.</p>
-        <a href="contact.html?package=makeover" class="btn-primary btn-arrow">Refresh My Website <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </div>
-      <ul class="checks">
-        <li>Fix layout issues</li>
-        <li>Fix minor bugs</li>
-        <li>Improve mobile experience</li>
-        <li>Refresh the existing design</li>
-        <li>Improve UI/UX</li>
-        <li>Improve branding consistency</li>
-        <li>Improve calls-to-action</li>
-      </ul>
-    </div>
-  </div>
-</div>
 
 <!-- ── CTA ──────────────────────────────────────────── -->
 <div class="cta-section">
