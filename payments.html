@@ -170,6 +170,19 @@
     .summary-total .amount { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--dark); line-height: 1.1; }
     .summary-total .recurring { display: none; font-size: 15px; font-weight: 700; color: var(--teal-dark); margin-top: 2px; }
 
+    /* ---------- Discount code ---------- */
+    .code-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .code-row input { flex: 1; min-width: 180px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--dark); }
+    .code-row input:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 0 3px rgba(106,171,176,0.2); }
+    .code-btn { padding: 10px 20px; border-radius: 8px; border: 2px solid var(--teal); background: var(--white); color: var(--teal-dark); font-weight: 700; font-size: 13px; cursor: pointer; }
+    .code-btn:hover { background: var(--teal); color: var(--white); }
+    .code-btn.remove { border-color: var(--border); color: var(--muted); }
+    .code-msg { font-size: 13px; margin-top: 8px; min-height: 1.2em; line-height: 1.5; }
+    .code-msg.ok { color: #2f6b4f; font-weight: 600; }
+    .code-msg.err { color: #c0392b; }
+    #colleague-field { margin-top: 12px; }
+    .sl-value.discount { color: #2f6b4f; font-weight: 600; }
+
     /* ---------- Payment ---------- */
     .payment-section { background: var(--white); border: 2px solid var(--border); border-radius: 16px; padding: 28px 24px; }
     .payment-title { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 8px; }
@@ -467,6 +480,19 @@
         <div id="summary-lines"></div>
       </div>
 
+      <div class="summary-block">
+        <div class="summary-block-title">Have a Code?</div>
+        <div class="code-row">
+          <input type="text" id="discount-code" placeholder="Enter a discount code" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Discount code">
+          <button type="button" class="code-btn" id="code-apply" onclick="applyCode()">Apply</button>
+        </div>
+        <div class="field" id="colleague-field" hidden>
+          <label for="colleague-email">Second teacher's email</label>
+          <input type="email" id="colleague-email" autocomplete="off" placeholder="colleague@school.org">
+        </div>
+        <div class="code-msg" id="code-msg" role="status" aria-live="polite"></div>
+      </div>
+
       <div class="summary-total">
         <div class="label">Order Total</div>
         <div class="amounts">
@@ -579,6 +605,9 @@
 
   /* ===================== STATE ===================== */
   var state = { pkg: null, mgmt: null, domain: null, acct: null, priority: null, care: null };
+  // The discount the Worker confirmed (null = none). The Worker re-checks it at checkout.
+  var discount = null, discountSig = '', codeTimer = null, codePending = false, lastCheckedSig = '';
+  function money(n) { return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : String(Math.round(n))); }
   var elements = null, paymentElement = null, expressElement = null;
   var clientSecret = null;
   var stripeState = 'idle';   // idle | loading | ready
@@ -684,6 +713,7 @@
       var c = CARE[state.care];
       if (c.type === 'monthly') rec = c.price; else one += c.price;
     }
+    if (discount) one = Math.max(0, one - discount.discountCents / 100);
     return { one: one, rec: rec };
   }
 
@@ -704,7 +734,9 @@
       preferredDomain:    state.domain === 'help' ? val('domain-preferred') : '',
       accountEmail:       state.acct === 'help' ? val('acct-email') : '',
       fullName: val('customer-name'), businessName: val('customer-business'),
-      email: val('customer-email'), phone: val('customer-phone')
+      email: val('customer-email'), phone: val('customer-phone'),
+      discountCode: discount ? discount.code : '',
+      colleagueEmail: discount && discount.kind === 'twoforone' ? val('colleague-email') : ''
     };
   }
 
@@ -741,8 +773,13 @@
       ? row('Website Care', careLabel().replace(' ($', ' — $').replace(')', ''))
       : row('Website Care', 'None', true);
 
+    if (discount) {
+      html += '<div class="summary-line"><span class="sl-label">Discount (' + esc(discount.code) + ')</span><span class="sl-value discount">' +
+        (discount.kind === 'twoforone' ? 'Second ' + esc(PACKAGES[state.pkg] ? PACKAGES[state.pkg].name : 'site') + ' free' : '−' + money(discount.discountCents / 100)) + '</span></div>';
+    }
+
     document.getElementById('summary-lines').innerHTML = html;
-    document.getElementById('total-display').textContent = '$' + t.one;
+    document.getElementById('total-display').textContent = money(t.one);
     var rd = document.getElementById('recurring-display');
     rd.style.display = t.rec ? 'block' : 'none';
     rd.textContent = t.rec ? '+ $' + t.rec + '/month once your site launches' : '';
@@ -759,8 +796,56 @@
       notice.style.display = 'none';
     }
 
+    maybeRecheckCode();
     updateReadiness();
   }
+
+  /* ===================== DISCOUNT CODE ===================== */
+  function codeMsg(text, kind) { var m = document.getElementById('code-msg'); m.textContent = text || ''; m.className = 'code-msg' + (kind ? ' ' + kind : ''); }
+  function codeInputs() { return [val('discount-code').toUpperCase(), state.pkg || '', val('customer-email').toLowerCase(), val('colleague-email').toLowerCase()].join('|'); }
+  function setApplyButton() {
+    var b = document.getElementById('code-apply');
+    if (discount) { b.textContent = 'Remove'; b.className = 'code-btn remove'; b.onclick = removeCode; }
+    else { b.textContent = 'Apply'; b.className = 'code-btn'; b.onclick = applyCode; }
+  }
+  function removeCode() {
+    discount = null; discountSig = ''; codePending = false; lastCheckedSig = '';
+    document.getElementById('discount-code').value = '';
+    document.getElementById('colleague-field').hidden = true;
+    codeMsg(''); setApplyButton(); updateSummary();
+  }
+  // Asks the Worker whether the code works for this package + email, and for how much.
+  function applyCode(silent) {
+    var code = val('discount-code').toUpperCase();
+    if (!code) { codeMsg('Enter a code first.', 'err'); return; }
+    if (!state.pkg) { codePending = true; codeMsg('Choose a website package above and your code will be applied.'); return; }
+    if (!validEmail(val('customer-email'))) { codePending = true; codeMsg('Enter your email address above and your code will be applied.'); return; }
+    var sig = codeInputs(); lastCheckedSig = sig;
+    fetch(API + '/checkout/code-kind?code=' + encodeURIComponent(code)).then(function (r) { return r.json(); }).then(function (k) {
+      var two = k && k.kind === 'twoforone';
+      document.getElementById('colleague-field').hidden = !two;
+      if (two && !validEmail(val('colleague-email'))) { codePending = true; discount = null; updateSummary(); codeMsg("Two-for-one! Enter the second teacher's email and it will be applied."); return null; }
+      return fetch(API + '/checkout/check-code', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code, pkg: state.pkg, email: val('customer-email'), colleagueEmail: val('colleague-email') }) }).then(function (r) { return r.json(); });
+    }).then(function (j) {
+      if (!j) return;
+      if (sig !== codeInputs()) return;   // something changed while checking; a newer check will follow
+      // Keep watching after a "no": if they switch package or fix their email, it re-checks.
+      codePending = !j.ok;
+      if (j.ok) { discount = j; discountSig = sig; codeMsg('Applied: ' + j.label + '.', 'ok'); }
+      else { discount = null; discountSig = ''; codeMsg(j.message || "That code couldn't be applied.", 'err'); }
+      setApplyButton(); updateSummary();
+    }).catch(function () { codeMsg("Couldn't check that code. Check your connection and try again.", 'err'); });
+  }
+  function maybeRecheckCode() {
+    var sig = codeInputs();
+    // Only when something relevant changed since the last check (no repeat checks).
+    if (val('discount-code') && sig !== lastCheckedSig && (discount || codePending)) {
+      clearTimeout(codeTimer); codeTimer = setTimeout(function () { applyCode(true); }, 600);
+    }
+  }
+  document.getElementById('discount-code').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); applyCode(); } });
+  document.getElementById('discount-code').addEventListener('input', function () { codePending = false; lastCheckedSig = ''; if (discount) { discount = null; discountSig = ''; codeMsg(''); setApplyButton(); updateSummary(); } });
 
   /* ===================== READINESS ===================== */
   function getMissing() {
@@ -895,11 +980,16 @@
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (token !== initToken) return;   // order changed while loading
-      if (!data.clientSecret) { console.error('No clientSecret:', data); failInit('Something went wrong loading the payment form. Please try again.'); return; }
+      if (!data.clientSecret) {
+        console.error('No clientSecret:', data);
+        if (data && data.message && discount) { discount = null; discountSig = ''; setApplyButton(); codeMsg(data.message, 'err'); updateSummary(); }
+        failInit(data && data.message ? data.message : 'Something went wrong loading the payment form. Please try again.');
+        return;
+      }
       clientSecret = data.clientSecret;
       stripeSig = mySig;
       stripeState = 'ready';
-      payLabel = 'Pay $' + t.one + ' Now';
+      payLabel = 'Pay ' + money(t.one) + ' Now';
 
       elements = stripe.elements({ clientSecret: clientSecret, appearance: {
         theme: 'stripe',
@@ -1018,6 +1108,8 @@
   // Supported: ?package=quickstart | business | complete
   function initFromURL() {
     var params = new URLSearchParams(window.location.search);
+    var urlCode = (params.get('code') || '').trim().toUpperCase().slice(0, 40);
+    if (urlCode) { document.getElementById('discount-code').value = urlCode; codePending = true; codeMsg('Your code ' + urlCode + ' will be applied once you enter your email address below.'); }
     var pkg = params.get('package');
     if (!pkg || !PACKAGES[pkg]) return;
     selectPackage(pkg);
