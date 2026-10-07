@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Student Portfolio — TEC Web Studio</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --forest: #1f3b2c; --forest-2: #2a4a38; --cream: #f5f0e8; --paper: #fffdf9; --gold: #c99a2e; --gold-lt: #e6c36a;
+  --ink: #233528; --muted: #5d6b60; --line: #e3dccd; --serif: Georgia, 'Times New Roman', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+a { color: #9a7420; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(201,154,46,.6); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.layout { display: grid; grid-template-columns: 290px 1fr; min-height: 100vh; }
+.side { background: var(--forest); color: #fff; padding: 46px 32px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
+.side .name { font-family: var(--serif); font-size: 25px; }
+.side .tag { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold-lt); margin-top: 6px; }
+.side nav { margin-top: 44px; display: flex; flex-direction: column; gap: 6px; }
+.side nav a { color: rgba(255,255,255,.88); text-decoration: none; padding: 10px 16px; border-radius: 8px; border-left: 2px solid transparent; }
+.side nav a:hover, .side nav a.on { background: var(--forest-2); color: var(--gold-lt); border-left-color: var(--gold); }
+.side .quote { margin-top: auto; border-top: 1px solid rgba(255,255,255,.15); padding-top: 22px; font-family: var(--serif); font-style: italic; font-size: 14px; color: rgba(255,255,255,.7); }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .side { position: static; height: auto; padding: 28px 24px; } .side nav { flex-direction: row; flex-wrap: wrap; margin-top: 18px; } .side .quote { display: none; } }
+
+main { padding: 64px clamp(24px, 6vw, 90px) 80px; max-width: 1000px; }
+.eyebrow { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(42px, 6vw, 72px); line-height: 1.08; color: var(--forest); margin: 16px 0 22px; }
+h1 em { font-style: italic; color: #2f6b4a; }
+.lead { font-size: 18px; color: var(--muted); max-width: 640px; }
+.price-tag { display: inline-flex; align-items: baseline; gap: 10px; margin: 28px 0 8px; background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 14px 22px; }
+.price-tag strong { font-family: var(--serif); font-size: 40px; color: var(--forest); line-height: 1; }
+.price-tag span { color: var(--muted); font-size: 14px; }
+section { margin-top: 70px; }
+h2 { font-family: var(--serif); font-weight: 400; font-size: 36px; color: var(--forest); margin: 8px 0 16px; }
+.rule { font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 22px; }
+
+.incl { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .incl { grid-template-columns: 1fr; } }
+.incl div { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.incl h3 { font-family: var(--serif); font-weight: 400; font-size: 20px; color: var(--forest); margin-bottom: 4px; }
+.incl p { font-size: 14px; color: var(--muted); }
+
+/* sample "work" card that expands, like a real portfolio */
+.work { background: var(--paper); border-radius: 16px; border-left: 4px solid var(--gold); box-shadow: 0 4px 22px rgba(30,50,40,.06); overflow: hidden; }
+.work-head { padding: 26px 30px; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.work-type { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.work h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; color: var(--forest); margin: 4px 0; }
+.work .sub { font-size: 14px; color: var(--muted); }
+.work blockquote { margin: 14px 0 0; padding-left: 18px; border-left: 2px solid #9cc5a8; font-style: italic; color: var(--muted); }
+.expand { flex-shrink: 0; background: var(--forest); color: #fff; border: 0; border-radius: 50px; padding: 9px 16px; font: 600 13px var(--sans); cursor: pointer; }
+.work-body { border-top: 1px solid #cfe5d6; padding: 26px 30px; font-family: var(--serif); font-size: 17px; color: #3b4a3f; line-height: 2; }
+.work-body p { margin-bottom: 16px; }
+
+.steps { counter-reset: s; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+.steps div { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; font-size: 14px; color: var(--muted); }
+.steps div::before { counter-increment: s; content: counter(s); display: inline-flex; width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #fff; font-weight: 700; align-items: center; justify-content: center; margin-bottom: 8px; }
+.steps strong { display: block; color: var(--ink); }
+
+.form-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 30px; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .fields { grid-template-columns: 1fr; } }
+.f { display: flex; flex-direction: column; gap: 5px; }
+.f.full { grid-column: 1 / -1; }
+.f label, .grp { font-size: 13px; font-weight: 600; }
+.req { color: #b0452e; }
+.f input, .f textarea, .f select { width: 100%; padding: 11px 13px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; font-size: 14px; background: #fff; color: var(--ink); }
+.f input:focus, .f textarea:focus, .f select:focus { border-color: var(--forest); outline: none; box-shadow: 0 0 0 3px rgba(31,59,44,.12); }
+.f textarea { min-height: 86px; resize: vertical; }
+.hint { font-size: 12px; color: var(--muted); }
+.hint.bad { color: #b0452e; } .hint.good { color: #2f6b4a; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.checks label { display: flex; gap: 7px; align-items: center; font-weight: 400; font-size: 14px; background: #fff; border: 1.5px solid var(--line); border-radius: 50px; padding: 7px 14px; cursor: pointer; }
+.checks input { accent-color: var(--forest); }
+.host-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
+@media (max-width: 640px) { .host-grid { grid-template-columns: 1fr; } }
+.host-card { text-align: left; font: inherit; color: inherit; background: #fff; border: 2px solid var(--line); border-radius: 12px; padding: 14px 16px; cursor: pointer; }
+.host-card[aria-pressed="true"] { border-color: var(--forest); background: #f1f6f2; }
+.host-card h4 { font-family: var(--serif); font-weight: 400; font-size: 17px; }
+.host-card b { color: #9a7420; font-size: 14px; }
+.host-card p { font-size: 13px; color: var(--muted); }
+.host-card code { font-size: 12.5px; }
+.addr { display: flex; gap: 6px; align-items: center; } .addr input { flex: 1; } .addr span { font-family: 'Courier New', monospace; font-size: 13px; color: var(--muted); }
+.total { display: flex; justify-content: space-between; align-items: center; background: #efe8da; border-radius: 12px; padding: 14px 18px; margin: 22px 0 8px; }
+.total strong { font-family: var(--serif); font-size: 28px; color: var(--forest); }
+.fine { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+.missing { background: #faf3e6; border: 1px solid #ecdcb8; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.missing ul { margin: 4px 0 0 18px; }
+.send { width: 100%; background: var(--forest); color: #fff; border: 0; border-radius: 50px; padding: 16px; font: 700 16px var(--sans); cursor: pointer; }
+.send:disabled { opacity: .5; cursor: not-allowed; }
+.msg { color: #b0452e; text-align: center; font-size: 13.5px; margin-top: 10px; min-height: 1.2em; }
+.done { display: none; text-align: center; padding: 30px 10px; }
+.done.show { display: block; }
+.done h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; color: var(--forest); margin: 8px 0; }
+.done p { color: var(--muted); }
+.honey { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="side">
+    <div class="name">Your Name Here</div>
+    <div class="tag">Student · Creator · Future Pro</div>
+    <nav aria-label="On this page">
+      <a href="#top" class="on">About</a>
+      <a href="#included">What's included</a>
+      <a href="#sample">Sample work</a>
+      <a href="#request">Request yours</a>
+    </nav>
+    <p class="quote">"Your work deserves a home as good as the work itself."</p>
+  </aside>
+
+  <main id="top">
+    <p class="eyebrow">Student Portfolio · TEC Web Studio</p>
+    <h1>Your work,<br><em>beautifully shown.</em></h1>
+    <p class="lead">A professional portfolio website for current students, built for you instead of by you, so you can spend your time on your classes and your craft. Perfect for internships, jobs, grad school and getting your work seen.</p>
+    <div class="price-tag"><strong>$190</strong><span>for current students · school email required</span></div>
+
+    <section id="included">
+      <p class="rule">What's included</p>
+      <h2>Everything you need, nothing you don't</h2>
+      <div class="incl">
+        <div><h3>Up to 4 pages</h3><p>Usually About, Work, Experience and Contact, but you choose what fits your field.</p></div>
+        <div><h3>Full work samples</h3><p>Each piece gets its own card with a short preview, and visitors can open the full sample right on the page.</p></div>
+        <div><h3>Experience &amp; highlights</h3><p>Conferences, awards, publications, projects and your resume, organized so recruiters find them fast.</p></div>
+        <div><h3>A contact page</h3><p>Let professors, employers and collaborators reach you directly.</p></div>
+        <div><h3>2 rounds of revisions</h3><p>We'll adjust the look and wording twice, so it feels exactly like you.</p></div>
+        <div><h3>A year of hosting</h3><p>Free on a TEC Web Studio address, or choose your own name-dot-com for 3 years.</p></div>
+      </div>
+    </section>
+
+    <section id="sample">
+      <p class="rule">Sample work card</p>
+      <h2>Show the work, not just the title</h2>
+      <article class="work">
+        <div class="work-head">
+          <div>
+            <p class="work-type">Short Story · Fiction</p>
+            <h3>The Last Bus Home</h3>
+            <p class="sub">Sample piece (made up, to show how it works)</p>
+            <blockquote>A night-shift nurse, a stranded music student, and one snowy ride across town that changes how they both see the city.</blockquote>
+          </div>
+          <button type="button" class="expand" id="expandBtn" aria-expanded="false" aria-controls="workBody">Read full sample</button>
+        </div>
+        <div class="work-body" id="workBody" hidden>
+          <p>The 11:40 was always late on snow nights, and Nadia had stopped pretending to mind. She liked the hush of the shelter, the way the streetlights turned every flake into something worth noticing.</p>
+          <p>The boy with the cello case arrived at 11:52, breathless, sure he'd missed it. "You didn't," she told him, before he could ask. "Nobody ever really misses the last one. It waits for us."</p>
+          <p>It's a small thing, a bus that runs late. But that night, it was the reason two strangers ended up talking about everything they'd been too tired to say out loud all year.</p>
+        </div>
+      </article>
+      <p class="hint" style="margin-top:10px;">Writers can share stories and poems, designers and artists can show galleries, and coders can link live projects. Every portfolio is shaped around your field.</p>
+    </section>
+
+    <section>
+      <p class="rule">How it works</p>
+      <h2>Four easy steps</h2>
+      <div class="steps">
+        <div><strong>Send a request</strong>Use your school email and tell us about your work. Nothing is charged yet.</div>
+        <div><strong>See your sample</strong>We build a first version of your portfolio for you to look over.</div>
+        <div><strong>Make it yours</strong>Two rounds of revisions to get the look and words just right.</div>
+        <div><strong>Approve and pay</strong>Once you love it, you get a private link to pay $190 and we publish it.</div>
+      </div>
+    </section>
+
+    <section id="request">
+      <p class="rule">Request yours</p>
+      <h2>Tell us about your work</h2>
+      <div class="form-card">
+        <div class="done" id="doneBox" role="status" tabindex="-1">
+          <div style="font-size:44px" aria-hidden="true">🎓</div>
+          <h3>Request received!</h3>
+          <p>Thank you! We'll be in touch at your school email to start your sample. Nothing is charged until you approve it.</p>
+        </div>
+        <form id="pfForm" novalidate>
+          <div class="honey" aria-hidden="true"><label for="hp3">Leave this empty</label><input type="text" id="hp3" tabindex="-1" autocomplete="off"></div>
+          <div class="fields">
+            <div class="f"><label for="fName">Your name <span class="req">*</span></label><input id="fName" type="text" maxlength="120" autocomplete="name"></div>
+            <div class="f"><label for="fEmail">School email <span class="req">*</span></label><input id="fEmail" type="email" maxlength="200" autocomplete="email" placeholder="you@school.edu"><span class="hint" id="eduHint">Must end in .edu</span></div>
+            <div class="f"><label for="fSchool">School <span class="req">*</span></label><input id="fSchool" type="text" maxlength="160"></div>
+            <div class="f"><label for="fField">Major or field <span class="req">*</span></label><input id="fField" type="text" maxlength="160" placeholder="e.g. Creative Writing, Graphic Design"></div>
+            <div class="f"><label for="fType">Kind of portfolio</label><select id="fType"><option>Writing</option><option>Art &amp; design</option><option>Photography &amp; film</option><option>Coding &amp; tech</option><option>Music &amp; performance</option><option>Something else</option></select></div>
+            <div class="f"><label for="fNeeded">Need it by? (optional)</label><input id="fNeeded" type="text" maxlength="60" placeholder="e.g. before internship applications in March"></div>
+            <div class="f full"><span class="grp" id="pagesLab">Pages (up to 4)</span>
+              <div class="checks" role="group" aria-labelledby="pagesLab" id="pages">
+                <label><input type="checkbox" value="About" checked> About</label>
+                <label><input type="checkbox" value="Work" checked> Work / Projects</label>
+                <label><input type="checkbox" value="Experience"> Experience &amp; Resume</label>
+                <label><input type="checkbox" value="Contact" checked> Contact</label>
+                <label><input type="checkbox" value="Gallery"> Gallery</label>
+                <label><input type="checkbox" value="Blog"> Blog / Writing</label>
+              </div><span class="hint" id="pagesHint"></span>
+            </div>
+            <div class="f full"><label for="fSamples">What work would you like to feature? (optional)</label><textarea id="fSamples" maxlength="1500" placeholder="e.g. two short stories, a screenplay pilot, three poems"></textarea></div>
+            <div class="f full"><label for="fLinks">Links to anything you already have (optional)</label><input id="fLinks" type="text" maxlength="600" placeholder="LinkedIn, Instagram, GitHub, a Google Drive folder..."></div>
+            <div class="f full"><label for="fStyle">A look you love (optional)</label><input id="fStyle" type="text" maxlength="300" placeholder="e.g. clean and literary, bold and colorful"></div>
+            <div class="f full"><span class="grp" id="hostLab">Where it lives</span>
+              <div class="host-grid" role="group" aria-labelledby="hostLab">
+                <button type="button" class="host-card" data-host="subdomain" aria-pressed="true"><h4>Hosted by us · <b>Included</b></h4><p>Free for a year at an address like <code>jordan.tecwebstudio.com</code>.</p></button>
+                <button type="button" class="host-card" data-host="own" aria-pressed="false"><h4>Your own name · <b>+ $45</b></h4><p>Your own address like <code>jordanlee.com</code>, registered for 3 years.</p></button>
+              </div>
+            </div>
+            <div class="f full"><label for="fAddr">The address you'd like (optional)</label><div class="addr"><input id="fAddr" type="text" maxlength="60" placeholder="jordan" autocomplete="off"><span id="addrSuffix">.tecwebstudio.com</span></div></div>
+            <div class="f full"><label for="fNotes">Anything else? (optional)</label><textarea id="fNotes" maxlength="2000"></textarea></div>
+          </div>
+          <div class="total"><span>Total, once approved</span><strong id="total">$190</strong></div>
+          <p class="fine">Nothing is charged today. You'll pay through a private link after you approve your sample.</p>
+          <div class="missing" id="missing"></div>
+          <button type="submit" class="send" id="sendBtn">Send my request</button>
+          <div class="msg" id="msg" role="alert"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var API = 'https://api.tecwebstudio.com', PRICE = 190, ADDON = 45, host = 'subdomain';
+
+  $('expandBtn').addEventListener('click', function () {
+    var open = this.getAttribute('aria-expanded') !== 'true';
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    this.textContent = open ? 'Close sample' : 'Read full sample';
+    $('workBody').hidden = !open;
+  });
+  document.querySelectorAll('.host-card').forEach(function (b) {
+    b.addEventListener('click', function () {
+      host = b.getAttribute('data-host');
+      document.querySelectorAll('.host-card').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      update();
+    });
+  });
+  // Up to 4 pages: once 4 are picked, the rest are disabled until one is unchecked.
+  function pages() { return Array.prototype.map.call(document.querySelectorAll('#pages input:checked'), function (c) { return c.value; }); }
+  function isEdu(e) { return /@([a-z0-9-]+\.)*[a-z0-9-]+\.edu$/i.test(e); }
+  function missing() {
+    var m = [], email = $('fEmail').value.trim();
+    if (!$('fName').value.trim()) m.push('Enter your name');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) m.push('Enter your school email');
+    else if (!isEdu(email)) m.push('Use your school email (ending in .edu)');
+    if (!$('fSchool').value.trim()) m.push('Enter your school');
+    if (!$('fField').value.trim()) m.push('Enter your major or field');
+    if (!pages().length) m.push('Choose at least one page');
+    return m;
+  }
+  function update() {
+    var n = pages().length;
+    document.querySelectorAll('#pages input').forEach(function (c) { c.disabled = !c.checked && n >= 4; });
+    $('pagesHint').textContent = n >= 4 ? "That's 4 pages, the most included." : '';
+    var email = $('fEmail').value.trim(), h = $('eduHint');
+    if (!email) { h.textContent = 'Must end in .edu'; h.className = 'hint'; }
+    else if (isEdu(email)) { h.textContent = 'School email confirmed ✓'; h.className = 'hint good'; }
+    else { h.textContent = 'This is for students: please use your .edu email'; h.className = 'hint bad'; }
+    var own = host === 'own';
+    $('addrSuffix').hidden = own; $('fAddr').placeholder = own ? 'jordanlee.com' : 'jordan';
+    $('total').textContent = '$' + (PRICE + (own ? ADDON : 0));
+    var m = missing();
+    $('missing').style.display = m.length ? 'block' : 'none';
+    $('missing').innerHTML = m.length ? '<strong>Before you send:</strong><ul>' + m.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+    $('sendBtn').disabled = m.length > 0;
+  }
+  $('pfForm').addEventListener('input', update);
+  $('pfForm').addEventListener('change', update);
+  $('pfForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (missing().length) { update(); return; }
+    if ($('hp3').value) { done(); return; }
+    var btn = $('sendBtn'); btn.disabled = true; btn.textContent = 'Sending...'; $('msg').textContent = '';
+    fetch(API + '/special/request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      product: 'student_portfolio', fullName: $('fName').value.trim(), email: $('fEmail').value.trim(), hosting: host, wishedAddress: $('fAddr').value.trim(),
+      school: $('fSchool').value.trim(), field: $('fField').value.trim(), portfolioType: $('fType').value, pages: pages(),
+      samples: $('fSamples').value.trim(), links: $('fLinks').value.trim(), style: $('fStyle').value.trim(), neededBy: $('fNeeded').value.trim(), notes: $('fNotes').value.trim()
+    }) }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); }).then(function (x) {
+      if (!x.r.ok || !x.j.ok) throw new Error(x.j && x.j.message || '');
+      done();
+    }).catch(function (err) {
+      btn.disabled = false; btn.textContent = 'Send my request';
+      $('msg').textContent = err.message || 'Something went wrong sending your request. Please try again, or email info@tecwebstudio.com.';
+    });
+  });
+  function done() { $('pfForm').style.display = 'none'; $('doneBox').classList.add('show'); $('doneBox').focus(); }
+  update();
+})();
+</script>
+</body>
+</html>
