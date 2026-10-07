@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Complete Your Order — TEC Web Studio</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --teal: #6AABB0; --teal-dark: #3d7a80; --gold: #F5C842; --dark: #1a2e2e; --muted: #6b8080; --border: #d0e4e6;
+  --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; --display: Georgia, "Times New Roman", serif; }
+body { font-family: var(--ui); background: #f0f7f8; color: var(--dark); min-height: 100vh; }
+button:focus-visible, a:focus-visible { outline: 3px solid rgba(61,122,128,.45); outline-offset: 2px; }
+.hero { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 44px 24px 36px; text-align: center; color: #fff; }
+.badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 6px 16px; border-radius: 50px; margin-bottom: 14px; }
+.hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 5vw, 36px); }
+.hero p { margin-top: 8px; opacity: .9; }
+.wrap { max-width: 620px; margin: 0 auto; padding: 32px 20px 60px; }
+.card { background: #fff; border: 2px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.card-head { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 14px 22px; color: #fff; font-family: var(--display); font-size: 18px; }
+.line { display: flex; justify-content: space-between; gap: 14px; padding: 10px 22px; border-bottom: 1px solid #f0f4f4; font-size: 14px; }
+.total { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; background: #f8fcfc; }
+.total .label { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 13px; color: var(--teal-dark); }
+.total .amount { font-family: var(--display); font-size: 30px; }
+.pay { padding: 24px 22px; }
+#payment-element { margin-bottom: 18px; }
+#express-checkout-element { margin-bottom: 14px; }
+.pay-btn { width: 100%; background: var(--teal); color: #fff; border: 0; border-radius: 50px; padding: 15px; font: 700 15px var(--ui); letter-spacing: .8px; text-transform: uppercase; cursor: pointer; display: none; }
+.pay-btn:hover { background: var(--teal-dark); }
+.pay-btn:disabled { background: #a0c8cc; cursor: not-allowed; }
+.msg { color: #c0392b; font-size: 13.5px; margin-top: 12px; text-align: center; min-height: 1.2em; }
+.state { text-align: center; padding: 36px 24px; }
+.state h2 { font-family: var(--display); font-weight: 400; font-size: 24px; margin-bottom: 8px; }
+.state p { color: var(--muted); line-height: 1.6; }
+.note { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">TEC Web Studio</div>
+  <h1 id="title">Complete your order</h1>
+  <p id="subtitle">Loading your order...</p>
+</div>
+<div class="wrap">
+  <div class="card" id="summary" hidden>
+    <div class="card-head">Your Order</div>
+    <div id="lines"></div>
+    <div class="total"><div class="label">Total</div><div class="amount" id="total"></div></div>
+  </div>
+  <div class="card">
+    <div class="pay" id="paySection">
+      <div class="state" id="loading"><p>Loading secure payment form...</p></div>
+      <div id="express-checkout-element"></div>
+      <div id="payment-element"></div>
+      <button type="button" class="pay-btn" id="payBtn">Pay</button>
+      <div class="msg" id="msg" role="alert"></div>
+    </div>
+  </div>
+  <p class="note">Payments are processed securely by Stripe. Questions? Email <a href="mailto:info@tecwebstudio.com">info@tecwebstudio.com</a>.</p>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+(function () {
+  var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
+  var API = 'https://api.tecwebstudio.com';
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var params = new URLSearchParams(location.search);
+  var t = params.get('t') || '', elements = null, clientSecret = null, info = null;
+
+  function stateBox(title, text) { $('paySection').innerHTML = '<div class="state"><h2>' + esc(title) + '</h2><p>' + text + '</p></div>'; }
+  function json(r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); }
+
+  function complete(piId) {
+    stateBox('Finishing up...', 'Payment received. Confirming your order...');
+    function attempt(left) {
+      fetch(API + '/special/pay-complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ paymentIntentId: piId }) })
+        .then(json).then(function (x) {
+          if (x.j && x.j.ok) stateBox('Thank you!', 'Your payment went through and your receipt is on its way by email. We\'ll let you know as soon as it\'s ready to share.');
+          else if (left > 1) setTimeout(function () { attempt(left - 1); }, 2500);
+          else stateBox('Payment received!', 'Your payment went through. If you don\'t get a receipt soon, just email <a href="mailto:info@tecwebstudio.com">info@tecwebstudio.com</a> and we\'ll sort it out.');
+        }).catch(function () { if (left > 1) setTimeout(function () { attempt(left - 1); }, 2500); });
+    }
+    attempt(3);
+  }
+
+  // Returning from a redirect-based payment method (bank redirects, Klarna, etc.)
+  if (params.get('payment') === 'complete' && params.get('payment_intent_client_secret')) {
+    $('summary').hidden = true; $('title').textContent = 'Thank you!'; $('subtitle').textContent = '';
+    stripe.retrievePaymentIntent(params.get('payment_intent_client_secret')).then(function (r) {
+      if (r.paymentIntent && r.paymentIntent.status === 'succeeded') complete(r.paymentIntent.id);
+      else stateBox('Payment not completed', 'The payment didn\'t go through. Use the link in your email to try again.');
+    });
+    return;
+  }
+
+  fetch(API + '/special/pay-info?t=' + encodeURIComponent(t)).then(json).then(function (x) {
+    if (!x.ok || !x.j.ok) { $('subtitle').textContent = ''; stateBox('Link not found', esc((x.j && x.j.message) || 'This payment link isn\'t valid.')); return; }
+    info = x.j;
+    $('title').textContent = info.productName;
+    $('subtitle').textContent = 'Hi ' + (info.fullName || 'there') + '! Here\'s your order.';
+    $('lines').innerHTML = info.lines.map(function (l) { return '<div class="line"><span>' + esc(l.label) + '</span><span>' + esc(l.amount) + '</span></div>'; }).join('');
+    $('total').textContent = info.total;
+    $('summary').hidden = false;
+    if (info.paid) { stateBox('Already paid', 'This order is paid. Thank you! We\'ll be in touch as soon as it\'s ready.'); return; }
+    return fetch(API + '/special/pay-intent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: t }) }).then(json).then(function (y) {
+      if (!y.j.clientSecret) { stateBox('Something went wrong', esc((y.j && y.j.message) || 'We couldn\'t load the payment form. Please try again in a moment.')); return; }
+      clientSecret = y.j.clientSecret;
+      elements = stripe.elements({ clientSecret: clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#6AABB0', borderRadius: '10px' } } });
+      var express = elements.create('expressCheckout', { buttonType: { applePay: 'buy', googlePay: 'buy' }, layout: { maxColumns: 2, maxRows: 1 } });
+      express.mount('#express-checkout-element');
+      express.on('confirm', pay);
+      elements.create('payment', { layout: { type: 'accordion', defaultCollapsed: false } }).mount('#payment-element');
+      $('loading').style.display = 'none';
+      $('payBtn').textContent = 'Pay ' + info.total;
+      $('payBtn').style.display = 'block';
+    });
+  }).catch(function () { stateBox('Can\'t connect', 'Check your connection and refresh the page.'); });
+
+  function pay() {
+    var btn = $('payBtn'); btn.disabled = true; btn.textContent = 'Processing...'; $('msg').textContent = '';
+    elements.submit().then(function (s) {
+      if (s.error) { btn.disabled = false; btn.textContent = 'Pay ' + info.total; $('msg').textContent = s.error.message; return; }
+      stripe.confirmPayment({ elements: elements, clientSecret: clientSecret,
+        confirmParams: { return_url: location.origin + location.pathname + '?payment=complete', payment_method_data: { billing_details: { name: info.fullName || undefined, email: info.email || undefined } } },
+        redirect: 'if_required' }).then(function (r) {
+        btn.disabled = false; btn.textContent = 'Pay ' + info.total;
+        if (r.error) $('msg').textContent = r.error.message;
+        else if (r.paymentIntent && r.paymentIntent.status === 'succeeded') complete(r.paymentIntent.id);
+      });
+    });
+  }
+  $('payBtn').addEventListener('click', pay);
+})();
+</script>
+</body>
+</html>

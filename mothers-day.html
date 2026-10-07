@@ -1,875 +1,340 @@
----
-published: false
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mother's Day Memory Page — TEC Web Studio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Give Mom a gift she'll never forget: a personal memory page with family photos, video messages, notes, and a special feature, built for her by TEC Web Studio.">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --blush:      #f5e0d8;
-  --blush-deep: #e8b4a0;
-  --rose:       #c97060;
-  --rose-dark:  #a05040;
-  --petal:      #f9ece6;
-  --cream:      #fdf8f4;
-  --warm-white: #fffaf7;
-  --gold:       #c9a040;
-  --gold-light: #f5e8c0;
-  --text:       #3a2020;
-  --muted:      #8a6060;
-  --border:     #e8ccc0;
-  --serif:      'Cormorant Garamond', Georgia, serif;
-  --sans:       'DM Sans', sans-serif;
-  --shadow:     0 4px 24px rgba(180,100,80,0.10);
-  --shadow-lg:  0 12px 48px rgba(180,100,80,0.16);
+  --blush: #f5e0d8; --rose: #c97060; --rose-dark: #a05040; --petal: #f9ece6; --cream: #fdf8f4; --warm-white: #fffaf7;
+  --gold-light: #f5e8c0; --text: #3a2020; --muted: #8a6060; --border: #e8ccc0;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --shadow: 0 4px 24px rgba(180,100,80,0.10); --shadow-lg: 0 12px 48px rgba(180,100,80,0.16);
 }
-
 html { scroll-behavior: smooth; }
 body { font-family: var(--sans); background: var(--cream); color: var(--text); line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: var(--rose-dark); }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 3px solid rgba(201,112,96,.55); outline-offset: 2px; }
 
-/* ── PETAL ANIMATIONS ── */
-@keyframes floatPetal {
-  0%   { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-  50%  { transform: translateY(-18px) rotate(8deg); opacity: 1; }
-  100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.04); }
-}
+@keyframes floatPetal { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-18px) rotate(8deg); } 100% { transform: translateY(0) rotate(0deg); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .petal, .hero > * { animation: none !important; } html { scroll-behavior: auto; } }
 
-/* ── HERO ── */
-.hero {
-  background: linear-gradient(160deg, #f2c4b0 0%, #e8a890 40%, #d47a6a 100%);
-  position: relative;
-  overflow: hidden;
-  padding: 72px 24px 80px;
-  text-align: center;
-}
+.topnav { background: rgba(255,250,247,.95); border-bottom: 1px solid var(--border); }
+.topnav-inner { max-width: 960px; margin: auto; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+.topnav a { text-decoration: none; font-weight: 600; }
+.brand { font-family: var(--serif); font-size: 18px; color: var(--rose-dark); }
 
-/* Floral SVG blobs */
-.hero-blob {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-}
+.hero { background: linear-gradient(160deg, #f2c4b0 0%, #e8a890 40%, #d47a6a 100%); position: relative; overflow: hidden; padding: 64px 24px 72px; text-align: center; }
+.hero-blob { position: absolute; border-radius: 50%; pointer-events: none; }
 .blob-1 { width: 320px; height: 320px; background: rgba(255,240,235,0.18); top: -80px; left: -80px; }
 .blob-2 { width: 240px; height: 240px; background: rgba(245,200,66,0.10); top: -40px; right: -40px; }
-.blob-3 { width: 200px; height: 200px; background: rgba(255,240,235,0.15); bottom: -60px; left: 30%; }
-
-/* Floating petal decorations */
-.petal {
-  position: absolute;
-  pointer-events: none;
-  animation: floatPetal 4s ease-in-out infinite;
-}
-.petal svg { display: block; }
-
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 50px; padding: 6px 18px;
-  font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
-  color: white; margin-bottom: 20px;
-  animation: fadeUp 0.5s ease both;
-}
-
-.hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(38px, 6vw, 68px);
-  font-weight: 400; line-height: 1.1;
-  color: white;
-  margin-bottom: 18px;
-  text-shadow: 0 2px 20px rgba(120,40,20,0.15);
-  animation: fadeUp 0.6s ease 0.1s both;
-}
-
+.petal { position: absolute; pointer-events: none; animation: floatPetal 4s ease-in-out infinite; }
+.hero-eyebrow { display: inline-block; background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); border-radius: 50px; padding: 6px 18px; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #fff; margin-bottom: 20px; position: relative; animation: fadeUp .5s ease both; }
+.hero h1 { font-family: var(--serif); font-size: clamp(36px, 6vw, 62px); font-weight: 400; line-height: 1.12; color: #fff; margin-bottom: 16px; position: relative; text-shadow: 0 2px 20px rgba(120,40,20,0.15); animation: fadeUp .6s ease .1s both; }
 .hero h1 em { font-style: italic; color: var(--gold-light); }
+.hero-sub { font-size: 18px; color: rgba(255,255,255,0.94); max-width: 540px; margin: 0 auto 26px; position: relative; animation: fadeUp .6s ease .2s both; }
+.price-now { font-family: var(--serif); font-size: clamp(54px, 8vw, 76px); font-weight: 600; color: #fff; line-height: 1; position: relative; }
+.price-now sup { font-size: .45em; vertical-align: top; margin-top: 14px; display: inline-block; }
+.price-label { font-size: 13.5px; color: rgba(255,255,255,0.9); margin: 6px 0 26px; position: relative; }
+.deadline { display: inline-block; background: rgba(30,10,5,0.22); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; padding: 8px 20px; font-size: 13px; font-weight: 600; color: var(--gold-light); margin-bottom: 26px; position: relative; }
+.hero-cta { display: inline-block; background: #fff; color: var(--rose-dark); padding: 15px 42px; border-radius: 50px; font-size: 16px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 32px rgba(120,40,20,0.25); position: relative; }
 
-.hero-sub {
-  font-size: 18px; color: rgba(255,255,255,0.92);
-  max-width: 520px; margin: 0 auto 32px;
-  line-height: 1.75;
-  animation: fadeUp 0.6s ease 0.2s both;
-}
+.how { background: var(--warm-white); border-bottom: 1px solid var(--border); }
+.how-inner { max-width: 960px; margin: auto; padding: 30px 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.how-step { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--muted); }
+.how-step strong { display: block; color: var(--text); font-size: 15px; }
+.how-num { width: 32px; height: 32px; border-radius: 50%; background: var(--blush); color: var(--rose-dark); font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+@media (max-width: 720px) { .how-inner { grid-template-columns: 1fr; } }
 
-.deadline-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(30,10,5,0.25); border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 50px; padding: 8px 22px;
-  font-size: 13px; font-weight: 600; color: var(--gold-light);
-  margin-bottom: 36px;
-  animation: fadeUp 0.6s ease 0.3s both;
-  animation: pulse 2.5s ease-in-out infinite;
-}
-
-.price-hero {
-  animation: fadeUp 0.6s ease 0.35s both;
-}
-
-.price-was { font-size: 15px; color: rgba(255,255,255,0.6); text-decoration: line-through; margin-bottom: 4px; }
-.price-now {
-  font-family: var(--serif);
-  font-size: clamp(56px, 8vw, 80px);
-  font-weight: 600; color: white; line-height: 1;
-  margin-bottom: 4px;
-}
-.price-now sup { font-size: 0.45em; vertical-align: top; margin-top: 14px; display: inline-block; }
-.price-label { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
-
-.hero-cta {
-  display: inline-block;
-  background: white;
-  color: var(--rose-dark);
-  padding: 16px 44px;
-  border-radius: 50px;
-  font-size: 16px; font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 8px 32px rgba(120,40,20,0.25);
-  transition: transform 0.2s, box-shadow 0.2s;
-  animation: fadeUp 0.6s ease 0.4s both;
-}
-.hero-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(120,40,20,0.3); }
-
-/* ── WHAT'S INCLUDED STRIP ── */
-.included-strip {
-  background: var(--warm-white);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.included-inner {
-  max-width: 960px; margin: auto;
-  padding: 28px 24px;
-  display: flex; gap: 0; flex-wrap: wrap;
-  justify-content: center;
-}
-.included-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 24px;
-  border-right: 1px solid var(--border);
-  font-size: 14px; color: var(--muted); font-weight: 500;
-}
-.included-item:last-child { border-right: none; }
-.included-icon {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--blush); display: flex; align-items: center;
-  justify-content: center; flex-shrink: 0;
-}
-
-/* ── MAIN CONTENT ── */
-.page-wrap { max-width: 780px; margin: 0 auto; padding: 56px 24px 80px; }
-
-.section-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
-  color: var(--rose); margin-bottom: 18px;
-  display: flex; align-items: center; gap: 12px;
-}
+.page-wrap { max-width: 780px; margin: 0 auto; padding: 52px 24px 80px; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--rose); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* ── STYLE PICKER ── */
-.style-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 14px; margin-bottom: 40px;
-}
+.style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
 @media (max-width: 560px) { .style-grid { grid-template-columns: 1fr; } }
-
-.style-card {
-  border: 2px solid var(--border);
-  border-radius: 16px; overflow: hidden;
-  cursor: pointer; transition: all 0.22s;
-  background: var(--warm-white);
-  position: relative;
-}
-.style-card:hover { border-color: var(--rose); box-shadow: var(--shadow); transform: translateY(-2px); }
-.style-card.selected { border-color: var(--rose); box-shadow: var(--shadow-lg); }
-.style-card.selected::after {
-  content: '✓';
-  position: absolute; top: 12px; right: 12px;
-  width: 26px; height: 26px;
-  background: var(--rose); color: white;
-  border-radius: 50%; font-size: 13px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  line-height: 26px; text-align: center;
-}
-
-.style-preview {
-  height: 130px; position: relative; overflow: hidden;
-  display: flex; align-items: flex-end; justify-content: center;
-}
-
-/* Style preview color themes */
+.style-card { border: 2px solid var(--border); border-radius: 16px; overflow: hidden; cursor: pointer; transition: all .2s; background: var(--warm-white); position: relative; text-align: left; font: inherit; color: inherit; padding: 0; }
+.style-card:hover { border-color: var(--rose); box-shadow: var(--shadow); }
+.style-card[aria-pressed="true"] { border-color: var(--rose); box-shadow: var(--shadow-lg); }
+.style-card[aria-pressed="true"]::after { content: '\2713'; position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; background: var(--rose); color: #fff; border-radius: 50%; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.style-preview { height: 120px; display: flex; align-items: flex-end; justify-content: center; }
 .preview-floral { background: linear-gradient(135deg, #fdf0eb, #f2c4b8); }
 .preview-elegant { background: linear-gradient(135deg, #1a0a0e, #3a1020); }
 .preview-playful { background: linear-gradient(135deg, #fff0f3, #ffe8cc); }
 .preview-minimal { background: linear-gradient(135deg, #f8f8f8, #eeeeee); }
-
-/* Mini browser mockup inside each preview */
-.mini-browser {
-  width: 86%; background: white; border-radius: 8px 8px 0 0;
-  padding: 8px; box-shadow: 0 -4px 16px rgba(0,0,0,0.12);
-}
-.mini-bar { display: flex; gap: 4px; margin-bottom: 6px; }
-.mini-dot { width: 6px; height: 6px; border-radius: 50%; }
-.mini-dot-r { background: #e0604a; } .mini-dot-y { background: #e5a24b; } .mini-dot-g { background: #5dba5d; }
+.mini-browser { width: 86%; background: #fff; border-radius: 8px 8px 0 0; padding: 8px; box-shadow: 0 -4px 16px rgba(0,0,0,0.12); }
 .mini-nav { height: 6px; border-radius: 2px; margin-bottom: 6px; }
-.mini-hero { border-radius: 5px; padding: 8px; margin-bottom: 5px; }
-.mini-line { height: 4px; border-radius: 2px; margin-bottom: 3px; }
-.mini-cards { display: flex; gap: 4px; }
-.mini-card { flex: 1; height: 28px; border-radius: 4px; }
-
-/* Floral mini styles */
-.floral .mini-nav { background: #f2c4b8; }
-.floral .mini-hero { background: linear-gradient(135deg, #f2c4b8, #e8a898); }
-.floral .mini-line { background: rgba(255,255,255,0.6); }
-.floral .mini-line.short { width: 60%; }
-.floral .mini-card { background: #fef4f0; border: 1px solid #f2c4b8; }
-
-/* Elegant mini styles */
-.elegant .mini-browser { background: #1a0a0e; }
-.elegant .mini-nav { background: #2a1020; }
-.elegant .mini-hero { background: linear-gradient(135deg, #300e1a, #2a0e14); }
-.elegant .mini-line { background: #c0404a; opacity: 0.5; }
-.elegant .mini-line.short { width: 60%; background: #F5C842; opacity: 0.6; }
-.elegant .mini-card { background: #2a0e14; border: 1px solid #c0404a; }
-
-/* Playful mini styles */
-.playful .mini-nav { background: #EF476F; }
-.playful .mini-hero { background: linear-gradient(135deg, #FFD166, #ff9a9e); }
-.playful .mini-line { background: white; opacity: 0.6; }
-.playful .mini-line.short { width: 60%; }
-.playful .mini-card { background: #fff0f3; border: 1px solid #EF476F; opacity: 0.7; }
-
-/* Minimal mini styles */
-.minimal .mini-nav { background: #111; }
-.minimal .mini-hero { background: #f5f5f5; border: 1px solid #eee; }
-.minimal .mini-line { background: #999; }
-.minimal .mini-line.short { width: 60%; }
-.minimal .mini-card { background: #f5f5f5; border: 1px solid #ddd; }
-
+.mini-hero { border-radius: 5px; height: 26px; margin-bottom: 5px; }
+.mini-cards { display: flex; gap: 4px; } .mini-card { flex: 1; height: 22px; border-radius: 4px; }
+.floral .mini-nav { background: #f2c4b8; } .floral .mini-hero { background: linear-gradient(135deg, #f2c4b8, #e8a898); } .floral .mini-card { background: #fef4f0; border: 1px solid #f2c4b8; }
+.elegant { background: #1a0a0e !important; } .elegant .mini-nav { background: #2a1020; } .elegant .mini-hero { background: linear-gradient(135deg, #300e1a, #5a1a2a); } .elegant .mini-card { background: #2a0e14; border: 1px solid #c0404a; }
+.playful .mini-nav { background: #EF476F; } .playful .mini-hero { background: linear-gradient(135deg, #FFD166, #ff9a9e); } .playful .mini-card { background: #fff0f3; border: 1px solid #EF476F; }
+.minimal .mini-nav { background: #111; } .minimal .mini-hero { background: #f5f5f5; border: 1px solid #eee; } .minimal .mini-card { background: #f5f5f5; border: 1px solid #ddd; }
 .style-info { padding: 14px 16px; }
-.style-name { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-.style-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.style-name { font-family: var(--serif); font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.style-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 
-/* ── INTERACTIVE FEATURES ── */
 .features-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+.feature-card { background: var(--warm-white); border: 2px solid var(--border); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all .2s; text-align: left; font: inherit; color: inherit; width: 100%; }
+.feature-card:hover { border-color: var(--rose); }
+.feature-card[aria-pressed="true"] { border-color: var(--rose); background: #fef6f4; }
+.radio { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%; flex-shrink: 0; background: #fff; }
+.feature-card[aria-pressed="true"] .radio { border-color: var(--rose); box-shadow: inset 0 0 0 4px #fff; background: var(--rose); }
+.feature-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--blush); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
+.feature-name { font-size: 14.5px; font-weight: 700; margin-bottom: 2px; }
+.feature-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.feature-badge { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; background: var(--blush); color: var(--rose); flex-shrink: 0; margin-left: auto; }
 
-.feature-card {
-  background: var(--warm-white); border: 2px solid var(--border);
-  border-radius: 14px; padding: 16px 20px;
-  display: flex; align-items: center; gap: 16px;
-  cursor: pointer; transition: all 0.2s; user-select: none;
-}
-.feature-card:hover { border-color: var(--rose); box-shadow: var(--shadow); }
-.feature-card.selected { border-color: var(--rose); background: #fef6f4; }
+.host-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .host-grid { grid-template-columns: 1fr; } }
+.host-card { text-align: left; font: inherit; color: inherit; background: var(--warm-white); border: 2px solid var(--border); border-radius: 14px; padding: 18px; cursor: pointer; position: relative; }
+.host-card[aria-pressed="true"] { border-color: var(--rose); background: #fef6f4; box-shadow: var(--shadow); }
+.host-card h3 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.host-price { font-weight: 700; color: var(--rose-dark); margin-bottom: 8px; font-size: 14px; }
+.host-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.host-example { display: inline-block; margin-top: 8px; font-family: 'Courier New', monospace; font-size: 13px; background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; color: var(--text); }
 
-.feature-checkbox {
-  width: 22px; height: 22px; border: 2px solid var(--border);
-  border-radius: 7px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.18s; background: white;
-}
-.feature-card.selected .feature-checkbox {
-  background: var(--rose); border-color: var(--rose);
-}
-.feature-card.selected .feature-checkbox::after {
-  content: '✓'; color: white; font-size: 12px; font-weight: 700;
-}
-
-.feature-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: var(--blush); display: flex; align-items: center;
-  justify-content: center; flex-shrink: 0; font-size: 20px;
-}
-.feature-info { flex: 1; }
-.feature-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-.feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.feature-badge {
-  font-size: 10px; font-weight: 700; letter-spacing: 1px;
-  text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
-  background: var(--blush); color: var(--rose); flex-shrink: 0;
-}
-
-/* ── CUSTOMER DETAILS ── */
-.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
 @media (max-width: 560px) { .details-grid { grid-template-columns: 1fr; } }
-
 .field-group { display: flex; flex-direction: column; gap: 6px; }
 .field-group.full { grid-column: 1 / -1; }
-.field-label { font-size: 12px; font-weight: 600; color: var(--text); }
-.field-label .req { color: var(--rose); margin-left: 2px; }
-.field-input, .field-textarea {
-  width: 100%; padding: 11px 14px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  font-family: var(--sans); font-size: 14px; color: var(--text);
-  background: white; outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.field-input::placeholder, .field-textarea::placeholder { color: #c0a8a0; }
-.field-input:focus, .field-textarea:focus {
-  border-color: var(--rose);
-  box-shadow: 0 0 0 3px rgba(201,112,96,0.12);
-}
-.field-input.err, .field-textarea.err { border-color: #c0392b; }
-.field-errmsg { font-size: 11px; color: #c0392b; display: none; }
-.field-errmsg.show { display: block; }
-.field-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.field-label { font-size: 12.5px; font-weight: 600; }
+.req { color: var(--rose); margin-left: 2px; }
+.field-input, .field-textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font: inherit; font-size: 14px; color: var(--text); background: #fff; }
+.field-input:focus, .field-textarea:focus { border-color: var(--rose); outline: none; box-shadow: 0 0 0 3px rgba(201,112,96,0.12); }
+.field-textarea { resize: vertical; min-height: 90px; }
+.field-hint { font-size: 12px; color: var(--muted); }
+.addr-row { display: flex; align-items: center; gap: 6px; }
+.addr-row .field-input { flex: 1; }
+.addr-suffix { font-family: 'Courier New', monospace; font-size: 13px; color: var(--muted); white-space: nowrap; }
 
-/* ── ORDER SUMMARY ── */
-.summary-box {
-  background: white; border: 2px solid var(--border);
-  border-radius: 16px; overflow: hidden;
-  box-shadow: var(--shadow); margin-bottom: 24px;
-}
-.summary-top {
-  background: linear-gradient(135deg, #e8a890, #d47a6a);
-  padding: 18px 24px;
-}
-.summary-top h3 { font-family: var(--serif); font-size: 20px; color: white; font-weight: 400; }
-.summary-lines { padding: 18px 24px; }
-.summary-line {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 9px 0; font-size: 14px; color: var(--text);
-  border-bottom: 1px solid #f5ece8;
-}
+.summary-box { background: #fff; border: 2px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 18px; }
+.summary-top { background: linear-gradient(135deg, #e8a890, #d47a6a); padding: 16px 24px; }
+.summary-top h3 { font-family: var(--serif); font-size: 20px; color: #fff; font-weight: 400; }
+.summary-lines { padding: 14px 24px; }
+.summary-line { display: flex; justify-content: space-between; gap: 14px; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f5ece8; }
 .summary-line:last-child { border-bottom: none; }
-.summary-line.empty { color: var(--muted); font-style: italic; justify-content: center; padding: 16px 0; }
-.summary-total {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 16px 24px; background: var(--petal); border-top: 2px solid var(--border);
-}
+.summary-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; background: var(--petal); border-top: 2px solid var(--border); }
 .summary-total .label { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--rose); }
-.summary-total .amount { font-family: var(--serif); font-size: 36px; color: var(--text); }
+.summary-total .amount { font-family: var(--serif); font-size: 32px; }
+.note-pay { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 16px; }
 
-/* ── PAYMENT SECTION ── */
-.payment-wrap {
-  background: white; border: 2px solid var(--border);
-  border-radius: 16px; padding: 28px 24px;
-  box-shadow: var(--shadow);
-}
-.payment-note { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
-.pay-notice {
-  background: var(--petal); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px 16px;
-  font-size: 13px; color: var(--muted); margin-bottom: 14px;
-  display: flex; align-items: flex-start; gap: 8px;
-}
-.pay-btn {
-  width: 100%; padding: 16px;
-  background: linear-gradient(135deg, var(--rose), var(--rose-dark));
-  color: white; border: none; border-radius: 50px;
-  font-family: var(--sans); font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(160,80,64,0.3);
-  letter-spacing: 0.3px;
-}
-.pay-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(160,80,64,0.35); }
-.pay-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.or-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
-.or-divider div { flex: 1; height: 1px; background: var(--border); }
-.or-divider span { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-
-/* ── SUCCESS ── */
-.success-wrap {
-  display: none; text-align: center; padding: 40px 24px;
-}
-.success-wrap.show { display: block; }
-
-/* ── FOOTER ── */
-.page-footer {
-  text-align: center; padding: 32px 24px;
-  font-size: 13px; color: var(--muted);
-  border-top: 1px solid var(--border);
-}
+.missing { background: var(--petal); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.missing ul { margin: 4px 0 0 18px; }
+.send-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--rose), var(--rose-dark)); color: #fff; border: none; border-radius: 50px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 20px rgba(160,80,64,0.3); }
+.send-btn:disabled { opacity: .55; cursor: not-allowed; }
+.form-msg { color: #b03a2e; font-size: 13.5px; margin-top: 10px; text-align: center; min-height: 1.2em; }
+.success, .closed { display: none; text-align: center; padding: 48px 24px; background: #fff; border: 2px solid var(--border); border-radius: 18px; }
+.success.show, .closed.show { display: block; }
+.success .big, .closed .big { font-size: 48px; margin-bottom: 12px; }
+.success h2, .closed h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; color: var(--rose-dark); margin-bottom: 10px; }
+.success p, .closed p { color: var(--muted); max-width: 460px; margin: 0 auto 10px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.page-footer { text-align: center; padding: 28px 24px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
 .page-footer strong { color: var(--rose); }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 680px) {
-  .included-item { border-right: none; border-bottom: 1px solid var(--border); padding: 10px 12px; width: 100%; }
-  .included-item:last-child { border-bottom: none; }
-  .included-inner { flex-direction: column; padding: 0; }
-}
 </style>
 </head>
 <body>
 
-<!-- ── HERO ── -->
+<div class="topnav"><div class="topnav-inner">
+  <a class="brand" href="index.html">TEC Web Studio</a>
+  <a href="index.html">&larr; Back to the main site</a>
+</div></div>
+
 <div class="hero">
-  <div class="hero-blob blob-1"></div>
-  <div class="hero-blob blob-2"></div>
-  <div class="hero-blob blob-3"></div>
+  <div class="hero-blob blob-1"></div><div class="hero-blob blob-2"></div>
+  <div class="petal" style="top:60px;left:8%;" aria-hidden="true"><svg width="28" height="36" viewBox="0 0 28 36"><ellipse cx="14" cy="18" rx="10" ry="17" fill="rgba(255,240,235,0.5)" transform="rotate(-20 14 18)"/></svg></div>
+  <div class="petal" style="top:40px;right:10%;animation-delay:1s;" aria-hidden="true"><svg width="22" height="30" viewBox="0 0 22 30"><ellipse cx="11" cy="15" rx="8" ry="14" fill="rgba(245,200,66,0.25)" transform="rotate(15 11 15)"/></svg></div>
+  <div class="petal" style="bottom:60px;left:15%;animation-delay:2s;" aria-hidden="true"><svg width="20" height="26" viewBox="0 0 20 26"><ellipse cx="10" cy="13" rx="7" ry="12" fill="rgba(255,240,235,0.4)" transform="rotate(30 10 13)"/></svg></div>
+  <div class="petal" style="bottom:80px;right:12%;animation-delay:.5s;" aria-hidden="true"><svg width="24" height="32" viewBox="0 0 24 32"><ellipse cx="12" cy="16" rx="9" ry="15" fill="rgba(255,220,210,0.35)" transform="rotate(-10 12 16)"/></svg></div>
 
-  <!-- Decorative petals -->
-  <div class="petal" style="top:60px;left:8%;animation-delay:0s;">
-    <svg width="28" height="36" viewBox="0 0 28 36"><ellipse cx="14" cy="18" rx="10" ry="17" fill="rgba(255,240,235,0.5)" transform="rotate(-20 14 18)"/></svg>
-  </div>
-  <div class="petal" style="top:40px;right:10%;animation-delay:1s;">
-    <svg width="22" height="30" viewBox="0 0 22 30"><ellipse cx="11" cy="15" rx="8" ry="14" fill="rgba(245,200,66,0.25)" transform="rotate(15 11 15)"/></svg>
-  </div>
-  <div class="petal" style="bottom:60px;left:15%;animation-delay:2s;">
-    <svg width="20" height="26" viewBox="0 0 20 26"><ellipse cx="10" cy="13" rx="7" ry="12" fill="rgba(255,240,235,0.4)" transform="rotate(30 10 13)"/></svg>
-  </div>
-  <div class="petal" style="bottom:80px;right:12%;animation-delay:0.5s;">
-    <svg width="24" height="32" viewBox="0 0 24 32"><ellipse cx="12" cy="16" rx="9" ry="15" fill="rgba(255,220,210,0.35)" transform="rotate(-10 12 16)"/></svg>
-  </div>
-
-  <div class="hero-eyebrow">Mother's Day Special — Limited Time</div>
-
+  <div class="hero-eyebrow">Mother's Day Special</div>
   <h1>Give Mom a gift<br>she'll <em>never forget.</em></h1>
-
-  <p class="hero-sub">A beautiful, personal website built just for her — photos, videos from the family, heartfelt notes, and her very own digital recipe box.</p>
-
-  <div class="deadline-badge">
-    ⏰ Offer expires May 9 at midnight
-  </div>
-
-  <div class="price-hero">
-    <div class="price-was">Regular price $122+</div>
-    <div class="price-now"><sup>$</sup>110</div>
-    <div class="price-label">One-time — everything included</div>
-  </div>
-
-  <br>
-  <a href="#order" class="hero-cta">Build Mom's Page →</a>
+  <p class="hero-sub">A beautiful, personal website built just for her, with family photos, video messages, heartfelt notes, and a special feature she'll come back to again and again.</p>
+  <div class="price-now"><sup>$</sup>195</div>
+  <div class="price-label">One-time · a year of hosting included</div>
+  <div class="deadline" id="deadline">Requests open April 12 – May 2</div><br>
+  <a href="#order" class="hero-cta">Build Mom's Page &rarr;</a>
 </div>
 
-<!-- ── WHAT'S INCLUDED STRIP ── -->
-<div class="included-strip">
-  <div class="included-inner">
-    <div class="included-item">
-      <div class="included-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c97060" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      Photo gallery
-    </div>
-    <div class="included-item">
-      <div class="included-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c97060" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-      </div>
-      Video messages
-    </div>
-    <div class="included-item">
-      <div class="included-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c97060" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      </div>
-      Family notes
-    </div>
-    <div class="included-item">
-      <div class="included-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c97060" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2h18v20H3z"/><path d="M7 6h10M7 10h10M7 14h6"/></svg>
-      </div>
-      Digital recipe box
-    </div>
-    <div class="included-item">
-      <div class="included-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c97060" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-      </div>
-      Her own link forever
-    </div>
-  </div>
-</div>
+<div class="how"><div class="how-inner">
+  <div class="how-step"><span class="how-num">1</span><div><strong>Tell us about her</strong>Pick a style and a special feature, and share what makes her wonderful.</div></div>
+  <div class="how-step"><span class="how-num">2</span><div><strong>See a sample</strong>We build a sample of her page for you to look over and adjust.</div></div>
+  <div class="how-step"><span class="how-num">3</span><div><strong>Approve, then pay</strong>Once you love it, we send a private link to pay and we finish it in time.</div></div>
+</div></div>
 
-<!-- ── MAIN ORDER FORM ── -->
 <div class="page-wrap" id="order">
 
-  <!-- STEP 1: STYLE -->
-  <div class="section-label">Step 1 — Choose her style</div>
-  <div class="style-grid" id="styleGrid">
-
-    <div class="style-card" id="style-floral" onclick="selectStyle('floral')">
-      <div class="style-preview preview-floral">
-        <div class="mini-browser floral">
-          <div class="mini-bar"><span class="mini-dot mini-dot-r"></span><span class="mini-dot mini-dot-y"></span><span class="mini-dot mini-dot-g"></span></div>
-          <div class="mini-nav floral"></div>
-          <div class="mini-hero floral"><div class="mini-line floral"></div><div class="mini-line floral short"></div></div>
-          <div class="mini-cards"><div class="mini-card floral"></div><div class="mini-card floral"></div><div class="mini-card floral"></div></div>
-        </div>
-      </div>
-      <div class="style-info">
-        <div class="style-name">Soft &amp; Floral</div>
-        <div class="style-desc">Blush pinks, creams &amp; botanical details — warm, romantic, timeless</div>
-      </div>
-    </div>
-
-    <div class="style-card" id="style-elegant" onclick="selectStyle('elegant')">
-      <div class="style-preview preview-elegant">
-        <div class="mini-browser elegant">
-          <div class="mini-bar"><span class="mini-dot mini-dot-r"></span><span class="mini-dot mini-dot-y"></span><span class="mini-dot mini-dot-g"></span></div>
-          <div class="mini-nav elegant"></div>
-          <div class="mini-hero elegant"><div class="mini-line elegant"></div><div class="mini-line elegant short"></div></div>
-          <div class="mini-cards"><div class="mini-card elegant"></div><div class="mini-card elegant"></div><div class="mini-card elegant"></div></div>
-        </div>
-      </div>
-      <div class="style-info">
-        <div class="style-name">Modern &amp; Elegant</div>
-        <div class="style-desc">Deep ruby &amp; gold on dark — sophisticated, luxe, unforgettable</div>
-      </div>
-    </div>
-
-    <div class="style-card" id="style-playful" onclick="selectStyle('playful')">
-      <div class="style-preview preview-playful">
-        <div class="mini-browser playful">
-          <div class="mini-bar"><span class="mini-dot mini-dot-r"></span><span class="mini-dot mini-dot-y"></span><span class="mini-dot mini-dot-g"></span></div>
-          <div class="mini-nav playful"></div>
-          <div class="mini-hero playful"><div class="mini-line playful"></div><div class="mini-line playful short"></div></div>
-          <div class="mini-cards"><div class="mini-card playful"></div><div class="mini-card playful"></div><div class="mini-card playful"></div></div>
-        </div>
-      </div>
-      <div class="style-info">
-        <div class="style-name">Bright &amp; Playful</div>
-        <div class="style-desc">Bold colors &amp; rounded shapes — fun, celebratory, full of joy</div>
-      </div>
-    </div>
-
-    <div class="style-card" id="style-minimal" onclick="selectStyle('minimal')">
-      <div class="style-preview preview-minimal">
-        <div class="mini-browser minimal">
-          <div class="mini-bar"><span class="mini-dot mini-dot-r"></span><span class="mini-dot mini-dot-y"></span><span class="mini-dot mini-dot-g"></span></div>
-          <div class="mini-nav minimal"></div>
-          <div class="mini-hero minimal"><div class="mini-line minimal"></div><div class="mini-line minimal short"></div></div>
-          <div class="mini-cards"><div class="mini-card minimal"></div><div class="mini-card minimal"></div><div class="mini-card minimal"></div></div>
-        </div>
-      </div>
-      <div class="style-info">
-        <div class="style-name">Clean &amp; Minimal</div>
-        <div class="style-desc">White space &amp; refined typography — timeless, elegant, effortless</div>
-      </div>
-    </div>
-
+  <div class="closed" id="closedBox" role="status">
+    <div class="big" aria-hidden="true">🌷</div>
+    <h2>This offer returns in the spring</h2>
+    <p id="closedText">Mother's Day Memory Page requests open April 12 and close May 2 each year, so we have time to build every page before Mother's Day.</p>
+    <p>Want something sooner? <a href="contact.html">Tell us what you have in mind</a>.</p>
   </div>
 
-  <!-- STEP 2: INTERACTIVE FEATURE -->
-  <div class="section-label">Step 2 — Choose her special feature</div>
-  <div class="features-grid" id="featuresGrid">
-
-    <div class="feature-card" id="feat-recipes" onclick="selectFeature('recipes')">
-      <div class="feature-checkbox"></div>
-      <div class="feature-icon">🍲</div>
-      <div class="feature-info">
-        <div class="feature-name">Digital Recipe Box</div>
-        <div class="feature-desc">Her favorite family recipes saved beautifully online — browse, share, and print anytime</div>
-      </div>
-      <div class="feature-badge">Most popular</div>
-    </div>
-
-    <div class="feature-card" id="feat-timeline" onclick="selectFeature('timeline')">
-      <div class="feature-checkbox"></div>
-      <div class="feature-icon">📅</div>
-      <div class="feature-info">
-        <div class="feature-name">Family Memory Timeline</div>
-        <div class="feature-desc">Scroll through years of photos and milestones — a living family scrapbook</div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="feat-jar" onclick="selectFeature('jar')">
-      <div class="feature-checkbox"></div>
-      <div class="feature-icon">💌</div>
-      <div class="feature-info">
-        <div class="feature-name">Gratitude Jar</div>
-        <div class="feature-desc">Family members drop in notes she can open and read anytime she needs a smile</div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="feat-bucketlist" onclick="selectFeature('bucketlist')">
-      <div class="feature-checkbox"></div>
-      <div class="feature-icon">✅</div>
-      <div class="feature-info">
-        <div class="feature-name">Mom's Bucket List</div>
-        <div class="feature-desc">A simple interactive list she can check off, add to, and dream with</div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="feat-board" onclick="selectFeature('board')">
-      <div class="feature-checkbox"></div>
-      <div class="feature-icon">📣</div>
-      <div class="feature-info">
-        <div class="feature-name">Family Announcement Board</div>
-        <div class="feature-desc">Birthdays, events, and family updates — her private corner of the internet</div>
-      </div>
-    </div>
-
+  <div class="success" id="successBox" role="status" tabindex="-1">
+    <div class="big" aria-hidden="true">🌸</div>
+    <h2>Request received!</h2>
+    <p>Thank you! We'll build a sample of her page and email you to take a look. Nothing is charged until you approve it.</p>
+    <p>Keep an eye on your inbox, and check spam just in case.</p>
   </div>
 
-  <!-- STEP 3: DETAILS -->
-  <div class="section-label">Step 3 — Your details</div>
-  <div class="details-grid">
-    <div class="field-group">
-      <label class="field-label">Your first name <span class="req">*</span></label>
-      <input class="field-input" id="fName" type="text" placeholder="Jane"/>
-      <div class="field-errmsg" id="fNameErr">Please enter your name.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Your email <span class="req">*</span></label>
-      <input class="field-input" id="fEmail" type="email" placeholder="you@example.com"/>
-      <div class="field-errmsg" id="fEmailErr">Please enter a valid email.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Mom's name <span class="req">*</span></label>
-      <input class="field-input" id="fMomName" type="text" placeholder="e.g. Carol, Grandma Rose..."/>
-      <div class="field-errmsg" id="fMomNameErr">Please enter her name.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Deadline needed by</label>
-      <input class="field-input" id="fDeadline" type="text" placeholder="e.g. May 10 morning"/>
-    </div>
-    <div class="field-group full">
-      <label class="field-label">Anything else we should know?</label>
-      <textarea class="field-textarea" id="fNotes" placeholder="Colors she loves, a theme idea, special memories to include..."></textarea>
-    </div>
-  </div>
+  <form id="orderForm" novalidate>
+    <div class="hp" aria-hidden="true"><label for="companySite">Leave this empty</label><input type="text" id="companySite" tabindex="-1" autocomplete="off"></div>
 
-  <!-- STEP 4: ORDER SUMMARY + PAYMENT -->
-  <div class="section-label">Step 4 — Review &amp; pay</div>
-
-  <div class="summary-box">
-    <div class="summary-top"><h3>Your Order</h3></div>
-    <div class="summary-lines" id="summaryLines">
-      <div class="summary-line empty">Select a style and feature above to see your order</div>
-    </div>
-    <div class="summary-total">
-      <div class="label">Total today</div>
-      <div class="amount">$110</div>
-    </div>
-  </div>
-
-  <div class="payment-wrap" id="paymentWrap">
-    <p class="payment-note">Secure checkout via Stripe. Apple Pay, Google Pay, Afterpay, Klarna, credit &amp; debit cards accepted.</p>
-
-    <div class="pay-notice" id="styleNotice">
-      Please select a style above before proceeding.
-    </div>
-    <div class="pay-notice" id="featureNotice" style="display:none;">
-      Please choose her special feature above.
+    <div class="section-label" id="styleLabel">Step 1 — Choose her style</div>
+    <div class="style-grid" role="group" aria-labelledby="styleLabel">
+      <button type="button" class="style-card" data-style="Soft &amp; Floral" aria-pressed="false">
+        <div class="style-preview preview-floral"><div class="mini-browser floral"><div class="mini-nav"></div><div class="mini-hero"></div><div class="mini-cards"><div class="mini-card"></div><div class="mini-card"></div><div class="mini-card"></div></div></div></div>
+        <div class="style-info"><div class="style-name">Soft &amp; Floral</div><div class="style-desc">Blush pinks, creams and botanical details. Warm, romantic, timeless.</div></div>
+      </button>
+      <button type="button" class="style-card" data-style="Modern &amp; Elegant" aria-pressed="false">
+        <div class="style-preview preview-elegant"><div class="mini-browser elegant"><div class="mini-nav"></div><div class="mini-hero"></div><div class="mini-cards"><div class="mini-card"></div><div class="mini-card"></div><div class="mini-card"></div></div></div></div>
+        <div class="style-info"><div class="style-name">Modern &amp; Elegant</div><div class="style-desc">Deep ruby and gold on dark. Sophisticated and unforgettable.</div></div>
+      </button>
+      <button type="button" class="style-card" data-style="Bright &amp; Playful" aria-pressed="false">
+        <div class="style-preview preview-playful"><div class="mini-browser playful"><div class="mini-nav"></div><div class="mini-hero"></div><div class="mini-cards"><div class="mini-card"></div><div class="mini-card"></div><div class="mini-card"></div></div></div></div>
+        <div class="style-info"><div class="style-name">Bright &amp; Playful</div><div class="style-desc">Bold colors and rounded shapes. Fun, celebratory, full of joy.</div></div>
+      </button>
+      <button type="button" class="style-card" data-style="Clean &amp; Minimal" aria-pressed="false">
+        <div class="style-preview preview-minimal"><div class="mini-browser minimal"><div class="mini-nav"></div><div class="mini-hero"></div><div class="mini-cards"><div class="mini-card"></div><div class="mini-card"></div><div class="mini-card"></div></div></div></div>
+        <div class="style-info"><div class="style-name">Clean &amp; Minimal</div><div class="style-desc">White space and refined lettering. Elegant and effortless.</div></div>
+      </button>
     </div>
 
-    <div id="express-checkout-element"></div>
-    <div class="or-divider" id="orDivider" style="display:none;">
-      <div></div><span>or pay with card</span><div></div>
+    <div class="section-label" id="featLabel">Step 2 — Choose her special feature</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:-8px 0 14px;">Every page includes a photo gallery, video messages, and family notes. Pick one extra:</p>
+    <div class="features-grid" role="group" aria-labelledby="featLabel">
+      <button type="button" class="feature-card" data-feature="Digital Recipe Box" aria-pressed="false"><span class="radio"></span><span class="feature-icon" aria-hidden="true">🍲</span><span><span class="feature-name" style="display:block">Digital Recipe Box</span><span class="feature-desc">Her favorite family recipes saved beautifully online to browse, share and print.</span></span><span class="feature-badge">Most popular</span></button>
+      <button type="button" class="feature-card" data-feature="Family Memory Timeline" aria-pressed="false"><span class="radio"></span><span class="feature-icon" aria-hidden="true">📅</span><span><span class="feature-name" style="display:block">Family Memory Timeline</span><span class="feature-desc">Years of photos and milestones in a living family scrapbook.</span></span></button>
+      <button type="button" class="feature-card" data-feature="Gratitude Jar" aria-pressed="false"><span class="radio"></span><span class="feature-icon" aria-hidden="true">💌</span><span><span class="feature-name" style="display:block">Gratitude Jar</span><span class="feature-desc">Notes from the family she can open whenever she needs a smile.</span></span></button>
+      <button type="button" class="feature-card" data-feature="Mom's Bucket List" aria-pressed="false"><span class="radio"></span><span class="feature-icon" aria-hidden="true">✅</span><span><span class="feature-name" style="display:block">Mom's Bucket List</span><span class="feature-desc">A list she can check off, add to, and dream with.</span></span></button>
+      <button type="button" class="feature-card" data-feature="Family Announcement Board" aria-pressed="false"><span class="radio"></span><span class="feature-icon" aria-hidden="true">📣</span><span><span class="feature-name" style="display:block">Family Announcement Board</span><span class="feature-desc">Birthdays, events and family updates in her own corner of the internet.</span></span></button>
     </div>
-    <div id="payment-element"></div>
 
-    <button class="pay-btn" id="payBtn" onclick="handlePay()" style="display:none;">
-      Pay $110 — Gift Mom Her Page
-    </button>
-    <div id="payMsg" style="color:#c0392b;font-size:13px;margin-top:10px;text-align:center;"></div>
-
-    <div class="success-wrap" id="successWrap">
-      <div style="font-size:52px;margin-bottom:16px;">🌸</div>
-      <p style="font-family:var(--serif);font-size:26px;color:var(--rose);margin-bottom:10px;">Payment received!</p>
-      <p style="font-size:15px;color:var(--muted);line-height:1.7;max-width:440px;margin:0 auto;">We'll be in touch shortly to start building Mom's page. She's going to love it.</p>
+    <div class="section-label" id="hostLabel">Step 3 — Where her page lives</div>
+    <div class="host-grid" role="group" aria-labelledby="hostLabel">
+      <button type="button" class="host-card" data-host="subdomain" aria-pressed="true">
+        <h3>Hosted by us</h3>
+        <div class="host-price">Included</div>
+        <p>We host her page free for a full year at an address on our site. Nothing to buy or set up. After the year, we'll check in about renewing.</p>
+        <span class="host-example">carol.tecwebstudio.com</span>
+      </button>
+      <button type="button" class="host-card" data-host="own" aria-pressed="false">
+        <h3>Her own web address</h3>
+        <div class="host-price">+ $45</div>
+        <p>Her very own address, registered for 3 years so nobody has to think about it. A lovely touch if you'd like it to feel completely hers.</p>
+        <span class="host-example">carolsmith.com</span>
+      </button>
     </div>
-  </div>
+    <div class="field-group" style="margin-bottom:36px;">
+      <label class="field-label" for="fAddr" id="addrLabel">The address you'd like (optional)</label>
+      <div class="addr-row"><input class="field-input" id="fAddr" type="text" maxlength="60" placeholder="carol" autocomplete="off"><span class="addr-suffix" id="addrSuffix">.tecwebstudio.com</span></div>
+      <span class="field-hint" id="addrHint">We'll confirm the final address with you.</span>
+    </div>
 
+    <div class="section-label">Step 4 — Your details</div>
+    <div class="details-grid">
+      <div class="field-group"><label class="field-label" for="fName">Your name <span class="req">*</span></label><input class="field-input" id="fName" type="text" maxlength="120" autocomplete="name"></div>
+      <div class="field-group"><label class="field-label" for="fEmail">Your email <span class="req">*</span></label><input class="field-input" id="fEmail" type="email" maxlength="200" autocomplete="email"></div>
+      <div class="field-group"><label class="field-label" for="fPhone">Phone (optional)</label><input class="field-input" id="fPhone" type="tel" maxlength="40" autocomplete="tel"></div>
+      <div class="field-group"><label class="field-label" for="fMom">Mom's name <span class="req">*</span></label><input class="field-input" id="fMom" type="text" maxlength="80" placeholder="e.g. Carol, Grandma Rose"></div>
+      <div class="field-group full"><label class="field-label" for="fNeeded">When do you need it? (optional)</label><input class="field-input" id="fNeeded" type="text" maxlength="60" placeholder="e.g. the morning of Mother's Day"></div>
+      <div class="field-group full"><label class="field-label" for="fNotes">Tell us about her (optional)</label><textarea class="field-textarea" id="fNotes" maxlength="2000" placeholder="Colors she loves, a theme idea, special memories, who'll be adding photos and messages..."></textarea></div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-top"><h3>Your Request</h3></div>
+      <div class="summary-lines" id="summaryLines"></div>
+      <div class="summary-total"><div class="label">Total, once approved</div><div class="amount" id="totalAmount">$195</div></div>
+    </div>
+    <p class="note-pay">Nothing is charged today. You'll pay through a private link after you approve her sample.</p>
+
+    <div class="missing" id="missingBox"></div>
+    <button type="submit" class="send-btn" id="sendBtn">Send my request</button>
+    <div class="form-msg" id="formMsg" role="alert"></div>
+  </form>
 </div>
 
-<div class="page-footer">
-  &copy; 2026 <strong>TEC Web Studio</strong> · Secure payments via Stripe · Mother's Day offer expires May 9 at midnight
-</div>
+<div class="page-footer">&copy; <span id="yr">2026</span> <strong>TEC Web Studio</strong> · <a href="index.html">tecwebstudio.com</a></div>
 
-<script src="https://js.stripe.com/v3/"></script>
 <script>
-var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
-var VERCEL_FN = 'https://tec-api.vercel.app/api/create-order';
-var APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbwNbHQU-dH96BhmDKglulagFgnjSP24yZ5mGJqd9npe09CM45Ur6L77pHSQGBAUqoOM/exec';
+(function () {
+  var API = 'https://api.tecwebstudio.com';
+  var PRICE = 195, ADDON = 45;
+  var state = { style: '', feature: '', host: 'subdomain' };
+  var $ = function (id) { return document.getElementById(id); };
+  $('yr').textContent = new Date().getFullYear();
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
-var selectedStyle = null;
-var selectedFeature = null;
-var elements, clientSecret;
+  function pick(selector, attr, value) {
+    document.querySelectorAll(selector).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute(attr) === value ? 'true' : 'false'); });
+  }
+  document.querySelectorAll('.style-card').forEach(function (b) { b.addEventListener('click', function () { state.style = b.getAttribute('data-style'); pick('.style-card', 'data-style', state.style); update(); }); });
+  document.querySelectorAll('.feature-card').forEach(function (b) { b.addEventListener('click', function () { state.feature = b.getAttribute('data-feature'); pick('.feature-card', 'data-feature', state.feature); update(); }); });
+  document.querySelectorAll('.host-card').forEach(function (b) { b.addEventListener('click', function () { state.host = b.getAttribute('data-host'); pick('.host-card', 'data-host', state.host); update(); }); });
+  document.addEventListener('input', update);
 
-var styleNames = {
-  floral:  'Soft & Floral',
-  elegant: 'Modern & Elegant',
-  playful: 'Bright & Playful',
-  minimal: 'Clean & Minimal'
-};
-var featureNames = {
-  recipes:    'Digital Recipe Box',
-  timeline:   'Family Memory Timeline',
-  jar:        'Gratitude Jar',
-  bucketlist: "Mom's Bucket List",
-  board:      'Family Announcement Board'
-};
-
-function selectStyle(id) {
-  document.querySelectorAll('.style-card').forEach(function(c){ c.classList.remove('selected'); });
-  document.getElementById('style-' + id).classList.add('selected');
-  selectedStyle = id;
-  updateSummary();
-}
-
-function selectFeature(id) {
-  document.querySelectorAll('.feature-card').forEach(function(c){ c.classList.remove('selected'); });
-  document.getElementById('feat-' + id).classList.add('selected');
-  selectedFeature = id;
-  updateSummary();
-}
-
-function updateSummary() {
-  var lines = document.getElementById('summaryLines');
-  var html = '';
-
-  if (selectedStyle) {
-    html += '<div class="summary-line"><span>Memory Page — ' + styleNames[selectedStyle] + ' style</span><span><strong>$110</strong></span></div>';
-    html += '<div class="summary-line"><span>Photos + Videos + Family Notes</span><span style="font-size:11px;color:#c0a8a0;">included</span></div>';
-    if (selectedFeature) {
-      html += '<div class="summary-line"><span>Special Feature: ' + featureNames[selectedFeature] + '</span><span style="font-size:11px;color:#c0a8a0;">included</span></div>';
-    }
-    html += '<div class="summary-line"><span>10% Mother\'s Day discount applied</span><span style="color:#27ae60;font-weight:600;">-$12</span></div>';
-  } else {
-    html = '<div class="summary-line empty">Select a style and feature above to see your order</div>';
+  function missing() {
+    var m = [];
+    if (!state.style) m.push('Choose her style (Step 1)');
+    if (!state.feature) m.push('Choose her special feature (Step 2)');
+    if (!$('fName').value.trim()) m.push('Enter your name');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('fEmail').value.trim())) m.push('Enter a valid email');
+    if (!$('fMom').value.trim()) m.push("Enter Mom's name");
+    return m;
+  }
+  function update() {
+    var own = state.host === 'own';
+    $('addrSuffix').hidden = own;
+    $('fAddr').placeholder = own ? 'carolsmith.com' : 'carol';
+    $('addrHint').textContent = own ? "We'll check it's available and confirm with you before registering it." : "We'll confirm the final address with you.";
+    var lines = '<div class="summary-line"><span>Memory Page' + (state.style ? ' — ' + esc(state.style) : '') + '</span><span><strong>$' + PRICE + '</strong></span></div>' +
+      '<div class="summary-line"><span>Photos, video messages and family notes</span><span>Included</span></div>' +
+      (state.feature ? '<div class="summary-line"><span>Special feature: ' + esc(state.feature) + '</span><span>Included</span></div>' : '') +
+      (own ? '<div class="summary-line"><span>Her own web address (3 years)</span><span>$' + ADDON + '</span></div>' : '<div class="summary-line"><span>Hosting for 1 year</span><span>Included</span></div>');
+    $('summaryLines').innerHTML = lines;
+    $('totalAmount').textContent = '$' + (PRICE + (own ? ADDON : 0));
+    var m = missing();
+    $('missingBox').style.display = m.length ? 'block' : 'none';
+    $('missingBox').innerHTML = m.length ? '<strong>Before you send:</strong><ul>' + m.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+    $('sendBtn').disabled = m.length > 0;
   }
 
-  lines.innerHTML = html;
-
-  // Update notices and button
-  var styleNotice   = document.getElementById('styleNotice');
-  var featureNotice = document.getElementById('featureNotice');
-  var payBtn        = document.getElementById('payBtn');
-
-  if (!selectedStyle) {
-    styleNotice.style.display   = 'flex';
-    featureNotice.style.display = 'none';
-    payBtn.style.display        = 'none';
-  } else if (!selectedFeature) {
-    styleNotice.style.display   = 'none';
-    featureNotice.style.display = 'flex';
-    payBtn.style.display        = 'none';
-  } else {
-    styleNotice.style.display   = 'none';
-    featureNotice.style.display = 'none';
-    // Init Stripe if not yet done
-    if (!clientSecret) { initStripe(); }
-    payBtn.style.display = 'block';
-  }
-}
-
-function initStripe() {
-  fetch(VERCEL_FN, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ amount: 11000, description: "Mother's Day Memory Page — TEC Web Studio", currency: 'usd' })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if (!data.clientSecret) return;
-    clientSecret = data.clientSecret;
-
-    elements = stripe.elements({ clientSecret: clientSecret, appearance: {
-      theme: 'stripe',
-      variables: { colorPrimary: '#c97060', borderRadius: '10px', fontFamily: 'DM Sans, sans-serif' }
-    }});
-
-    var express = elements.create('expressCheckout', { buttonType: { applePay: 'buy', googlePay: 'buy' }, layout: { maxColumns: 2, maxRows: 1 } });
-    express.mount('#express-checkout-element');
-    express.on('confirm', function(){ submitPayment(); });
-    express.on('ready', function(e){
-      if (e.availablePaymentMethods && Object.keys(e.availablePaymentMethods).length > 0) {
-        document.getElementById('orDivider').style.display = 'flex';
-      }
-    });
-
-    var paymentEl = elements.create('payment', { layout: { type: 'accordion', defaultCollapsed: false } });
-    paymentEl.mount('#payment-element');
-  })
-  .catch(function(e){ console.error('Stripe init error:', e); });
-}
-
-function handlePay() {
-  if (!validate()) return;
-  submitPayment();
-}
-
-function validate() {
-  var ok = true;
-  var name  = document.getElementById('fName').value.trim();
-  var email = document.getElementById('fEmail').value.trim();
-  var mom   = document.getElementById('fMomName').value.trim();
-  var eOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  document.getElementById('fName').classList.toggle('err', !name);
-  document.getElementById('fNameErr').classList.toggle('show', !name);
-  document.getElementById('fEmail').classList.toggle('err', !eOk);
-  document.getElementById('fEmailErr').classList.toggle('show', !eOk);
-  document.getElementById('fMomName').classList.toggle('err', !mom);
-  document.getElementById('fMomNameErr').classList.toggle('show', !mom);
-
-  if (!name || !eOk || !mom) ok = false;
-  return ok;
-}
-
-function submitPayment() {
-  var btn = document.getElementById('payBtn');
-  btn.disabled = true; btn.textContent = 'Processing...';
-  document.getElementById('payMsg').textContent = '';
-
-  var name  = document.getElementById('fName').value.trim();
-  var email = document.getElementById('fEmail').value.trim();
-  var mom   = document.getElementById('fMomName').value.trim();
-
-  elements.submit().then(function(res){
-    if (res.error) {
-      btn.disabled = false; btn.textContent = 'Pay $110 — Gift Mom Her Page';
-      document.getElementById('payMsg').textContent = res.error.message;
-      return;
+  // Open or closed? The Worker decides, by date.
+  fetch(API + '/special/status?product=mothers_day').then(function (r) { return r.json(); }).then(function (s) {
+    if (!s || !s.ok) return;
+    $('deadline').textContent = s.open ? 'Requests close ' + s.closes : 'Requests open ' + s.opens + ' – ' + s.closes;
+    if (!s.open) {
+      $('orderForm').style.display = 'none';
+      $('closedText').textContent = "Mother's Day Memory Page requests open " + s.opens + ' and close ' + s.closes + ' each year, so we have time to build every page before Mother\'s Day.';
+      $('closedBox').classList.add('show');
     }
-    stripe.confirmPayment({
-      elements: elements,
-      clientSecret: clientSecret,
-      confirmParams: {
-        return_url: window.location.href + '?payment=complete',
-        payment_method_data: { billing_details: { name: name, email: email } }
-      },
-      redirect: 'if_required'
-    }).then(function(result){
-      btn.disabled = false; btn.textContent = 'Pay $110 — Gift Mom Her Page';
-      if (result.error) {
-        document.getElementById('payMsg').textContent = result.error.message;
-      } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-        logOrder(name, email, mom);
-        showSuccess();
-      }
+  }).catch(function () {});
+
+  $('orderForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (missing().length) { update(); return; }
+    if ($('companySite').value) { showSuccess(); return; }   // spam bots fill this hidden field
+    var btn = $('sendBtn'); btn.disabled = true; btn.textContent = 'Sending...'; $('formMsg').textContent = '';
+    fetch(API + '/special/request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      product: 'mothers_day', fullName: $('fName').value.trim(), email: $('fEmail').value.trim(), phone: $('fPhone').value.trim(),
+      hosting: state.host, wishedAddress: $('fAddr').value.trim(), style: state.style, feature: state.feature,
+      momName: $('fMom').value.trim(), neededBy: $('fNeeded').value.trim(), notes: $('fNotes').value.trim()
+    }) }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); }).then(function (x) {
+      if (!x.r.ok || !x.j.ok) throw new Error(x.j && x.j.message || '');
+      showSuccess();
+    }).catch(function (err) {
+      btn.disabled = false; btn.textContent = 'Send my request';
+      $('formMsg').textContent = err.message || "Something went wrong sending your request. Please try again, or email us at info@tecwebstudio.com.";
     });
   });
-}
-
-function logOrder(name, email, mom) {
-  var fd = new FormData();
-  fd.append('formType',       "Mother's Day Order");
-  fd.append('fullName',       name);
-  fd.append('email',          email);
-  fd.append('momName',        mom);
-  fd.append('style',          styleNames[selectedStyle] || '');
-  fd.append('feature',        featureNames[selectedFeature] || '');
-  fd.append('deadline',       document.getElementById('fDeadline').value.trim());
-  fd.append('notes',          document.getElementById('fNotes').value.trim());
-  fd.append('orderTotal',     '$110');
-  fetch(APPS_SCRIPT, { method: 'POST', mode: 'no-cors', body: fd }).catch(function(){});
-}
-
-function showSuccess() {
-  document.getElementById('paymentWrap').innerHTML = document.getElementById('successWrap').outerHTML;
-  document.querySelector('.success-wrap').classList.add('show');
-}
-
-// Check for redirect return
-(function(){
-  var p = new URLSearchParams(window.location.search);
-  if (p.get('payment') === 'complete' && p.get('payment_intent_client_secret')) {
-    stripe.retrievePaymentIntent(p.get('payment_intent_client_secret')).then(function(r){
-      if (r.paymentIntent && r.paymentIntent.status === 'succeeded') { showSuccess(); }
-    });
-  }
+  function showSuccess() { $('orderForm').style.display = 'none'; $('successBox').classList.add('show'); $('successBox').focus(); $('successBox').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  update();
 })();
 </script>
 </body>
