@@ -47,40 +47,84 @@
 /* Shared: the hard-coded teal areas follow each theme's colors */
 body.promo-on footer { background: var(--promo-footer, var(--teal-dark)); }
 body.promo-on .pain-section, body.promo-on .testimonials-wrap { background: var(--teal); }
+body.promo-on .browser-content > div[style] { background: linear-gradient(135deg, var(--teal), var(--teal-dark)) !important; }
+body.promo-on .mock-cta-btn { background: var(--gold); }
 
-/* ═══ WINTER — Holiday Website Special (and the Family Tree season) ═══
-   Soft, warm, wintry: twilight blues, cream and gold, falling snow.
-   No holiday-specific symbols, so it welcomes everyone. */
+/* Hero decorations live inside the hero itself */
+.promo-hero-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.hero, .page-hero-inner, .cta-inner { position: relative; z-index: 1; }
+
+/* ═══ HOLIDAY — "Family Traditions" ═══
+   Deep red, red, sage, evergreen and soft gray, with falling snowflakes. */
 body.promo-winter {
-  --teal: #4a6489; --teal-dark: #344a69; --teal-deep: #3d5a80; --teal-light: #eef2f8;
-  --gold: #e8c56b; --cream: #fbf8f2; --border: #dbe2ec; --text-muted: #56627a;
-  --promo-banner-bg: #2f4562; --promo-accent: #e8c56b; --promo-accent-text: #3d5a80; --promo-cta-bg: #344a69;
-  --promo-code-bg: #fbf8f2; --promo-fx: #ffffff; --promo-footer: #2f4562;
+  --teal: #24432f; --teal-dark: #1b3424; --teal-deep: #24432f; --teal-light: #eef1ee;
+  --gold: #a63a2e; --cream: #f6f7f8; --border: #dcdfdc; --text-muted: #55605a;
+  --promo-banner-bg: #74271f; --promo-accent: #a63a2e; --promo-accent-on: #fff; --promo-accent-text: #a63a2e;
+  --promo-cta-bg: #24432f; --promo-code-bg: #e9ebee; --promo-fx: #ffffff; --promo-footer: #1b3424;
 }
-body.promo-winter .hero-wrap, body.promo-winter .page-hero, body.promo-winter .cta-section { background: linear-gradient(160deg, #2f4562 0%, #4a6489 55%, #7d93b5 100%); }
-body.promo-winter .promo-fx span { text-shadow: 0 0 6px rgba(150,180,220,.8); }
+body.promo-winter .btn-primary, body.promo-winter .btn-primary-lg, body.promo-winter .nav-links a.nav-cta, body.promo-winter .mobile-menu a.mobile-cta { color: #fff; }
+body.promo-winter .hero-wrap, body.promo-winter .page-hero, body.promo-winter .cta-section { background: linear-gradient(160deg, #1b3424 0%, #24432f 50%, #3f6449 100%); }
+body.promo-winter .hero h1 em { color: #e9b3a6; }
+body.promo-winter .pain-section { background: #6a8a68; }
+body.promo-winter .testimonials-wrap { background: #74271f; }
+body.promo-winter .promo-pop { border-top-color: #a63a2e; }
+body.promo-winter .promo-pop::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; border-radius: 0 0 18px 18px; background: linear-gradient(90deg, #74271f 0 20%, #a63a2e 20% 40%, #6a8a68 40% 60%, #24432f 60% 80%, #e9ebee 80%); }
+body.promo-winter .promo-fx span { text-shadow: 0 0 6px rgba(255,255,255,.7); }
 
-/* ═══ CYBER — CYBERWEB weekend ═══
-   Old-school terminal: black screens, green type, scanlines, blinking cursor. */
+/* ═══ CYBER — Y2K desktop ═══
+   Lime grid, hot pink and purple, retro windows, chunky outlined buttons. */
 body.promo-cyber {
-  --teal: #1f8a4c; --teal-dark: #14663a; --teal-deep: #1f8a4c; --teal-light: #e9f7ee;
-  --gold: #39ff88; --border: #c6e8d3;
-  --promo-banner-bg: #050806; --promo-banner-fg: #39ff88; --promo-accent: #39ff88; --promo-accent-on: #050806; --promo-accent-text: #39ff88;
-  --promo-pop-bg: #050806; --promo-pop-fg: #c9ffd9; --promo-code-bg: #0b140e; --promo-cta-bg: #39ff88; --promo-cta-fg: #050806;
-  --promo-display: 'Courier New', ui-monospace, monospace; --promo-footer: #050806;
+  --teal: #7b2ff7; --teal-dark: #5a1fc0; --teal-deep: #7b2ff7; --teal-light: #f6ffd9;
+  --gold: #ff4fd8; --border: #1a1a1a; --cream: #fbffe8; --text-muted: #3d3d5c;
+  --promo-banner-bg: #7b2ff7; --promo-banner-fg: #fff; --promo-accent: #ff4fd8; --promo-accent-on: #1a1a1a; --promo-accent-text: #7b2ff7;
+  --promo-pop-bg: #fbffd6; --promo-pop-fg: #1a1a1a; --promo-code-bg: #ffffff; --promo-cta-bg: #ff4fd8; --promo-cta-fg: #1a1a1a;
+  --promo-display: 'Courier New', ui-monospace, monospace; --promo-footer: #5a1fc0;
 }
-body.promo-cyber .promo-banner-inner { font-family: 'Courier New', ui-monospace, monospace; }
-body.promo-cyber .hero-wrap, body.promo-cyber .page-hero, body.promo-cyber .cta-section { background: #050806; }
-body.promo-cyber .hero-wrap::after, body.promo-cyber .page-hero::after, body.promo-cyber .cta-section::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none; width: auto; height: auto; border-radius: 0;
-  background: repeating-linear-gradient(0deg, rgba(57,255,136,.06) 0 1px, transparent 1px 3px);
+body.promo-cyber .hero-wrap, body.promo-cyber .page-hero, body.promo-cyber .cta-section {
+  background-color: #eaff9e;
+  background-image: linear-gradient(rgba(123,47,247,.13) 1px, transparent 1px), linear-gradient(90deg, rgba(123,47,247,.13) 1px, transparent 1px), radial-gradient(ellipse at 80% 20%, #fff5a8 0%, #eaff9e 55%, #d4f76a 100%);
+  background-size: 28px 28px, 28px 28px, auto;
 }
-body.promo-cyber .hero h1, body.promo-cyber .page-hero h1, body.promo-cyber .cta-title { font-family: 'Courier New', ui-monospace, monospace; color: #39ff88; text-shadow: 0 0 12px rgba(57,255,136,.35); letter-spacing: -1px; }
-body.promo-cyber .hero h1 em { color: #c9ffd9; }
-body.promo-cyber .hero-sub, body.promo-cyber .page-hero p, body.promo-cyber .cta-sub, body.promo-cyber .hero-note, body.promo-cyber .cta-note { color: #a6f5c2; font-family: 'Courier New', ui-monospace, monospace; }
-body.promo-cyber .browser-mockup { box-shadow: 0 0 0 1px #39ff88, 0 24px 64px rgba(57,255,136,.25); }
-body.promo-cyber .promo-pop { border: 1px solid #39ff88; border-top: 6px solid #39ff88; box-shadow: 0 0 40px rgba(57,255,136,.25); }
-body.promo-cyber .promo-pop h2::before { content: '> '; }
+body.promo-cyber .hero-wrap::before, body.promo-cyber .hero-wrap::after, body.promo-cyber .page-hero::before, body.promo-cyber .cta-section::before { display: none; }
+body.promo-cyber .hero h1, body.promo-cyber .page-hero h1, body.promo-cyber .cta-title { color: #1a1a1a; font-family: 'Courier New', ui-monospace, monospace; font-weight: 700; letter-spacing: -1px; text-shadow: 3px 3px 0 #ff4fd8; }
+body.promo-cyber .hero h1 em { color: #7b2ff7; text-shadow: 3px 3px 0 #fff; }
+body.promo-cyber .hero-sub, body.promo-cyber .page-hero p, body.promo-cyber .cta-sub, body.promo-cyber .hero-note, body.promo-cyber .cta-note, body.promo-cyber .btn-ghost { color: #2a2a40; }
+/* chunky Y2K buttons */
+body.promo-cyber .btn-primary, body.promo-cyber .btn-primary-lg, body.promo-cyber .nav-links a.nav-cta, body.promo-cyber .mobile-menu a.mobile-cta, body.promo-cyber .btn-outline-light {
+  background: #ff4fd8; color: #1a1a1a; border: 2px solid #1a1a1a; border-radius: 6px; box-shadow: 4px 4px 0 #1a1a1a; font-family: 'Courier New', ui-monospace, monospace; font-weight: 700;
+}
+body.promo-cyber .btn-outline-light { background: #fff; }
+body.promo-cyber .btn-primary:hover, body.promo-cyber .btn-primary-lg:hover, body.promo-cyber .nav-links a.nav-cta:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1a1a1a; background: #ff7be3; }
+body.promo-cyber .browser-mockup { border: 2px solid #1a1a1a; box-shadow: 6px 6px 0 #1a1a1a; transform: none; border-radius: 8px; }
+body.promo-cyber .browser-bar { background: #ff4fd8; border-bottom: 2px solid #1a1a1a; }
+body.promo-cyber .pain-section, body.promo-cyber .testimonials-wrap { background: #7b2ff7; }
+body.promo-cyber .promo-banner { border-bottom: 2px solid #1a1a1a; }
+body.promo-cyber .promo-banner-inner { font-family: 'Courier New', ui-monospace, monospace; font-weight: 700; }
+body.promo-cyber .promo-code-btn { background: #eaff9e; color: #1a1a1a; border: 2px solid #1a1a1a; border-style: solid; box-shadow: 2px 2px 0 #1a1a1a; }
+/* the popup becomes a little CYBERWEB.exe window */
+body.promo-cyber .promo-pop { border: 2px solid #1a1a1a; border-radius: 10px; box-shadow: 8px 8px 0 #1a1a1a; padding-top: 58px; overflow: hidden; }
+body.promo-cyber .promo-pop::before { content: 'CYBERWEB.exe'; position: absolute; top: 0; left: 0; right: 0; height: 36px; display: flex; align-items: center; padding: 0 14px; background: #ff4fd8; border-bottom: 2px solid #1a1a1a; font: 700 13px 'Courier New', monospace; letter-spacing: 1px; text-align: left; }
+body.promo-cyber .promo-pop-x { top: 5px; right: 8px; width: 26px; height: 26px; padding: 0; font-size: 18px; line-height: 22px; background: #fff; border: 2px solid #1a1a1a; border-radius: 4px; opacity: 1; box-shadow: 2px 2px 0 #1a1a1a; }
+body.promo-cyber .promo-pop h2::before { content: none; }
+body.promo-cyber .promo-pop-code { border: 2px solid #1a1a1a; border-radius: 6px; box-shadow: inset 2px 2px 0 rgba(0,0,0,.15); }
+body.promo-cyber .promo-pop-copy, body.promo-cyber .promo-pop-cta { border: 2px solid #1a1a1a; border-radius: 6px; box-shadow: 3px 3px 0 #1a1a1a; font-family: 'Courier New', monospace; font-weight: 700; }
+body.promo-cyber .promo-pop-copy { background: #eaff9e; }
+body.promo-cyber .promo-pop-msg::after { content: ''; display: block; height: 14px; margin: 14px auto 0; max-width: 260px; border: 2px solid #1a1a1a; border-radius: 4px; background: linear-gradient(90deg, #7b2ff7 0 30%, #fff 30%); }
+/* retro desktop bits in the hero */
+.y2k-win { position: absolute; background: #fff; border: 2px solid #1a1a1a; border-radius: 6px; box-shadow: 4px 4px 0 #1a1a1a; font: 700 11px 'Courier New', monospace; color: #1a1a1a; }
+.y2k-win b { display: block; background: #7b2ff7; color: #fff; padding: 3px 8px; border-bottom: 2px solid #1a1a1a; border-radius: 3px 3px 0 0; font-weight: 700; }
+.y2k-win b::after { content: '\2715'; float: right; }
+.y2k-win span { display: block; padding: 8px 10px; }
+.y2k-win.w1 { top: 7%; right: 5%; width: 170px; transform: rotate(3deg); }
+.y2k-win.w2 { bottom: 7%; left: 40%; width: 150px; transform: rotate(-4deg); }
+.page-hero .y2k-win.w2 { left: 3%; }
+.y2k-win.w2 b { background: #ff4fd8; color: #1a1a1a; }
+.y2k-bar { display: block; height: 10px; margin-top: 6px; border: 2px solid #1a1a1a; background: linear-gradient(90deg, #ff4fd8 0 70%, #fff 70%); }
+.y2k-cursor { position: absolute; width: 0; height: 0; border-left: 9px solid transparent; border-right: 9px solid transparent; border-bottom: 22px solid #fff; filter: drop-shadow(2px 2px 0 #1a1a1a); }
+.y2k-cursor.c1 { top: 28%; right: 26%; transform: rotate(-25deg); }
+.y2k-cursor.c2 { bottom: 22%; right: 9%; transform: rotate(-35deg); }
+.y2k-cursor.c3 { top: 14%; left: 42%; transform: rotate(-20deg); }
+@media (max-width: 900px) { .y2k-win { display: none; } }
 
 /* ═══ MOTHER'S DAY ═══  Hearts and flowers, rosy reds and pinks. */
 body.promo-mothers {
@@ -92,35 +136,105 @@ body.promo-mothers {
 body.promo-mothers .hero-wrap, body.promo-mothers .page-hero, body.promo-mothers .cta-section { background: linear-gradient(160deg, #f2b4a4 0%, #e08b86 45%, #c95f6e 100%); }
 body.promo-mothers .hero h1 em { color: #fff2c4; }
 
-/* ═══ TEACHER APPRECIATION ═══  Chalkboard green with apple red. */
+/* ═══ TEACHER APPRECIATION — "Nostalgic Notebook" ═══
+   Chalkboard Green #2D5A27, Composition Black #1F2937, Soft Cream #FDFBF7,
+   No. 2 Pencil Yellow #FBBF24, Notebook Paper Blue #3B82F6. */
 body.promo-teacher {
-  --teal: #3c6b55; --teal-dark: #2b4d3d; --teal-deep: #355f4b; --teal-light: #edf4ef;
-  --gold: #e2574c; --border: #d3e2d8;
-  --promo-banner-bg: #c7372b; --promo-accent: #e2574c; --promo-accent-on: #fff; --promo-accent-text: #c7372b; --promo-cta-bg: #2b4d3d;
-  --promo-code-bg: #f6faf7; --promo-fx: #ffffff; --promo-footer: #2b4d3d;
+  --teal: #2D5A27; --teal-dark: #23471f; --teal-deep: #2D5A27; --teal-light: #eef4ec;
+  --gold: #FBBF24; --cream: #FDFBF7; --border: #e6e1d6; --text-muted: #4b5563; --ink: #1F2937;
+  --promo-banner-bg: #2D5A27; --promo-accent: #FBBF24; --promo-accent-on: #1F2937; --promo-accent-text: #2D5A27;
+  --promo-pop-bg: #FDFBF7; --promo-pop-fg: #1F2937; --promo-cta-bg: #1F2937; --promo-code-bg: #ffffff; --promo-footer: #1F2937;
 }
-body.promo-teacher .btn-primary, body.promo-teacher .btn-primary-lg, body.promo-teacher .nav-links a.nav-cta, body.promo-teacher .mobile-menu a.mobile-cta { color: #fff; }
-body.promo-teacher .hero-wrap, body.promo-teacher .page-hero, body.promo-teacher .cta-section { background: radial-gradient(ellipse at 30% 20%, #3e6a55 0%, #2b4d3d 60%, #213b2f 100%); }
-body.promo-teacher .hero h1, body.promo-teacher .page-hero h1 { text-shadow: 0 0 1px rgba(255,255,255,.4); }
-body.promo-teacher .hero h1 em { color: #ffb3a8; }
+/* composition-notebook cover */
+body.promo-teacher .hero-wrap, body.promo-teacher .page-hero, body.promo-teacher .cta-section {
+  background-color: #1F2937;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.10) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,.08) 0 3px, transparent 4px),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,.07) 0 2px, transparent 3px),
+    radial-gradient(circle at 85% 20%, rgba(255,255,255,.09) 0 1px, transparent 2px);
+  background-size: 23px 19px, 31px 29px, 17px 23px, 13px 11px;
+}
+body.promo-teacher .hero-wrap::before, body.promo-teacher .page-hero::before, body.promo-teacher .cta-section::before { display: none; }
+body.promo-teacher .hero-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 34px; height: auto; border-radius: 0; background: #111827; box-shadow: inset -3px 0 0 rgba(255,255,255,.08); }
+body.promo-teacher .hero h1 em { color: #FBBF24; }
+body.promo-teacher .pain-section { background: #2D5A27; }
+body.promo-teacher .testimonials-wrap { background: #1F2937; }
+body.promo-teacher .promo-pop { background-image: repeating-linear-gradient(180deg, transparent 0 27px, rgba(59,130,246,.22) 27px 28px); border-top-color: #FBBF24; }
+body.promo-teacher .promo-pop-code { border-color: #3B82F6; }
+body.promo-teacher .promo-code-btn { background: #FBBF24; color: #1F2937; border: 2px solid #1F2937; }
+.notebook-label { position: absolute; top: 22px; right: 4%; background: #FDFBF7; border: 2px solid #1F2937; border-radius: 6px; padding: 8px 16px 10px; text-align: center; font: 600 12px Georgia, serif; color: #1F2937; transform: rotate(2deg); box-shadow: 3px 3px 0 rgba(0,0,0,.25); }
+.notebook-label i { display: block; height: 1px; background: #3B82F6; margin: 5px 0; opacity: .7; }
+.notebook-pencil { position: absolute; bottom: 14%; right: 6%; width: 150px; height: 16px; background: #FBBF24; border: 2px solid #1F2937; border-radius: 3px; transform: rotate(-14deg); }
+.notebook-pencil::before { content: ''; position: absolute; left: -22px; top: -2px; border-right: 22px solid #f3d9a4; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+.notebook-pencil::after { content: ''; position: absolute; right: -16px; top: -2px; width: 14px; height: 16px; background: #f4a3b5; border: 2px solid #1F2937; border-left: 6px solid #b0b8c4; border-radius: 0 4px 4px 0; }
+@media (max-width: 900px) { .notebook-label, .notebook-pencil { display: none; } }
 
-/* ═══ BACK TO SCHOOL ═══  Notebook paper, ink blue, pencil yellow. */
+/* ═══ BACK TO SCHOOL — Chalkboard ═══
+   Chalkboard green, chalk dust, chalk lettering, wooden frame and eraser. */
 body.promo-school {
-  --teal: #2d5fa8; --teal-dark: #224a85; --teal-deep: #2d5fa8; --teal-light: #eaf1fb;
-  --gold: #f5c842; --border: #d3def0;
-  --promo-banner-bg: #224a85; --promo-accent: #f5c842; --promo-accent-text: #224a85; --promo-cta-bg: #224a85;
-  --promo-code-bg: #fffdf0; --promo-fx: #f5c842; --promo-footer: #224a85;
+  --teal: #2f5a45; --teal-dark: #24473a; --teal-deep: #2f5a45; --teal-light: #eef4f0;
+  --gold: #f5c842; --border: #d5e2da;
+  --promo-banner-bg: #24473a; --promo-accent: #f5c842; --promo-accent-text: #2f5a45; --promo-cta-bg: #24473a;
+  --promo-pop-bg: #2f5a45; --promo-pop-fg: #f4f4ef; --promo-code-bg: rgba(255,255,255,.06);
+  --promo-display: 'Chalkboard SE', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive; --promo-footer: #24473a;
 }
 body.promo-school .hero-wrap, body.promo-school .page-hero, body.promo-school .cta-section {
-  background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(255,255,255,.14) 31px 32px), linear-gradient(160deg, #2d5fa8 0%, #3a74c4 100%);
+  background-color: #2f5a45;
+  background-image:
+    radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.07) 0%, transparent 45%),
+    radial-gradient(ellipse at 75% 70%, rgba(255,255,255,.05) 0%, transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(255,255,255,.04) 0%, transparent 30%),
+    linear-gradient(160deg, #335f49 0%, #2a5340 100%);
+  border-top: 14px solid #8b5a2b; border-bottom: 22px solid #8b5a2b;
+  box-shadow: inset 0 0 0 4px #6e4520, inset 0 0 60px rgba(0,0,0,.35);
 }
-body.promo-school .promo-pop { background-image: repeating-linear-gradient(180deg, transparent 0 27px, #e6edf8 27px 28px); border-left: 3px solid #f2a7a7; }
+body.promo-school .hero-wrap::before, body.promo-school .hero-wrap::after, body.promo-school .page-hero::before, body.promo-school .cta-section::before { display: none; }
+body.promo-school .hero h1, body.promo-school .page-hero h1, body.promo-school .cta-title { font-family: 'Chalkboard SE', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive; color: #f4f4ef; text-shadow: 0 0 2px rgba(255,255,255,.55), 1px 1px 0 rgba(255,255,255,.15); letter-spacing: .5px; }
+body.promo-school .hero h1 em { color: #f9e27a; }
+body.promo-school .hero-sub, body.promo-school .page-hero p { color: #e6ece8; }
+body.promo-school .promo-pop { border: 10px solid #8b5a2b; border-top-width: 10px; box-shadow: 0 24px 64px rgba(0,0,0,.4), inset 0 0 40px rgba(0,0,0,.3); }
+body.promo-school .promo-pop h2 { color: #f4f4ef; text-shadow: 0 0 2px rgba(255,255,255,.5); }
+body.promo-school .promo-pop-code { border-color: rgba(244,244,239,.7); }
+body.promo-school .promo-pop-cta { background: #f5c842; color: #1a2e2e; }
+body.promo-school .promo-pop-eyebrow { color: #f9e27a; }
+.chalk-tray { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: #6e4520; box-shadow: 0 -2px 0 rgba(0,0,0,.25); }
+.chalk-eraser { position: absolute; bottom: 12px; right: 9%; width: 120px; height: 34px; border-radius: 4px; background: linear-gradient(180deg, #a8743f 0 55%, #474a4f 55% 100%); border: 2px solid #3d2a14; box-shadow: 0 3px 0 rgba(0,0,0,.3); }
+.chalk-eraser::after { content: ''; position: absolute; left: 10px; right: 10px; top: 5px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.25); }
+.chalk-stick { position: absolute; bottom: 12px; width: 46px; height: 10px; border-radius: 5px; background: #f4f4ef; box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.chalk-stick.s1 { right: calc(9% + 140px); } .chalk-stick.s2 { right: calc(9% + 196px); width: 30px; background: #f9e27a; }
+.chalk-doodle { position: absolute; font: 26px 'Chalkboard SE', 'Segoe Print', 'Bradley Hand', cursive; color: rgba(244,244,239,.55); }
+.chalk-doodle.d1 { top: 10%; right: 7%; transform: rotate(-8deg); }
+.chalk-doodle.d2 { top: 34%; right: 30%; font-size: 20px; transform: rotate(6deg); }
+.chalk-doodle.d3 { bottom: 26%; left: 4%; font-size: 22px; transform: rotate(-5deg); }
+body.promo-school .page-hero .chalk-doodle.d2, body.promo-school .page-hero .chalk-doodle.d3 { display: none; }
+@media (max-width: 900px) { .chalk-doodle.d2 { display: none; } .chalk-eraser { right: 4%; } .chalk-stick { display: none; } }
 
-/* ═══ NEW YEAR (Teacher Entrepreneur) ═══  Fresh start: deep indigo, gold sparkle. */
+/* ═══ NEW YEAR — black, gold, white and silver, with fireworks ═══ */
 body.promo-newyear {
-  --teal: #3b4f8f; --teal-dark: #2c3b6e; --teal-deep: #3b4f8f; --teal-light: #eef0f9;
-  --gold: #f5c842; --border: #d8dcef;
-  --promo-banner-bg: #2c3b6e; --promo-accent: #f5c842; --promo-accent-text: #3b4f8f; --promo-cta-bg: #2c3b6e;
-  --promo-code-bg: #fbfaf4; --promo-fx: #f5c842; --promo-footer: #2c3b6e;
+  --teal: #1a1a1a; --teal-dark: #000000; --teal-deep: #1a1a1a; --teal-light: #f5f2ea;
+  --gold: #d4af37; --cream: #fbfaf6; --border: #e3ddcc; --text-muted: #555555;
+  --promo-banner-bg: #0b0b0b; --promo-banner-fg: #f3e2a6; --promo-accent: #d4af37; --promo-accent-text: #a8862a;
+  --promo-cta-bg: #0b0b0b; --promo-cta-fg: #f3e2a6; --promo-code-bg: #faf8f1; --promo-footer: #0b0b0b;
 }
-body.promo-newyear .hero-wrap, body.promo-newyear .page-hero, body.promo-newyear .cta-section { background: linear-gradient(160deg, #2c3b6e 0%, #3b4f8f 50%, #4f8f9a 100%); }
+body.promo-newyear .hero-wrap, body.promo-newyear .page-hero, body.promo-newyear .cta-section { background: radial-gradient(ellipse at 50% 120%, #2a2a2a 0%, #111 55%, #050505 100%); }
+body.promo-newyear .hero-wrap::before, body.promo-newyear .hero-wrap::after, body.promo-newyear .page-hero::before, body.promo-newyear .cta-section::before { display: none; }
+body.promo-newyear .hero h1 em { background: linear-gradient(90deg, #f3e2a6, #d4af37 40%, #e8e8e8 70%, #c0c0c0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+body.promo-newyear .btn-primary, body.promo-newyear .btn-primary-lg, body.promo-newyear .nav-links a.nav-cta { background: linear-gradient(135deg, #f3e2a6, #d4af37 55%, #b8962e); color: #0b0b0b; }
+body.promo-newyear .pain-section { background: #111; }
+body.promo-newyear .testimonials-wrap { background: #1a1a1a; }
+body.promo-newyear .promo-pop { border-top: 6px solid transparent; border-image: linear-gradient(90deg, #c0c0c0, #d4af37, #f3e2a6, #d4af37, #c0c0c0) 1; border-image-slice: 6 0 0 0; border-image-width: 6px 0 0 0; }
+body.promo-newyear .promo-pop-copy { background: linear-gradient(135deg, #f3e2a6, #d4af37); }
+body.promo-newyear .promo-code-btn { border-color: #d4af37; color: #f3e2a6; }
+.fw { position: absolute; width: 7px; height: 7px; border-radius: 50%; animation: fwBurst 3.2s ease-out infinite; opacity: 0; filter: drop-shadow(0 0 6px currentColor); }
+.fw::before, .fw::after { content: ''; position: absolute; inset: 0; border-radius: 50%; }
+.fw.gold { color: #f3d27a; } .fw.silver { color: #e6e6e6; } .fw.white { color: #ffffff; }
+.fw, .fw::before, .fw::after {
+  box-shadow: 0 -95px 0 currentColor, 36px -88px 0 currentColor, 67px -67px 0 currentColor, 88px -36px 0 currentColor,
+              95px 0 0 currentColor, 88px 36px 0 currentColor, 67px 67px 0 currentColor, 36px 88px 0 currentColor,
+              0 95px 0 currentColor, -36px 88px 0 currentColor, -67px 67px 0 currentColor, -88px 36px 0 currentColor,
+              -95px 0 0 currentColor, -88px -36px 0 currentColor, -67px -67px 0 currentColor, -36px -88px 0 currentColor;
+}
+.fw::before { transform: rotate(11deg) scale(.68); } .fw::after { transform: rotate(-11deg) scale(.4); }
+@keyframes fwBurst { 0% { transform: scale(.05); opacity: 0; } 8% { opacity: 1; } 55% { transform: scale(1); opacity: .9; } 100% { transform: scale(1.15) translateY(14px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .fw { animation: none; opacity: .45; transform: scale(.9); } }
