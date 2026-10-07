@@ -4,7 +4,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TEC Web Studio Payment</title>
+  <title>TEC Web Studio – Payment</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -745,7 +745,7 @@
     document.getElementById('total-display').textContent = '$' + t.one;
     var rd = document.getElementById('recurring-display');
     rd.style.display = t.rec ? 'block' : 'none';
-    rd.textContent = t.rec ? '+ $' + t.rec + '/month' : '';
+    rd.textContent = t.rec ? '+ $' + t.rec + '/month once your site launches' : '';
 
     document.getElementById('clear-prio').style.display = state.priority ? 'inline' : 'none';
     document.getElementById('clear-care').style.display = state.care ? 'inline' : 'none';
@@ -753,7 +753,7 @@
     var notice = document.getElementById('care-notice');
     if (state.care && CARE[state.care].type === 'monthly') {
       var c = CARE[state.care];
-      document.getElementById('care-notice-text').innerHTML = c.name + ' is a <strong>recurring monthly subscription of $' + c.price + '</strong>. Your card will be charged automatically each month until you cancel.';
+      document.getElementById('care-notice-text').innerHTML = c.name + ' is a <strong>monthly subscription of $' + c.price + '</strong>. Nothing is charged for it today: your card is saved, and monthly billing starts when your website launches. You can cancel anytime.';
       notice.style.display = 'block';
     } else {
       notice.style.display = 'none';

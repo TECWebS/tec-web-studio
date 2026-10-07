@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TEC Web Studio Builder</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
   :root{
@@ -306,6 +306,7 @@
     <button type="button" data-admintab="requests" role="tab" aria-selected="false">Requests</button>
     <button type="button" data-admintab="orders" role="tab" aria-selected="false">Orders</button>
     <button type="button" data-admintab="reviews" role="tab" aria-selected="false">Reviews</button>
+    <button type="button" data-admintab="subs" role="tab" aria-selected="false">Subscriptions</button>
   </div>
 
   <div id="adminTabStarter">
@@ -395,6 +396,22 @@
         <tbody id="revRows"><tr><td colspan="6">Loading…</td></tr></tbody>
       </table></div>
       <p class="msg" id="revMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabSubs" hidden>
+    <h2>Website Care Subscriptions</h2>
+    <div class="admin-card">
+      <p class="sub" style="margin-bottom:12px;">Website Care orders wait here. Once a customer's website is live, click <strong>Start billing</strong>: their saved card is charged for the first month right then, and on the same date every month after. Customers can update their card or cancel through Stripe's billing page, and this list updates on its own.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="subCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="subRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Customer</th><th>Plan</th><th>Ordered</th><th>Status</th><th></th></tr></thead>
+        <tbody id="subRows"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="subMsg" role="status" aria-live="polite"></p>
     </div>
   </div>
 </div>
@@ -898,10 +915,12 @@
     $("#adminTabRequests").hidden = t !== "requests";
     $("#adminTabOrders").hidden = t !== "orders";
     $("#adminTabReviews").hidden = t !== "reviews";
+    $("#adminTabSubs").hidden = t !== "subs";
     if (t === "audits" && !auditsLoadedOnce) loadAudits();
     if (t === "requests" && !reqLoadedOnce) loadRequests();
     if (t === "orders" && !ordersLoadedOnce) loadOrders("");
     if (t === "reviews" && !revLoadedOnce) loadReviews();
+    if (t === "subs" && !subsLoadedOnce) loadSubs();
   }
   document.querySelectorAll('.seg[role="tablist"] button[data-admintab]').forEach(function (b) { b.addEventListener("click", function () { showAdminTab(b.dataset.admintab); }); });
 
@@ -1480,6 +1499,49 @@
       r.approved = next; renderReviews();
       say("#revMsg", next ? "Now showing on your homepage." : "Hidden from your homepage.", true);
     }).catch(function (err) { say("#revMsg", friendlyError(err), false); b.disabled = false; });
+  });
+
+  /* ---- Website Care subscriptions ---- */
+  var subsLoadedOnce = false, subData = [];
+  var SUB_STATUS = {
+    pending: ['review', 'Waiting to start'], starting: ['review', 'Starting…'], active: ['live', 'Active'],
+    past_due: ['off', 'Payment failed'], unpaid: ['off', 'Unpaid'], canceled: ['', 'Canceled'], incomplete: ['review', 'Incomplete']
+  };
+  function loadSubs() {
+    say("#subMsg", "Loading…", true);
+    api("GET", "/admin/subscriptions").then(function (j) {
+      subsLoadedOnce = true; subData = j.results || []; say("#subMsg", ""); renderSubs();
+    }).catch(function (err) { say("#subMsg", friendlyError(err), false); });
+  }
+  function renderSubs() {
+    var waiting = subData.filter(function (x) { return x.status === "pending"; }).length;
+    var active = subData.filter(function (x) { return x.status === "active"; }).length;
+    $("#subCount").textContent = subData.length + " subscription" + (subData.length === 1 ? "" : "s") + " · " + active + " active" + (waiting ? " · " + waiting + " waiting to start" : "");
+    $("#subRows").innerHTML = subData.length ? subData.map(function (x, i) {
+      var st = SUB_STATUS[x.status] || ['', x.status];
+      var when = x.status === "canceled" && x.canceledAt ? "Ended " + fmtDate(x.canceledAt) : x.startedAt ? "Billing since " + fmtDate(x.startedAt) : "";
+      var actions = "";
+      if (x.status === "pending") actions += x.hasCard
+        ? '<button type="button" class="btn-primary btn-sm" data-sub-start="' + i + '">Start billing</button>'
+        : '<span class="pill off" title="No card was saved at checkout">No card saved</span>';
+      if (x.stripeCustomerId && /^cus_[A-Za-z0-9]+$/.test(x.stripeCustomerId)) actions += '<a class="btn-ghost btn-sm" style="text-decoration:none;" target="_blank" rel="noopener" href="https://dashboard.stripe.com/customers/' + esc(x.stripeCustomerId) + '">Open in Stripe</a>';
+      return '<tr class="' + (x.status === "pending" || x.status === "past_due" ? "needs" : "") + '"><td><strong>' + esc(x.businessName || x.fullName || x.email) + "</strong><br>" + esc(x.email) +
+        "</td><td>" + esc(x.plan) + "<br>$" + esc(String(x.price)) + "/month</td><td>" + esc(fmtDate(x.createdAt)) +
+        '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + (when ? '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(when) + "</span>" : "") +
+        (x.lastError && x.status === "pending" ? '<br><span style="color:var(--danger);font-size:12px;">Last try: ' + esc(x.lastError) + "</span>" : "") +
+        '</td><td><div class="row-actions">' + actions + "</div></td></tr>";
+    }).join("") : '<tr><td colspan="5">No Website Care subscriptions yet. They appear here when someone orders Website Care.</td></tr>';
+  }
+  $("#subRefresh").addEventListener("click", loadSubs);
+  $("#subRows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-sub-start]"); if (!b) return;
+    var x = subData[+b.dataset.subStart];
+    if (!confirm("Start " + x.plan + " for " + (x.businessName || x.fullName || x.email) + "?\n\nTheir saved card will be charged $" + x.price + " today, and $" + x.price + " on this date every month until they cancel.\n\nOnly do this once their website is live.")) return;
+    b.disabled = true; say("#subMsg", "Starting billing…", true);
+    api("POST", "/admin/subscriptions/start", { id: x.id }).then(function () {
+      say("#subMsg", "Billing started for " + x.email + ". They've been emailed a confirmation with their manage/cancel link.", true);
+      loadSubs();
+    }).catch(function (err) { say("#subMsg", friendlyError(err), false); b.disabled = false; loadSubs(); });
   });
 
   /* =====================================================================
