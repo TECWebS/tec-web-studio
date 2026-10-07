@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Let's Build Your Website — Contact TEC Web Studio</title>
+<title>Let's Build Your Website</title>
 <meta name="description" content="Tell us a little about your business and what you're looking for. We'll get back to you with the next steps.">
 
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-fixed-16.png">
@@ -222,7 +222,6 @@
 <div class="option-item"><input type="radio" name="package" id="pkg_quickstart" value="Quick Start — $299" data-key="quickstart" /><label for="pkg_quickstart">Quick Start — $299</label></div>
             <div class="option-item"><input type="radio" name="package" id="pkg_business" value="Business Website — $599" data-key="business" /><label for="pkg_business">Business Website — $599</label></div>
             <div class="option-item"><input type="radio" name="package" id="pkg_complete" value="Complete Brand + Website — $799" data-key="complete" /><label for="pkg_complete">Complete Brand + Website — $799</label></div>
-            <div class="option-item"><input type="radio" name="package" id="pkg_makeover" value="Website Makeover — $399" data-key="makeover" /><label for="pkg_makeover">Website Makeover — $399</label></div>
             <div class="option-item"><input type="radio" name="package" id="pkg_unsure" value="I'm not sure" data-key="unsure" /><label for="pkg_unsure">I'm not sure</label></div>
           </div>
           <div class="error-group-msg" id="packageErr">Please select an option.</div>
@@ -312,7 +311,7 @@
     r.addEventListener('change', function() { $('packageErr').classList.remove('visible'); });
   });
 
-  // Preselect a package from the link, e.g. contact.html?package=makeover
+  // Preselect a package from the link, e.g. contact.html?package=business
   (function() {
     const key = new URLSearchParams(location.search).get('package');
     if (!key) return;
