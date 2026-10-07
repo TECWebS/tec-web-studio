@@ -1,0 +1,126 @@
+/* TEC Web Studio — seasonal promotion themes
+   Loaded by site.js only while a promotion is running (or previewing).
+   Each theme recolors the existing design through the same color
+   variables site.css uses, then restyles the few hard-coded teal areas. */
+
+/* ── Banner under the menu ───────────────────────── */
+.promo-banner { background: var(--promo-banner-bg, #1a2e2e); color: var(--promo-banner-fg, #fff); position: relative; z-index: 150; }
+.promo-banner-inner { max-width: 1080px; margin: auto; padding: 10px 24px; display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 14px; text-align: center; }
+.promo-banner-title { font-weight: 700; }
+.promo-banner-cta { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.promo-banner-ends { opacity: .85; font-size: 12.5px; }
+.promo-code-btn { font: 700 13px/1 'Courier New', monospace; letter-spacing: 1.5px; background: rgba(255,255,255,.16); color: inherit; border: 1.5px dashed currentColor; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.promo-code-btn:hover { background: rgba(255,255,255,.28); }
+
+/* ── Popup ───────────────────────────────────────── */
+.promo-pop-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(15,25,25,.55); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity .25s; }
+.promo-pop-backdrop.open { opacity: 1; }
+.promo-pop { position: relative; background: var(--promo-pop-bg, #fff); color: var(--promo-pop-fg, #1a2e2e); border-radius: 18px; max-width: 440px; width: 100%; padding: 32px 28px 26px; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,.3); border-top: 6px solid var(--promo-accent, #F5C842); transform: translateY(12px); transition: transform .25s; }
+.promo-pop-backdrop.open .promo-pop { transform: none; }
+.promo-pop-x { position: absolute; top: 10px; right: 12px; background: none; border: 0; font-size: 26px; line-height: 1; color: inherit; opacity: .6; cursor: pointer; padding: 4px 8px; }
+.promo-pop-x:hover { opacity: 1; }
+.promo-pop-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--promo-accent-text, #3d7a80); margin-bottom: 10px; }
+.promo-pop h2 { font-family: var(--promo-display, var(--serif)); font-weight: 400; font-size: 27px; line-height: 1.2; margin-bottom: 10px; color: inherit; }
+.promo-pop-msg { font-size: 15px; line-height: 1.65; opacity: .9; margin-bottom: 18px; }
+.promo-pop-code { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; background: var(--promo-code-bg, #f4f8f8); border: 2px dashed var(--promo-accent, #F5C842); border-radius: 12px; padding: 12px; margin-bottom: 18px; }
+.promo-pop-code span { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: .7; width: 100%; }
+.promo-pop-code strong { font: 700 22px/1.2 'Courier New', monospace; letter-spacing: 3px; }
+.promo-pop-copy { background: var(--promo-accent, #F5C842); color: var(--promo-accent-on, #1a2e2e); border: 0; border-radius: 50px; padding: 8px 16px; font-weight: 700; font-size: 13px; cursor: pointer; }
+.promo-pop-actions { display: flex; flex-direction: column; gap: 8px; }
+.promo-pop-cta { display: block; background: var(--promo-cta-bg, #3d7a80); color: var(--promo-cta-fg, #fff); border-radius: 50px; padding: 14px 20px; font-weight: 700; text-decoration: none; }
+.promo-pop-later { background: none; border: 0; color: inherit; opacity: .7; text-decoration: underline; cursor: pointer; font-size: 13px; padding: 6px; }
+.promo-pop-others { list-style: none; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid rgba(128,128,128,.25); font-size: 13px; opacity: .85; }
+.promo-pop-others li { margin: 4px 0; }
+
+/* ── Falling decorations ─────────────────────────── */
+.promo-fx { position: fixed; inset: 0; pointer-events: none; z-index: 120; overflow: hidden; }
+.promo-fx span { position: absolute; top: -40px; color: var(--promo-fx, #fff); animation: promoFall linear infinite; will-change: transform; }
+@keyframes promoFall { from { transform: translateY(-40px) rotate(0deg); } to { transform: translateY(110vh) rotate(200deg); } }
+.promo-cursor { display: inline-block; margin-left: 2px; animation: promoBlink 1s steps(1) infinite; }
+@keyframes promoBlink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .promo-fx { display: none; }
+  .promo-cursor { animation: none; }
+  .promo-pop-backdrop, .promo-pop { transition: none; }
+}
+
+/* Shared: the hard-coded teal areas follow each theme's colors */
+body.promo-on footer { background: var(--promo-footer, var(--teal-dark)); }
+body.promo-on .pain-section, body.promo-on .testimonials-wrap { background: var(--teal); }
+
+/* ═══ WINTER — Holiday Website Special (and the Family Tree season) ═══
+   Soft, warm, wintry: twilight blues, cream and gold, falling snow.
+   No holiday-specific symbols, so it welcomes everyone. */
+body.promo-winter {
+  --teal: #4a6489; --teal-dark: #344a69; --teal-deep: #3d5a80; --teal-light: #eef2f8;
+  --gold: #e8c56b; --cream: #fbf8f2; --border: #dbe2ec; --text-muted: #56627a;
+  --promo-banner-bg: #2f4562; --promo-accent: #e8c56b; --promo-accent-text: #3d5a80; --promo-cta-bg: #344a69;
+  --promo-code-bg: #fbf8f2; --promo-fx: #ffffff; --promo-footer: #2f4562;
+}
+body.promo-winter .hero-wrap, body.promo-winter .page-hero, body.promo-winter .cta-section { background: linear-gradient(160deg, #2f4562 0%, #4a6489 55%, #7d93b5 100%); }
+body.promo-winter .promo-fx span { text-shadow: 0 0 6px rgba(150,180,220,.8); }
+
+/* ═══ CYBER — CYBERWEB weekend ═══
+   Old-school terminal: black screens, green type, scanlines, blinking cursor. */
+body.promo-cyber {
+  --teal: #1f8a4c; --teal-dark: #14663a; --teal-deep: #1f8a4c; --teal-light: #e9f7ee;
+  --gold: #39ff88; --border: #c6e8d3;
+  --promo-banner-bg: #050806; --promo-banner-fg: #39ff88; --promo-accent: #39ff88; --promo-accent-on: #050806; --promo-accent-text: #39ff88;
+  --promo-pop-bg: #050806; --promo-pop-fg: #c9ffd9; --promo-code-bg: #0b140e; --promo-cta-bg: #39ff88; --promo-cta-fg: #050806;
+  --promo-display: 'Courier New', ui-monospace, monospace; --promo-footer: #050806;
+}
+body.promo-cyber .promo-banner-inner { font-family: 'Courier New', ui-monospace, monospace; }
+body.promo-cyber .hero-wrap, body.promo-cyber .page-hero, body.promo-cyber .cta-section { background: #050806; }
+body.promo-cyber .hero-wrap::after, body.promo-cyber .page-hero::after, body.promo-cyber .cta-section::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; width: auto; height: auto; border-radius: 0;
+  background: repeating-linear-gradient(0deg, rgba(57,255,136,.06) 0 1px, transparent 1px 3px);
+}
+body.promo-cyber .hero h1, body.promo-cyber .page-hero h1, body.promo-cyber .cta-title { font-family: 'Courier New', ui-monospace, monospace; color: #39ff88; text-shadow: 0 0 12px rgba(57,255,136,.35); letter-spacing: -1px; }
+body.promo-cyber .hero h1 em { color: #c9ffd9; }
+body.promo-cyber .hero-sub, body.promo-cyber .page-hero p, body.promo-cyber .cta-sub, body.promo-cyber .hero-note, body.promo-cyber .cta-note { color: #a6f5c2; font-family: 'Courier New', ui-monospace, monospace; }
+body.promo-cyber .browser-mockup { box-shadow: 0 0 0 1px #39ff88, 0 24px 64px rgba(57,255,136,.25); }
+body.promo-cyber .promo-pop { border: 1px solid #39ff88; border-top: 6px solid #39ff88; box-shadow: 0 0 40px rgba(57,255,136,.25); }
+body.promo-cyber .promo-pop h2::before { content: '> '; }
+
+/* ═══ MOTHER'S DAY ═══  Hearts and flowers, rosy reds and pinks. */
+body.promo-mothers {
+  --teal: #c97060; --teal-dark: #a05040; --teal-deep: #b35a4a; --teal-light: #fbe9e4;
+  --gold: #f6b8c6; --cream: #fdf5f2; --border: #f0d4cc; --text-muted: #8a6060;
+  --promo-banner-bg: #a05040; --promo-accent: #e8728a; --promo-accent-on: #fff; --promo-accent-text: #b35a4a; --promo-cta-bg: #c0485f;
+  --promo-code-bg: #fdf5f2; --promo-fx: #e8728a; --promo-footer: #a05040;
+}
+body.promo-mothers .hero-wrap, body.promo-mothers .page-hero, body.promo-mothers .cta-section { background: linear-gradient(160deg, #f2b4a4 0%, #e08b86 45%, #c95f6e 100%); }
+body.promo-mothers .hero h1 em { color: #fff2c4; }
+
+/* ═══ TEACHER APPRECIATION ═══  Chalkboard green with apple red. */
+body.promo-teacher {
+  --teal: #3c6b55; --teal-dark: #2b4d3d; --teal-deep: #355f4b; --teal-light: #edf4ef;
+  --gold: #e2574c; --border: #d3e2d8;
+  --promo-banner-bg: #c7372b; --promo-accent: #e2574c; --promo-accent-on: #fff; --promo-accent-text: #c7372b; --promo-cta-bg: #2b4d3d;
+  --promo-code-bg: #f6faf7; --promo-fx: #ffffff; --promo-footer: #2b4d3d;
+}
+body.promo-teacher .btn-primary, body.promo-teacher .btn-primary-lg, body.promo-teacher .nav-links a.nav-cta, body.promo-teacher .mobile-menu a.mobile-cta { color: #fff; }
+body.promo-teacher .hero-wrap, body.promo-teacher .page-hero, body.promo-teacher .cta-section { background: radial-gradient(ellipse at 30% 20%, #3e6a55 0%, #2b4d3d 60%, #213b2f 100%); }
+body.promo-teacher .hero h1, body.promo-teacher .page-hero h1 { text-shadow: 0 0 1px rgba(255,255,255,.4); }
+body.promo-teacher .hero h1 em { color: #ffb3a8; }
+
+/* ═══ BACK TO SCHOOL ═══  Notebook paper, ink blue, pencil yellow. */
+body.promo-school {
+  --teal: #2d5fa8; --teal-dark: #224a85; --teal-deep: #2d5fa8; --teal-light: #eaf1fb;
+  --gold: #f5c842; --border: #d3def0;
+  --promo-banner-bg: #224a85; --promo-accent: #f5c842; --promo-accent-text: #224a85; --promo-cta-bg: #224a85;
+  --promo-code-bg: #fffdf0; --promo-fx: #f5c842; --promo-footer: #224a85;
+}
+body.promo-school .hero-wrap, body.promo-school .page-hero, body.promo-school .cta-section {
+  background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(255,255,255,.14) 31px 32px), linear-gradient(160deg, #2d5fa8 0%, #3a74c4 100%);
+}
+body.promo-school .promo-pop { background-image: repeating-linear-gradient(180deg, transparent 0 27px, #e6edf8 27px 28px); border-left: 3px solid #f2a7a7; }
+
+/* ═══ NEW YEAR (Teacher Entrepreneur) ═══  Fresh start: deep indigo, gold sparkle. */
+body.promo-newyear {
+  --teal: #3b4f8f; --teal-dark: #2c3b6e; --teal-deep: #3b4f8f; --teal-light: #eef0f9;
+  --gold: #f5c842; --border: #d8dcef;
+  --promo-banner-bg: #2c3b6e; --promo-accent: #f5c842; --promo-accent-text: #3b4f8f; --promo-cta-bg: #2c3b6e;
+  --promo-code-bg: #fbfaf4; --promo-fx: #f5c842; --promo-footer: #2c3b6e;
+}
+body.promo-newyear .hero-wrap, body.promo-newyear .page-hero, body.promo-newyear .cta-section { background: linear-gradient(160deg, #2c3b6e 0%, #3b4f8f 50%, #4f8f9a 100%); }
