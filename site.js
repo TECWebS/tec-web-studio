@@ -49,24 +49,54 @@ function toggleMenu() {
     else { var i = document.createElement('input'); i.value = code; document.body.appendChild(i); i.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(i); done(); }
   }
 
-  // Light, decorative extras per theme. Hidden for anyone whose device asks for reduced motion.
-  function decorate(theme) {
-    var sets = { winter: ['❄', '❅', '❆', '•'], mothers: ['♥', '❀', '♡', '✿'], teacher: ['✎', '★', '♥'], newyear: ['✦', '✧', '·'], school: ['✎', '✐', '★'] };
-    var chars = sets[theme]; if (!chars) return;
+  // Decorative extras per theme. Moving ones are hidden for visitors whose
+  // device asks for reduced motion (see promo.css).
+  function heroLayer() {
+    var hero = document.querySelector('.hero-wrap') || document.querySelector('.page-hero');
+    if (!hero) return null;
     var layer = document.createElement('div');
-    layer.className = 'promo-fx'; layer.setAttribute('aria-hidden', 'true');
-    var count = theme === 'winter' ? 22 : 14;
-    for (var i = 0; i < count; i++) {
-      var s = document.createElement('span');
-      s.textContent = chars[i % chars.length];
-      s.style.left = (Math.random() * 100).toFixed(1) + '%';
-      s.style.animationDuration = (9 + Math.random() * 10).toFixed(1) + 's';
-      s.style.animationDelay = (-Math.random() * 18).toFixed(1) + 's';
-      s.style.fontSize = (10 + Math.random() * 14).toFixed(0) + 'px';
-      s.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
-      layer.appendChild(s);
+    layer.className = 'promo-hero-layer'; layer.setAttribute('aria-hidden', 'true');
+    hero.insertBefore(layer, hero.firstChild);
+    return layer;
+  }
+  function decorate(theme) {
+    var falling = { winter: ['❄', '❅', '❆', '•'], mothers: ['♥', '❀', '♡', '✿'] }[theme];
+    if (falling) {
+      var layer = document.createElement('div');
+      layer.className = 'promo-fx'; layer.setAttribute('aria-hidden', 'true');
+      var count = theme === 'winter' ? 24 : 14;
+      for (var i = 0; i < count; i++) {
+        var s = document.createElement('span');
+        s.textContent = falling[i % falling.length];
+        s.style.left = (Math.random() * 100).toFixed(1) + '%';
+        s.style.animationDuration = (9 + Math.random() * 10).toFixed(1) + 's';
+        s.style.animationDelay = (-Math.random() * 18).toFixed(1) + 's';
+        s.style.fontSize = (10 + Math.random() * 14).toFixed(0) + 'px';
+        s.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
+        layer.appendChild(s);
+      }
+      document.body.appendChild(layer);
     }
-    document.body.appendChild(layer);
+    var hero = heroLayer();
+    if (!hero) return;
+    if (theme === 'newyear') {
+      var spots = [[12, 22, 'gold', 0], [80, 18, 'silver', 0.9], [64, 48, 'gold', 1.7], [28, 58, 'white', 2.4], [90, 62, 'gold', 1.2], [46, 16, 'silver', 2.9]];
+      spots.forEach(function (f) {
+        var el = document.createElement('span');
+        el.className = 'fw ' + f[2];
+        el.style.left = f[0] + '%'; el.style.top = f[1] + '%'; el.style.animationDelay = f[3] + 's';
+        hero.appendChild(el);
+      });
+    } else if (theme === 'school') {
+      hero.innerHTML = '<span class="chalk-doodle d1">A+</span><span class="chalk-doodle d2">2 + 2 = 4</span><span class="chalk-doodle d3">&#9734; ABC</span>' +
+        '<span class="chalk-stick s1"></span><span class="chalk-stick s2"></span><span class="chalk-eraser"></span><span class="chalk-tray"></span>';
+    } else if (theme === 'teacher') {
+      hero.innerHTML = '<span class="notebook-label">COMPOSITION<i></i><i></i>Teacher Appreciation</span><span class="notebook-pencil"></span>';
+    } else if (theme === 'cyber') {
+      hero.innerHTML = '<span class="y2k-win w1"><b>savings.exe</b><span>Loading 30% off&hellip;<i class="y2k-bar"></i></span></span>' +
+        '<span class="y2k-win w2"><b>my_website</b><span>New brand?<br>[ Yes! ] [ No ]</span></span>' +
+        '<span class="y2k-cursor c1"></span><span class="y2k-cursor c2"></span><span class="y2k-cursor c3"></span>';
+    }
   }
 
   function banner(promos) {
