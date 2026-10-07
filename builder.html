@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TEC Web Studio Builder</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
   :root{
@@ -308,6 +308,7 @@
     <button type="button" data-admintab="reviews" role="tab" aria-selected="false">Reviews</button>
     <button type="button" data-admintab="subs" role="tab" aria-selected="false">Subscriptions</button>
     <button type="button" data-admintab="discounts" role="tab" aria-selected="false">Discounts</button>
+    <button type="button" data-admintab="specials" role="tab" aria-selected="false">Special Orders</button>
   </div>
 
   <div id="adminTabStarter">
@@ -426,6 +427,22 @@
         <tbody id="discRows"><tr><td colspan="6">Loading…</td></tr></tbody>
       </table></div>
       <p class="msg" id="discMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabSpecials" hidden>
+    <h2>Special Orders</h2>
+    <div class="admin-card">
+      <p class="sub" style="margin-bottom:12px;">Requests for seasonal specials like the Mother's Day Memory Page. Build their sample first. Once they approve it, click <strong>Send payment link</strong>: they get a private link to pay the price locked in when they requested.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="spCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="spRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Customer</th><th>Special</th><th>Requested</th><th>Total</th><th>Status</th><th></th></tr></thead>
+        <tbody id="spRows"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="spMsg" role="status" aria-live="polite"></p>
     </div>
   </div>
 
@@ -959,12 +976,14 @@
     $("#adminTabReviews").hidden = t !== "reviews";
     $("#adminTabSubs").hidden = t !== "subs";
     $("#adminTabDiscounts").hidden = t !== "discounts";
+    $("#adminTabSpecials").hidden = t !== "specials";
     if (t === "audits" && !auditsLoadedOnce) loadAudits();
     if (t === "requests" && !reqLoadedOnce) loadRequests();
     if (t === "orders" && !ordersLoadedOnce) loadOrders("");
     if (t === "reviews" && !revLoadedOnce) loadReviews();
     if (t === "subs" && !subsLoadedOnce) loadSubs();
     if (t === "discounts" && !discLoadedOnce) loadDiscounts();
+    if (t === "specials" && !spLoadedOnce) loadSpecials();
   }
   document.querySelectorAll('.seg[role="tablist"] button[data-admintab]').forEach(function (b) { b.addEventListener("click", function () { showAdminTab(b.dataset.admintab); }); });
 
@@ -1543,6 +1562,48 @@
       r.approved = next; renderReviews();
       say("#revMsg", next ? "Now showing on your homepage." : "Hidden from your homepage.", true);
     }).catch(function (err) { say("#revMsg", friendlyError(err), false); b.disabled = false; });
+  });
+
+  /* ---- Special orders (Mother's Day, Family Tree) ---- */
+  var spLoadedOnce = false, spData = [];
+  var SP_STATUS = { requested: ["review", "Needs a sample"], link_sent: ["draft", "Payment link sent"], paid: ["live", "Paid"] };
+  function loadSpecials() {
+    say("#spMsg", "Loading…", true);
+    api("GET", "/admin/special").then(function (j) { spLoadedOnce = true; spData = j.results || []; say("#spMsg", ""); renderSpecials(); })
+      .catch(function (err) { say("#spMsg", friendlyError(err), false); });
+  }
+  function spWhere(x) { return x.hosting === "own" ? "Own web address, 3 years" + (x.wishedAddress ? ": " + x.wishedAddress : "") : "Hosted 1 year" + (x.wishedAddress ? " at " + x.wishedAddress + ".tecwebstudio.com" : ""); }
+  function renderSpecials() {
+    var waiting = spData.filter(function (x) { return x.status === "requested"; }).length;
+    $("#spCount").textContent = spData.length + " request" + (spData.length === 1 ? "" : "s") + (waiting ? " · " + waiting + " need a sample" : "");
+    $("#spRows").innerHTML = spData.length ? spData.map(function (x, i) {
+      var st = SP_STATUS[x.status] || ["", x.status];
+      var send = x.status === "paid" ? "" : '<button type="button" class="' + (x.status === "requested" ? "btn-primary" : "btn-ghost") + ' btn-sm" data-sp-send="' + i + '">' + (x.status === "requested" ? "Send payment link" : "Resend link") + "</button>";
+      return '<tr class="' + (x.status === "requested" ? "needs" : "") + '"><td><strong>' + esc(x.fullName) + "</strong><br>" + esc(x.email) + "</td><td>" + esc(x.productName) +
+        '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(spWhere(x)) + "</span></td><td>" + esc(fmtDate(x.createdAt)) + "</td><td>" + esc(x.price) +
+        '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + (x.paidAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(fmtDate(x.paidAt)) + "</span>" : "") +
+        '</td><td><div class="row-actions"><button type="button" class="btn-ghost btn-sm" data-sp-view="' + i + '">View</button>' + send +
+        '<button type="button" class="btn-danger btn-sm" data-sp-del="' + i + '">Delete</button></div></td></tr>';
+    }).join("") : '<tr><td colspan="6">No special requests yet. They appear here during each special\'s dates.</td></tr>';
+  }
+  $("#spRefresh").addEventListener("click", loadSpecials);
+  $("#spRows").addEventListener("click", function (e) {
+    var v = e.target.closest("[data-sp-view]"), sd = e.target.closest("[data-sp-send]"), d = e.target.closest("[data-sp-del]");
+    if (v) {
+      var x = spData[+v.dataset.spView], pairs = [["Name", x.fullName], ["Email", x.email], ["Phone", x.phone], ["Requested", fmtDateTime(x.createdAt)], ["Where it lives", spWhere(x)], ["Total", x.price]];
+      Object.keys(x.details || {}).forEach(function (k) { pairs.push([(x.detailLabels && x.detailLabels[k]) || k, x.details[k]]); });
+      openInfo(x.productName + " — " + x.fullName, pairs, x.email, "Your " + x.productName);
+      return;
+    }
+    if (sd) {
+      var y = spData[+sd.dataset.spSend], again = y.status !== "requested";
+      if (!confirm((again ? "Resend" : "Send") + " the payment link (" + y.price + ") to " + y.email + "?\n\nOnly do this once they've approved their sample.")) return;
+      sd.disabled = true;
+      api("POST", "/admin/special/send-link", { id: y.id }).then(function () { say("#spMsg", "Payment link sent to " + y.email + ".", true); loadSpecials(); })
+        .catch(function (err) { say("#spMsg", friendlyError(err), false); sd.disabled = false; });
+      return;
+    }
+    if (d) { var z = spData[+d.dataset.spDel]; deleteEntry("special", z.id, "Delete the " + z.productName + " request from " + z.fullName + "?", d, "#spMsg", loadSpecials); }
   });
 
   /* ---- Discounts + outreach codes ---- */
