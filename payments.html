@@ -4,7 +4,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TEC Web Studio Payment</title>
+  <title>TEC Web Studio – Payment</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -147,6 +147,8 @@
     .opt-price { font-size: 15px; font-weight: 700; color: var(--teal-dark); white-space: nowrap; }
     .fineprint { font-size: 11.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
 
+    #editor-panel.editor-off .editor-opt { opacity: .45; cursor: not-allowed; pointer-events: none; }
+    #editor-panel { margin-bottom: 20px; }
     .care-heading { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 -2px; min-height: 18px; }
     .subscription-notice { display: none; background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #7a5c00; line-height: 1.6; margin-top: 20px; }
     .subscription-notice .ico { width: 14px; height: 14px; margin-right: 4px; }
@@ -433,6 +435,19 @@
       </div>
     </div>
 
+    <div class="panel" id="editor-panel">
+      <div class="panel-head">
+        <span class="panel-title"><svg class="ico" aria-hidden="true"><use href="#i-pencil"/></svg> Your Own Editor</span>
+        <button type="button" class="link-btn" id="clear-editor" onclick="clearEditor()">Clear selection</button>
+      </div>
+      <div class="panel-body">
+        <p class="lead">Want to update your website yourself?</p>
+        <p class="sub">We add a private editor to your site, so you can make changes any time. No website-builder subscription, and you own your site.</p>
+        <div class="opt-list" id="editor-list"></div>
+        <p class="fineprint" id="editor-note">Available with Business Website or Complete Brand + Website, built and managed by TEC Web Studio. Bookings, online stores and member areas are quoted separately.</p>
+      </div>
+    </div>
+
     <div class="care-heading">
       <span></span>
       <button type="button" class="link-btn" id="clear-care" onclick="clearCare()">Clear selection</button>
@@ -526,7 +541,7 @@
 <!-- Pre-selected package snackbar -->
 <div class="pkg-snackbar" id="pkgSnackbar"><svg class="ico fill" style="width:14px;height:14px;" aria-hidden="true"><use href="#i-star"/></svg> Your recommended package has been pre-selected for you!</div>
 
-<footer>&copy; 2026 <strong>TEC Web Studio</strong> · Secure payments powered by Stripe</footer>
+<footer>&copy; 2026 <strong>TEC Web Studio LLC</strong> · Secure payments powered by Stripe</footer>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
@@ -578,6 +593,14 @@
     d1: { label: '24-Hour Delivery', short: '24-Hour', price: 199, detail: 'Delivered within 24 hours.' }
   };
 
+  // Your own editor (backend). Must match ORDER_EDITOR in checkout.js on the Worker.
+  var EDITOR = {
+    lite: { label: 'Editor Lite', short: 'Editor Lite', price: 300, detail: 'Change the wording on any page and swap your photos, whenever you like.' },
+    plus: { label: 'Editor Plus', short: 'Editor Plus', price: 600, detail: 'Everything in Lite, plus lists you manage yourself (services, menu items, events, gallery) and forms that save to your dashboard.' }
+  };
+  var EDITOR_PACKAGES = ['business', 'complete'];
+  function editorAllowed() { return !!state.pkg && EDITOR_PACKAGES.indexOf(state.pkg) !== -1 && state.mgmt !== 'wix'; }
+
   // type: 'once' = added to today's total, 'monthly' = recurring, shown separately
   var CARE = {
     pack: {
@@ -604,7 +627,7 @@
   var DOMAIN_LABELS = { have: 'Existing Domain', help: 'Domain Assistance' };
 
   /* ===================== STATE ===================== */
-  var state = { pkg: null, mgmt: null, domain: null, acct: null, priority: null, care: null };
+  var state = { pkg: null, mgmt: null, domain: null, acct: null, priority: null, care: null, editor: null };
   // The discount the Worker confirmed (null = none). The Worker re-checks it at checkout.
   var discount = null, discountSig = '', codeTimer = null, codePending = false, lastCheckedSig = '';
   function money(n) { return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : String(Math.round(n))); }
@@ -666,6 +689,19 @@
     document.getElementById('priority-list').innerHTML = html;
   }
 
+  function renderEditor() {
+    var html = '';
+    Object.keys(EDITOR).forEach(function(k) {
+      var e = EDITOR[k];
+      html += '<div class="opt editor-opt" id="editor-' + k + '" data-choice role="button" tabindex="0" aria-pressed="false" onclick="selectEditor(\'' + k + '\')">'
+        + '<div class="radio"></div>'
+        + '<div class="opt-label">' + e.label + '<small>' + e.detail + '</small></div>'
+        + '<div class="opt-price">+$' + e.price + '</div>'
+        + '</div>';
+    });
+    document.getElementById('editor-list').innerHTML = html;
+  }
+
   function renderCare() {
     var html = '';
     Object.keys(CARE).forEach(function(k) {
@@ -697,6 +733,14 @@
   }
   function clearPriority() { state.priority = null; setSelected('.prio-opt', null); updateSummary(); }
 
+  function selectEditor(id) {
+    if (!editorAllowed()) return;
+    state.editor = (state.editor === id) ? null : id;
+    setSelected('.editor-opt', state.editor ? 'editor-' + id : null);
+    updateSummary();
+  }
+  function clearEditor() { state.editor = null; setSelected('.editor-opt', null); updateSummary(); }
+
   function selectCare(id) {
     state.care = (state.care === id) ? null : id;
     setSelected('.care-card', state.care ? 'care-' + id : null);
@@ -706,9 +750,11 @@
 
   /* ===================== TOTALS ===================== */
   function computeTotals() {
+    if (state.editor && !editorAllowed()) { state.editor = null; setSelected('.editor-opt', null); }
     var one = 0, rec = 0;
     if (state.pkg) one += PACKAGES[state.pkg].price;
     if (state.priority) one += PRIORITY[state.priority].price;
+    if (state.editor) one += EDITOR[state.editor].price;
     if (state.care) {
       var c = CARE[state.care];
       if (c.type === 'monthly') rec = c.price; else one += c.price;
@@ -728,7 +774,7 @@
   function orderDetails() {
     return {
       pkg: state.pkg, mgmt: state.mgmt, domain: state.domain, acct: state.acct,
-      priority: state.priority || '', care: state.care || '',
+      priority: state.priority || '', care: state.care || '', editor: state.editor || '',
       existingDomain:     state.domain === 'have' ? val('domain-existing') : '',
       domainBusinessName: state.domain === 'help' ? val('domain-business') : '',
       preferredDomain:    state.domain === 'help' ? val('domain-preferred') : '',
@@ -765,6 +811,8 @@
       html += row('Domain', 'Not selected', true);
     }
 
+    if (state.editor) html += row('Your Own Editor', EDITOR[state.editor].short + ' — +$' + EDITOR[state.editor].price);
+
     html += state.priority
       ? row('Priority Delivery', PRIORITY[state.priority].short + ' — +$' + PRIORITY[state.priority].price)
       : row('Priority Delivery', 'None', true);
@@ -785,6 +833,11 @@
     rd.textContent = t.rec ? '+ $' + t.rec + '/month once your site launches' : '';
 
     document.getElementById('clear-prio').style.display = state.priority ? 'inline' : 'none';
+    document.getElementById('clear-editor').style.display = state.editor ? 'inline' : 'none';
+    // The editor is only for Business / Complete sites we build. Switching away clears it.
+    var canEdit = editorAllowed();
+    document.getElementById('editor-panel').classList.toggle('editor-off', !canEdit);
+    document.querySelectorAll('.editor-opt').forEach(function(el) { el.setAttribute('aria-disabled', canEdit ? 'false' : 'true'); el.tabIndex = canEdit ? 0 : -1; });
     document.getElementById('clear-care').style.display = state.care ? 'inline' : 'none';
 
     var notice = document.getElementById('care-notice');
@@ -1140,6 +1193,7 @@
 
   renderPackages();
   renderPriority();
+  renderEditor();
   renderCare();
   updateSummary();
   initFromURL();
