@@ -4,59 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Complete Your Order TEC Web Studio</title>
+<title>Complete your order — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --teal: #6AABB0; --teal-dark: #3d7a80; --gold: #F5C842; --dark: #1a2e2e; --muted: #6b8080; --border: #d0e4e6;
+:root { --teal: #6AABB0; --teal-dark: #3d7a80; --teal-deep: #2f6166; --gold: #F5C842; --dark: #1a2e2e; --muted: #557070; --border: #d0e4e6;
   --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; --display: Georgia, "Times New Roman", serif; }
 body { font-family: var(--ui); background: #f0f7f8; color: var(--dark); min-height: 100vh; }
-button:focus-visible, a:focus-visible { outline: 3px solid rgba(61,122,128,.45); outline-offset: 2px; }
-.hero { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 44px 24px 36px; text-align: center; color: #fff; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid rgba(61,122,128,.45); outline-offset: 2px; }
+.hero { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 44px 24px 34px; text-align: center; color: #fff; }
 .badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 6px 16px; border-radius: 50px; margin-bottom: 14px; }
 .hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 5vw, 36px); }
-.hero p { margin-top: 8px; opacity: .9; }
-.wrap { max-width: 620px; margin: 0 auto; padding: 32px 20px 60px; }
+.hero p { margin-top: 8px; opacity: .92; }
+.steps { display: flex; justify-content: center; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.16); border-radius: 50px; padding: 6px 14px 6px 6px; font-size: 13.5px; font-weight: 600; }
+.step .n { width: 24px; height: 24px; border-radius: 50%; background: #fff; color: var(--teal-dark); display: flex; align-items: center; justify-content: center; font-size: 12.5px; }
+.step.done .n { background: var(--gold); color: var(--dark); }
+.step.current { background: #fff; color: var(--teal-deep); }
+.step.current .n { background: var(--teal-dark); color: #fff; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 30px 18px 60px; }
 .card { background: #fff; border: 2px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
-.card-head { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 14px 22px; color: #fff; font-family: var(--display); font-size: 18px; }
-.line { display: flex; justify-content: space-between; gap: 14px; padding: 10px 22px; border-bottom: 1px solid #f0f4f4; font-size: 14px; }
-.total { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; background: #f8fcfc; }
+.card-head { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 14px 22px; color: #fff; font-family: var(--display); font-size: 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.card-head button { background: rgba(255,255,255,.18); color: #fff; border: 1px solid rgba(255,255,255,.5); border-radius: 50px; padding: 6px 14px; font: 600 12.5px var(--ui); cursor: pointer; }
+.doc { max-height: 560px; overflow-y: auto; padding: 24px 26px; border-bottom: 1px solid var(--border); }
+.doc h1 { font-size: 24px !important; }
+.doc h2 { font-family: var(--display); font-weight: 400; font-size: 20px; color: var(--teal-deep); margin: 24px 0 8px; }
+.doc p, .doc li { font-size: 14.5px; line-height: 1.7; color: #2c3e3e; }
+.doc p { margin-bottom: 10px; }
+.doc ul { margin: 0 0 12px 20px; }
+.doc li { margin-bottom: 5px; }
+.doc .todo { background: #fff3b0; color: #3d3200; padding: 0 3px; border-radius: 3px; font-weight: 600; }
+.scroll-hint { font-size: 12.5px; color: var(--muted); text-align: center; padding: 8px 18px; background: #f8fcfc; }
+.sign { padding: 22px 26px 26px; }
+.check { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; cursor: pointer; }
+.check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--teal-dark); flex-shrink: 0; }
+.check span { font-size: 14.5px; line-height: 1.6; }
+label.lab { display: block; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 6px; }
+input.name { width: 100%; border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; font: 16px var(--ui); color: var(--dark); }
+input.name:focus { border-color: var(--teal); outline: none; }
+.sig-preview { min-height: 52px; border-bottom: 2px solid var(--dark); margin: 16px 0 6px; font-family: 'Caveat', 'Brush Script MT', cursive; font-size: 34px; color: var(--teal-deep); padding: 0 4px; line-height: 1.4; overflow-wrap: anywhere; }
+.sig-caption { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+.btn { width: 100%; background: var(--teal-dark); color: #fff; border: 0; border-radius: 50px; padding: 15px; font: 700 15px var(--ui); letter-spacing: .8px; text-transform: uppercase; cursor: pointer; }
+.btn:hover { background: var(--teal-deep); }
+.btn:disabled { background: #a0c8cc; cursor: not-allowed; }
+.preview-card { padding: 22px 26px; display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.preview-card p { font-size: 14.5px; line-height: 1.6; max-width: 440px; color: #2c3e3e; }
+.btn-link { display: inline-block; background: var(--gold); color: var(--dark); text-decoration: none; border-radius: 50px; padding: 12px 22px; font: 700 14px var(--ui); letter-spacing: .5px; white-space: nowrap; }
+.btn-link:hover { background: #e9b92e; }
+fieldset.decide { border: 0; margin: 0 0 18px; padding: 0; }
+fieldset.decide legend { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 10px; }
+.opt { display: flex; gap: 12px; align-items: flex-start; border: 2px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; }
+.opt:has(input:checked) { border-color: var(--teal-dark); background: #f4fafa; }
+.opt input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--teal-dark); flex-shrink: 0; }
+.opt span { font-size: 14.5px; line-height: 1.5; }
+.opt small { display: block; color: var(--muted); font-size: 13px; }
+textarea.changes { width: 100%; min-height: 110px; border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; font: 15px/1.5 var(--ui); color: var(--dark); resize: vertical; margin: 4px 0 6px; }
+textarea.changes:focus { border-color: var(--teal); outline: none; }
+.changes-note { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.signed-box { display: flex; gap: 14px; align-items: flex-start; padding: 20px 26px; background: #f2faf5; }
+.signed-box svg { flex-shrink: 0; margin-top: 2px; }
+.signed-box p { font-size: 14.5px; line-height: 1.6; }
+.signed-box .sig { font-family: 'Caveat', 'Brush Script MT', cursive; font-size: 28px; color: var(--teal-deep); line-height: 1.2; }
+.total { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; background: #f8fcfc; border-bottom: 1px solid var(--border); }
 .total .label { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 13px; color: var(--teal-dark); }
 .total .amount { font-family: var(--display); font-size: 30px; }
+.monthly { padding: 12px 22px; font-size: 13.5px; color: var(--muted); border-bottom: 1px solid var(--border); line-height: 1.5; }
 .pay { padding: 24px 22px; }
 #payment-element { margin-bottom: 18px; }
 #express-checkout-element { margin-bottom: 14px; }
-.pay-btn { width: 100%; background: var(--teal); color: #fff; border: 0; border-radius: 50px; padding: 15px; font: 700 15px var(--ui); letter-spacing: .8px; text-transform: uppercase; cursor: pointer; display: none; }
+.pay-btn { display: none; background: var(--teal); }
 .pay-btn:hover { background: var(--teal-dark); }
-.pay-btn:disabled { background: #a0c8cc; cursor: not-allowed; }
-.msg { color: #c0392b; font-size: 13.5px; margin-top: 12px; text-align: center; min-height: 1.2em; }
+.msg { color: #b0331f; font-size: 13.5px; margin-top: 12px; text-align: center; min-height: 1.2em; }
 .state { text-align: center; padding: 36px 24px; }
 .state h2 { font-family: var(--display); font-weight: 400; font-size: 24px; margin-bottom: 8px; }
 .state p { color: var(--muted); line-height: 1.6; }
 .note { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 10px; }
+.note a { color: var(--teal-dark); }
+@media (max-width: 560px) { .doc { padding: 18px 16px; max-height: 460px; } .sign, .signed-box { padding-left: 16px; padding-right: 16px; } }
+@media print { .hero, .sign, #payCard, .note, .scroll-hint, .card-head button { display: none !important; } .doc { max-height: none; overflow: visible; } .card { border: 0; } body { background: #fff; } }
 </style>
 </head>
 <body>
 <div class="hero">
   <div class="badge">TEC Web Studio</div>
   <h1 id="title">Complete your order</h1>
-  <p id="subtitle">Loading your order...</p>
+  <p id="subtitle">Loading...</p>
+  <div class="steps" aria-label="Progress">
+    <div class="step current" id="step1"><span class="n">1</span><span id="step1Label">Read and sign</span></div>
+    <div class="step" id="step2"><span class="n">2</span>Pay in full</div>
+  </div>
 </div>
 <div class="wrap">
-  <div class="card" id="summary" hidden>
-    <div class="card-head">Your Order</div>
-    <div id="lines"></div>
-    <div class="total"><div class="label">Total</div><div class="amount" id="total"></div></div>
+  <div class="state" id="loading"><p>Loading your agreement...</p></div>
+
+  <div class="card" id="previewCard" hidden>
+    <div class="card-head"><span>Your preview</span></div>
+    <div class="preview-card">
+      <p>Here is the preview we designed from what you told us. Take a look, then approve it below when you sign, as it is or with a list of changes you'd like included.</p>
+      <a class="btn-link" id="previewLink" href="#" target="_blank" rel="noopener">Open my preview</a>
+    </div>
   </div>
-  <div class="card">
+
+  <div class="card" id="agreeCard" hidden>
+    <div class="card-head"><span>Your agreement</span><button type="button" id="printBtn">Print or save</button></div>
+    <div class="doc" id="doc" tabindex="0" aria-label="Website Services Agreement"></div>
+    <div class="scroll-hint" id="scrollHint">Scroll to read the whole agreement.</div>
+    <form class="sign" id="signForm" novalidate>
+      <fieldset class="decide" id="decide" hidden>
+        <legend>Approve your preview</legend>
+        <label class="opt"><input type="radio" name="decision" value="as_is"><span><strong>I approve the preview</strong><small>Build my full website as shown.</small></span></label>
+        <label class="opt"><input type="radio" name="decision" value="with_changes"><span><strong>I approve the preview, with these changes</strong><small>Include my list of changes in the full build.</small></span></label>
+        <div id="changesWrap" hidden>
+          <label class="lab" for="changes">Changes to include</label>
+          <textarea class="changes" id="changes" maxlength="3000" placeholder="For example: make the header darker, use our new logo, move the reviews above the services."></textarea>
+          <p class="changes-note">This is your one list of changes for the preview. We'll include them in your full build, and your package's revision rounds apply to the finished website.</p>
+        </div>
+      </fieldset>
+      <label class="check"><input type="checkbox" id="agree"><span>I have read and agree to the TEC Web Studio Website Services Agreement (version <span id="ver"></span>), including the Order Summary.</span></label>
+      <label class="lab" for="sigName">Type your full name to sign</label>
+      <input class="name" type="text" id="sigName" maxlength="120" autocomplete="name">
+      <div class="sig-preview" id="sigPreview" aria-hidden="true"></div>
+      <p class="sig-caption">Typing your name and selecting Sign agreement is your legal signature. We save your name, the time, and your IP address with the signed agreement, and email a copy to you.</p>
+      <button type="submit" class="btn" id="signBtn">Sign agreement</button>
+      <div class="msg" id="signMsg" role="alert"></div>
+    </form>
+    <div class="signed-box" id="signedBox" hidden>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2e8b57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 11 15 16 9"></polyline></svg>
+      <div><p class="sig" id="signedName"></p><p>Signed <span id="signedWhen"></span>. A copy was emailed to you.</p><p id="signedDecision" hidden></p></div>
+    </div>
+  </div>
+
+  <div class="card" id="payCard" hidden>
+    <div class="card-head"><span>Payment</span></div>
+    <div class="total"><div class="label">Total</div><div class="amount" id="total"></div></div>
+    <div class="monthly" id="monthly" hidden></div>
     <div class="pay" id="paySection">
-      <div class="state" id="loading"><p>Loading secure payment form...</p></div>
+      <div class="state" id="payLoading"><p>Loading secure payment form...</p></div>
       <div id="express-checkout-element"></div>
       <div id="payment-element"></div>
-      <button type="button" class="pay-btn" id="payBtn">Pay</button>
+      <button type="button" class="btn pay-btn" id="payBtn">Pay</button>
       <div class="msg" id="msg" role="alert"></div>
     </div>
   </div>
+
   <p class="note">Payments are processed securely by Stripe. Questions? Email <a href="mailto:info@tecwebstudio.com">info@tecwebstudio.com</a>.</p>
   <p class="note">&copy; 2026 TEC Web Studio LLC</p>
 </div>
@@ -66,59 +159,123 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(61,122,128,.45);
 (function () {
   var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
   var API = 'https://api.tecwebstudio.com';
+  var ROUTES = { info: '/special/pay-info', sign: '/special/sign', intent: '/special/pay-intent', complete: '/special/pay-complete' };
+  var DONE_TEXT = 'Your payment went through and your receipt is on its way by email. We\'ll let you know as soon as it\'s ready to share.';
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   var params = new URLSearchParams(location.search);
   var t = params.get('t') || '', elements = null, clientSecret = null, info = null;
 
-  function stateBox(title, text) { $('paySection').innerHTML = '<div class="state"><h2>' + esc(title) + '</h2><p>' + text + '</p></div>'; }
-  function json(r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); }
+  function post(path, body) { return fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(json); }
+  function json(r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }, function () { return { ok: false, j: {} }; }); }
+  function showState(title, text) {
+    $('loading').innerHTML = '<h2>' + esc(title) + '</h2><p>' + text + '</p>';
+    $('loading').hidden = false;
+  }
+  function payState(title, text) { $('paySection').innerHTML = '<div class="state"><h2>' + esc(title) + '</h2><p>' + text + '</p></div>'; }
+  function setStep(n) {
+    $('step1').className = 'step ' + (n > 1 ? 'done' : 'current');
+    $('step2').className = 'step ' + (n > 2 ? 'done' : n === 2 ? 'current' : '');
+  }
 
   function complete(piId) {
-    stateBox('Finishing up...', 'Payment received. Confirming your order...');
+    payState('Finishing up...', 'Payment received. Confirming your order...');
     function attempt(left) {
-      fetch(API + '/special/pay-complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ paymentIntentId: piId }) })
-        .then(json).then(function (x) {
-          if (x.j && x.j.ok) stateBox('Thank you!', 'Your payment went through and your receipt is on its way by email. We\'ll let you know as soon as it\'s ready to share.');
-          else if (left > 1) setTimeout(function () { attempt(left - 1); }, 2500);
-          else stateBox('Payment received!', 'Your payment went through. If you don\'t get a receipt soon, just email <a href="mailto:info@tecwebstudio.com">info@tecwebstudio.com</a> and we\'ll sort it out.');
-        }).catch(function () { if (left > 1) setTimeout(function () { attempt(left - 1); }, 2500); });
+      post(ROUTES.complete, { paymentIntentId: piId }).then(function (x) {
+        if (x.j && x.j.ok) { setStep(3); payState('Thank you!', DONE_TEXT); }
+        else if (left > 1) setTimeout(function () { attempt(left - 1); }, 2500);
+        else payState('Payment received!', 'Your payment went through. If you don\'t get a receipt soon, just email <a href="mailto:info@tecwebstudio.com">info@tecwebstudio.com</a> and we\'ll sort it out.');
+      }).catch(function () { if (left > 1) setTimeout(function () { attempt(left - 1); }, 2500); });
     }
     attempt(3);
   }
 
   // Returning from a redirect-based payment method (bank redirects, Klarna, etc.)
   if (params.get('payment') === 'complete' && params.get('payment_intent_client_secret')) {
-    $('summary').hidden = true; $('title').textContent = 'Thank you!'; $('subtitle').textContent = '';
+    $('title').textContent = 'Thank you!'; $('subtitle').textContent = ''; setStep(2);
+    $('loading').hidden = true; $('payCard').hidden = false;
     stripe.retrievePaymentIntent(params.get('payment_intent_client_secret')).then(function (r) {
       if (r.paymentIntent && r.paymentIntent.status === 'succeeded') complete(r.paymentIntent.id);
-      else stateBox('Payment not completed', 'The payment didn\'t go through. Use the link in your email to try again.');
+      else payState('Payment not completed', 'The payment didn\'t go through. Use the link in your email to try again.');
     });
     return;
   }
 
-  fetch(API + '/special/pay-info?t=' + encodeURIComponent(t)).then(json).then(function (x) {
-    if (!x.ok || !x.j.ok) { $('subtitle').textContent = ''; stateBox('Link not found', esc((x.j && x.j.message) || 'This payment link isn\'t valid.')); return; }
+  fetch(API + ROUTES.info + '?t=' + encodeURIComponent(t)).then(json).then(function (x) {
+    if (!x.ok || !x.j.ok) { $('subtitle').textContent = ''; showState('Link not found', esc((x.j && x.j.message) || 'This link isn\'t valid.')); return; }
     info = x.j;
-    $('title').textContent = info.productName;
-    $('subtitle').textContent = 'Hi ' + (info.fullName || 'there') + '! Here\'s your order.';
-    $('lines').innerHTML = info.lines.map(function (l) { return '<div class="line"><span>' + esc(l.label) + '</span><span>' + esc(l.amount) + '</span></div>'; }).join('');
+    $('title').textContent = info.label || info.productName || 'Your agreement';
+    $('subtitle').textContent = 'Hi ' + (info.fullName || 'there') + '! Read and sign your agreement, then pay below.';
+    $('doc').innerHTML = info.agreementHtml;   // built by the Worker from escaped values
+    if (info.previewUrl) {
+      $('previewLink').href = info.previewUrl; $('previewCard').hidden = false;
+      $('decide').hidden = false; $('step1Label').textContent = 'Approve preview and sign';
+      $('subtitle').textContent = 'Hi ' + (info.fullName || 'there') + '! Look at your preview, approve it and sign, then pay below.';
+    }
+    $('ver').textContent = info.version;
     $('total').textContent = info.total;
-    $('summary').hidden = false;
-    if (info.paid) { stateBox('Already paid', 'This order is paid. Thank you! We\'ll be in touch as soon as it\'s ready.'); return; }
-    return fetch(API + '/special/pay-intent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: t }) }).then(json).then(function (y) {
-      if (!y.j.clientSecret) { stateBox('Something went wrong', esc((y.j && y.j.message) || 'We couldn\'t load the payment form. Please try again in a moment.')); return; }
+    if (info.monthly) { $('monthly').hidden = false; $('monthly').textContent = 'Plus Website Care: ' + info.monthly + '. Nothing monthly is charged today. We\'ll email you when it starts.'; }
+    $('loading').hidden = true;
+    $('agreeCard').hidden = false;
+    if (info.signed) showSigned(info.signed);
+    if (info.paid) { setStep(3); $('subtitle').textContent = 'This order is signed and paid. Thank you!'; $('payCard').hidden = false; payState('Already paid', 'This order is paid. Your signed agreement and receipt were emailed to you.'); return; }
+    if (info.signed) startPayment();
+  }).catch(function () { showState('Can\'t connect', 'Check your connection and refresh the page.'); });
+
+  $('doc').addEventListener('scroll', function () {
+    var d = $('doc'); if (d.scrollTop + d.clientHeight >= d.scrollHeight - 40) $('scrollHint').textContent = 'You\'ve reached the end of the agreement.';
+  });
+  $('printBtn').addEventListener('click', function () { window.print(); });
+  $('sigName').addEventListener('input', function () { $('sigPreview').textContent = this.value; });
+  function decision() { var c = document.querySelector('input[name="decision"]:checked'); return c ? c.value : ''; }
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="decision"]'), function (el) {
+    el.addEventListener('change', function () { $('changesWrap').hidden = decision() !== 'with_changes'; if (decision() === 'with_changes') $('changes').focus(); });
+  });
+
+  function showSigned(s) {
+    $('signForm').hidden = true; $('signedBox').hidden = false;
+    $('signedName').textContent = s.name; $('signedWhen').textContent = s.when;
+    var dec = (info && info.previewDecision) || s.previewDecision;
+    if (dec) { $('signedDecision').hidden = false; $('signedDecision').textContent = dec === 'with_changes' ? 'Preview approved, with your changes included in the full build.' : 'Preview approved as it is.'; }
+    $('scrollHint').hidden = true; setStep(2);
+  }
+
+  $('signForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = $('sigName').value.trim(), btn = $('signBtn');
+    var withPreview = !!(info && info.previewUrl), dec = decision(), changes = $('changes').value.trim();
+    if (withPreview && !dec) { $('signMsg').textContent = 'Choose how you approve your preview.'; return; }
+    if (withPreview && dec === 'with_changes' && changes.length < 3) { $('signMsg').textContent = 'List the changes you would like included.'; $('changes').focus(); return; }
+    if (!$('agree').checked) { $('signMsg').textContent = 'Check the box to confirm you agree.'; return; }
+    if (name.length < 2) { $('signMsg').textContent = 'Type your full name to sign.'; $('sigName').focus(); return; }
+    btn.disabled = true; btn.textContent = 'Signing...'; $('signMsg').textContent = '';
+    var body = { t: t, name: name, agree: true };
+    if (withPreview) { body.previewDecision = dec; body.previewChanges = dec === 'with_changes' ? changes : ''; info.previewDecision = dec; }
+    post(ROUTES.sign, body).then(function (x) {
+      btn.disabled = false; btn.textContent = 'Sign agreement';
+      if (!x.j || !x.j.ok) { if (info) info.previewDecision = ''; $('signMsg').textContent = (x.j && x.j.message) || 'Something went wrong. Please try again.'; return; }
+      if (x.j.agreementHtml) $('doc').innerHTML = x.j.agreementHtml;
+      showSigned(x.j.signed);
+      startPayment();
+      setTimeout(function () { $('payCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+    }).catch(function () { btn.disabled = false; btn.textContent = 'Sign agreement'; $('signMsg').textContent = 'Can\'t connect. Check your connection and try again.'; });
+  });
+
+  function startPayment() {
+    $('payCard').hidden = false;
+    post(ROUTES.intent, { t: t }).then(function (y) {
+      if (!y.j || !y.j.clientSecret) { payState('Something went wrong', esc((y.j && y.j.message) || 'We couldn\'t load the payment form. Please try again in a moment.')); return; }
       clientSecret = y.j.clientSecret;
-      elements = stripe.elements({ clientSecret: clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#6AABB0', borderRadius: '10px' } } });
+      elements = stripe.elements({ clientSecret: clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#3d7a80', borderRadius: '10px' } } });
       var express = elements.create('expressCheckout', { buttonType: { applePay: 'buy', googlePay: 'buy' }, layout: { maxColumns: 2, maxRows: 1 } });
       express.mount('#express-checkout-element');
       express.on('confirm', pay);
       elements.create('payment', { layout: { type: 'accordion', defaultCollapsed: false } }).mount('#payment-element');
-      $('loading').style.display = 'none';
+      $('payLoading').style.display = 'none';
       $('payBtn').textContent = 'Pay ' + info.total;
       $('payBtn').style.display = 'block';
-    });
-  }).catch(function () { stateBox('Can\'t connect', 'Check your connection and refresh the page.'); });
+    }).catch(function () { payState('Can\'t connect', 'Check your connection and refresh the page.'); });
+  }
 
   function pay() {
     var btn = $('payBtn'); btn.disabled = true; btn.textContent = 'Processing...'; $('msg').textContent = '';

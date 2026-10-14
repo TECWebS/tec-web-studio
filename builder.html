@@ -158,6 +158,10 @@
   .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
   .search-row input{flex:1;min-width:200px;}
   .clip{max-width:360px;overflow-wrap:anywhere;}
+  .draft-warn{background:#fff3b0;border:1px solid #e6cf5a;color:#4a3d00;border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:12px;}
+  .prj-approve{display:flex;flex-direction:column;gap:6px;min-width:230px;}
+  .prj-approve input{padding:7px 10px !important;font-size:13px !important;}
+  .prj-note{color:var(--ink-soft);font-size:12px;overflow-wrap:anywhere;}
   .stars{color:var(--accent-deep);letter-spacing:1px;white-space:nowrap;}
   .info-answers p{margin:0 0 8px;}
   .seg button{background:#fff;padding:8px 18px;font-size:13px;color:var(--ink-soft);}
@@ -303,7 +307,8 @@
   <div class="seg admin-tabs" role="tablist" aria-label="Admin section">
     <button type="button" class="on" data-admintab="starter" role="tab" aria-selected="true">Site Starter</button>
     <button type="button" data-admintab="audits" role="tab" aria-selected="false">Free Audits</button>
-    <button type="button" data-admintab="requests" role="tab" aria-selected="false">Requests</button>
+    <button type="button" data-admintab="requests" role="tab" aria-selected="false">Consultations</button>
+    <button type="button" data-admintab="projects" role="tab" aria-selected="false">Website Requests</button>
     <button type="button" data-admintab="orders" role="tab" aria-selected="false">Orders</button>
     <button type="button" data-admintab="reviews" role="tab" aria-selected="false">Reviews</button>
     <button type="button" data-admintab="subs" role="tab" aria-selected="false">Subscriptions</button>
@@ -364,6 +369,23 @@
         <tbody id="reqRows"><tr><td colspan="5">Loading…</td></tr></tbody>
       </table></div>
       <p class="msg" id="reqMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabProjects" hidden>
+    <h2>Website Requests</h2>
+    <div class="admin-card">
+      <p class="sub" style="margin-bottom:12px;">Package requests from the payments page. Nothing is charged yet. Build their <strong>preview</strong>, paste its link, and click <strong>Approve &amp; send agreement</strong>. They see the preview, approve it (as is, or with one list of changes), sign the agreement, and pay in full on the same page. Their order then shows in Orders, and any Website Care plan waits in Subscriptions for <strong>Start billing</strong>.</p>
+      <div class="draft-warn" id="prjDraft" hidden>The service agreement still has blanks for you and your attorney, so agreement links won't send yet. Fill them in (src/agreement.js) and deploy.</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+        <div class="lab" style="margin:0;" id="prjCount"></div>
+        <button type="button" class="btn-ghost btn-sm" id="prjRefresh">Refresh</button>
+      </div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Client</th><th>Package</th><th>Requested</th><th>Status</th><th>Preview and agreement</th></tr></thead>
+        <tbody id="prjRows"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="prjMsg" role="status" aria-live="polite"></p>
     </div>
   </div>
 
@@ -434,7 +456,7 @@
   <div id="adminTabSpecials" hidden>
     <h2>Special Orders</h2>
     <div class="admin-card">
-      <p class="sub" style="margin-bottom:12px;">Requests for seasonal specials like the Mother's Day Memory Page. Build their sample first. Once they approve it, click <strong>Send payment link</strong>: they get a private link to pay the price locked in when they requested.</p>
+      <p class="sub" style="margin-bottom:12px;">Requests for seasonal specials like the Mother's Day Memory Page. Build their sample first. Once they approve it, click <strong>Send payment link</strong>: they get a private link where they sign the service agreement, then pay the price locked in when they requested.</p>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
         <div class="lab" style="margin:0;" id="spCount"></div>
         <button type="button" class="btn-ghost btn-sm" id="spRefresh">Refresh</button>
@@ -973,6 +995,7 @@
     $("#adminTabStarter").hidden = t !== "starter";
     $("#adminTabAudits").hidden = t !== "audits";
     $("#adminTabRequests").hidden = t !== "requests";
+    $("#adminTabProjects").hidden = t !== "projects";
     $("#adminTabOrders").hidden = t !== "orders";
     $("#adminTabReviews").hidden = t !== "reviews";
     $("#adminTabSubs").hidden = t !== "subs";
@@ -980,6 +1003,7 @@
     $("#adminTabSpecials").hidden = t !== "specials";
     if (t === "audits" && !auditsLoadedOnce) loadAudits();
     if (t === "requests" && !reqLoadedOnce) loadRequests();
+    if (t === "projects" && !prjLoadedOnce) loadProjects();
     if (t === "orders" && !ordersLoadedOnce) loadOrders("");
     if (t === "reviews" && !revLoadedOnce) loadReviews();
     if (t === "subs" && !subsLoadedOnce) loadSubs();
@@ -1485,7 +1509,7 @@
     say("#reqMsg", "Loading…", true);
     api("GET", "/admin/consultations").then(function (j) {
       reqLoadedOnce = true; reqData = j.results || []; say("#reqMsg", "");
-      $("#reqCount").textContent = reqData.length + " request" + (reqData.length === 1 ? "" : "s");
+      $("#reqCount").textContent = reqData.length + " consultation request" + (reqData.length === 1 ? "" : "s");
       $("#reqRows").innerHTML = reqData.length ? reqData.map(function (r, i) {
         return "<tr><td><strong>" + esc(r.businessName || r.fullName) + "</strong><br>" + esc(r.fullName && r.businessName ? r.fullName + " · " : "") + esc(r.email) + "</td><td>" + esc(fmtDateTime(r.timestamp)) +
           '</td><td class="clip">' + esc(r.needs) + "</td><td>" + esc(r.packageInterest) + '</td><td><div class="row-actions"><button type="button" class="btn-primary btn-sm" data-req-i="' + i + '">View</button><button type="button" class="btn-danger btn-sm" data-req-del="' + i + '">Delete</button></div></td></tr>';
@@ -1565,9 +1589,86 @@
     }).catch(function (err) { say("#revMsg", friendlyError(err), false); b.disabled = false; });
   });
 
+  /* ---- Website requests: preview -> agreement -> payment ---- */
+  var prjLoadedOnce = false, prjData = [];
+  var PRJ_STATUS = { requested: ["review", "New request"], approved: ["draft", "Preview + agreement sent"], signed: ["review", "Signed, not paid"], paid: ["live", "Paid"], declined: ["off", "Declined"] };
+  function loadProjects(doneMsg) {
+    say("#prjMsg", "Loading…", true);
+    api("GET", "/admin/requests").then(function (j) {
+      prjLoadedOnce = true; prjData = j.results || []; say("#prjMsg", typeof doneMsg === "string" ? doneMsg : "", true);
+      $("#prjDraft").hidden = !j.draftAgreement;
+      renderProjects();
+    }).catch(function (err) { say("#prjMsg", friendlyError(err), false); });
+  }
+  function renderProjects() {
+    var waiting = prjData.filter(function (x) { return x.status === "requested"; }).length;
+    $("#prjCount").textContent = prjData.length + " request" + (prjData.length === 1 ? "" : "s") + (waiting ? " · " + waiting + " need a preview" : "");
+    $("#prjRows").innerHTML = prjData.length ? prjData.map(function (x, i) {
+      var st = PRJ_STATUS[x.status] || ["", x.status];
+      var canSend = x.status === "requested" || x.status === "approved" || x.status === "declined";
+      var sub = function (t) { return '<br><span class="prj-note">' + t + "</span>"; };
+      var stNotes = (x.approvedAt && x.status === "approved" ? sub("Sent " + esc(fmtDate(x.approvedAt))) : "") +
+        (x.signature ? sub("Signed by " + esc(x.signature.name) + ", " + esc(fmtDate(x.signature.at))) : "") +
+        (x.previewDecision ? sub(x.previewChanges ? "Preview approved <strong>with changes</strong>" : "Preview approved as is") : "") +
+        (x.paidAt ? sub("Paid " + esc(fmtDate(x.paidAt))) : "");
+      var actions = '<div class="row-actions"><button type="button" class="btn-ghost btn-sm" data-prj-view="' + i + '">View</button>' +
+        (x.link ? '<button type="button" class="btn-ghost btn-sm" data-prj-copy="' + i + '">Copy client link</button>' : "") +
+        ((x.status === "requested" || x.status === "approved") ? '<button type="button" class="btn-ghost btn-sm" data-prj-decline="' + i + '">Decline</button>' : "") +
+        '<button type="button" class="btn-danger btn-sm" data-prj-del="' + i + '">Delete</button></div>';
+      var approve = canSend ? '<div class="prj-approve"><input type="url" placeholder="https:// preview link" aria-label="Preview link for ' + esc(x.fullName) + '" data-prj-url="' + i + '" value="' + esc(x.previewUrl || "") + '">' +
+        '<button type="button" class="' + (x.status === "approved" ? "btn-ghost" : "btn-primary") + ' btn-sm" data-prj-send="' + i + '">' + (x.status === "approved" ? "Resend agreement" : "Approve &amp; send agreement") + "</button></div>"
+        : (x.previewUrl ? '<a href="' + esc(x.previewUrl) + '" target="_blank" rel="noopener" class="prj-note">' + esc(x.previewUrl) + "</a>" : "");
+      return '<tr class="' + (x.status === "requested" ? "needs" : "") + '"><td><strong>' + esc(x.businessName || x.fullName) + "</strong><br>" + esc(x.businessName ? x.fullName + " · " : "") + esc(x.email) + "</td><td>" + esc(x.packageName) +
+        '<br><span class="prj-note">' + esc(x.total) + (x.monthly ? " + " + esc(x.monthly) + " from launch" : "") + "</span></td><td>" + esc(fmtDate(x.createdAt)) +
+        '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + stNotes + "</td><td>" + approve + actions + "</td></tr>";
+    }).join("") : '<tr><td colspan="5">No website requests yet. They come from the payments page.</td></tr>';
+  }
+  $("#prjRefresh").addEventListener("click", function () { loadProjects(); });
+  $("#prjRows").addEventListener("click", function (e) {
+    var v = e.target.closest("[data-prj-view]"), sd = e.target.closest("[data-prj-send]"), cp = e.target.closest("[data-prj-copy]"),
+      dc = e.target.closest("[data-prj-decline]"), d = e.target.closest("[data-prj-del]");
+    if (v) {
+      var x = prjData[+v.dataset.prjView];
+      var pairs = [["Name", x.fullName], ["Business", x.businessName], ["Email", x.email], ["Phone", x.phone], ["Requested", fmtDateTime(x.createdAt)]]
+        .concat(x.summary || [])
+        .concat([["Total after signing", x.total], ["Monthly from launch", x.monthly], ["Preview link", x.previewUrl],
+          ["Preview decision", x.previewDecision], ["Changes to include", x.previewChanges],
+          ["Agreement", x.signature ? "Signed by " + x.signature.name + ", " + fmtDateTime(x.signature.at) + " (IP " + x.signature.ip + ", version " + x.signature.version + ")" : (x.approvedAt ? "Sent " + fmtDateTime(x.approvedAt) + ", not signed yet" : "Not sent yet")],
+          ["Paid", x.paidAt ? fmtDateTime(x.paidAt) : ""]]).filter(function (p) { return p[1]; });
+      openInfo(x.packageName + " — " + (x.businessName || x.fullName), pairs, x.email, "Your " + x.packageName);
+      return;
+    }
+    if (sd) {
+      var y = prjData[+sd.dataset.prjSend], input = $('[data-prj-url="' + sd.dataset.prjSend + '"]'), url = input ? input.value.trim() : "";
+      if (!/^https?:\/\/\S+\.\S+/.test(url)) { say("#prjMsg", "Paste the full preview link first, starting with https://", false); if (input) input.focus(); return; }
+      var again = y.status === "approved";
+      if (!confirm((again ? "Resend" : "Send") + " the preview and agreement to " + y.email + "?\n\nPreview: " + url + "\nTotal after signing: " + y.total)) return;
+      sd.disabled = true;
+      api("POST", "/admin/requests/approve", { id: y.id, previewUrl: url }).then(function () { loadProjects("Preview and agreement sent to " + y.email + "."); })
+        .catch(function (err) { say("#prjMsg", friendlyError(err), false); sd.disabled = false; });
+      return;
+    }
+    if (cp) {
+      var c = prjData[+cp.dataset.prjCopy];
+      (navigator.clipboard ? navigator.clipboard.writeText(c.link) : Promise.reject()).then(function () { say("#prjMsg", "Client link copied. It's private to " + c.email + ".", true); },
+        function () { prompt("Client link (private to " + c.email + "):", c.link); });
+      return;
+    }
+    if (dc) {
+      var z = prjData[+dc.dataset.prjDecline];
+      if (!confirm("Decline the request from " + (z.businessName || z.fullName) + "?\n\nNo email is sent, so reply to them yourself. You can still approve it later.")) return;
+      dc.disabled = true;
+      api("POST", "/admin/requests/decline", { id: z.id }).then(function () { loadProjects("Marked as declined."); })
+        .catch(function (err) { say("#prjMsg", friendlyError(err), false); dc.disabled = false; });
+      return;
+    }
+    if (d) { var w = prjData[+d.dataset.prjDel]; deleteEntry("request", w.id, "Delete the request from " + (w.businessName || w.fullName) + "? Its signed agreement stays on record.", d, "#prjMsg", loadProjects); }
+  });
+
   /* ---- Special orders (Mother's Day, Family Tree) ---- */
   var spLoadedOnce = false, spData = [];
   var SP_STATUS = { requested: ["review", "Needs a sample"], link_sent: ["draft", "Payment link sent"], paid: ["live", "Paid"] };
+  function spStatus(x) { var st = SP_STATUS[x.status] || ["", x.status]; return x.status === "link_sent" && x.signedAt ? ["review", "Signed, not paid"] : st; }
   function loadSpecials() {
     say("#spMsg", "Loading…", true);
     api("GET", "/admin/special").then(function (j) { spLoadedOnce = true; spData = j.results || []; say("#spMsg", ""); renderSpecials(); })
@@ -1578,11 +1679,11 @@
     var waiting = spData.filter(function (x) { return x.status === "requested"; }).length;
     $("#spCount").textContent = spData.length + " request" + (spData.length === 1 ? "" : "s") + (waiting ? " · " + waiting + " need a sample" : "");
     $("#spRows").innerHTML = spData.length ? spData.map(function (x, i) {
-      var st = SP_STATUS[x.status] || ["", x.status];
+      var st = spStatus(x);
       var send = x.status === "paid" ? "" : '<button type="button" class="' + (x.status === "requested" ? "btn-primary" : "btn-ghost") + ' btn-sm" data-sp-send="' + i + '">' + (x.status === "requested" ? "Send payment link" : "Resend link") + "</button>";
       return '<tr class="' + (x.status === "requested" ? "needs" : "") + '"><td><strong>' + esc(x.fullName) + "</strong><br>" + esc(x.email) + "</td><td>" + esc(x.productName) +
         '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(spWhere(x)) + "</span></td><td>" + esc(fmtDate(x.createdAt)) + "</td><td>" + esc(x.price) +
-        '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + (x.paidAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(fmtDate(x.paidAt)) + "</span>" : "") +
+        '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + (x.signedAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">Signed by ' + esc(x.signedName) + "</span>" : "") + (x.paidAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(fmtDate(x.paidAt)) + "</span>" : "") +
         '</td><td><div class="row-actions"><button type="button" class="btn-ghost btn-sm" data-sp-view="' + i + '">View</button>' + send +
         '<button type="button" class="btn-danger btn-sm" data-sp-del="' + i + '">Delete</button></div></td></tr>';
     }).join("") : '<tr><td colspan="6">No special requests yet. They appear here during each special\'s dates.</td></tr>';
@@ -1591,14 +1692,14 @@
   $("#spRows").addEventListener("click", function (e) {
     var v = e.target.closest("[data-sp-view]"), sd = e.target.closest("[data-sp-send]"), d = e.target.closest("[data-sp-del]");
     if (v) {
-      var x = spData[+v.dataset.spView], pairs = [["Name", x.fullName], ["Email", x.email], ["Phone", x.phone], ["Requested", fmtDateTime(x.createdAt)], ["Where it lives", spWhere(x)], ["Total", x.price]];
+      var x = spData[+v.dataset.spView], pairs = [["Name", x.fullName], ["Email", x.email], ["Phone", x.phone], ["Requested", fmtDateTime(x.createdAt)], ["Where it lives", spWhere(x)], ["Total", x.price], ["Agreement", x.signedAt ? "Signed by " + x.signedName + ", " + fmtDateTime(x.signedAt) : "Not signed yet"]];
       Object.keys(x.details || {}).forEach(function (k) { pairs.push([(x.detailLabels && x.detailLabels[k]) || k, x.details[k]]); });
       openInfo(x.productName + " — " + x.fullName, pairs, x.email, "Your " + x.productName);
       return;
     }
     if (sd) {
       var y = spData[+sd.dataset.spSend], again = y.status !== "requested";
-      if (!confirm((again ? "Resend" : "Send") + " the payment link (" + y.price + ") to " + y.email + "?\n\nOnly do this once they've approved their sample.")) return;
+      if (!confirm((again ? "Resend" : "Send") + " the payment link (" + y.price + ") to " + y.email + "?\n\nOnly do this once they've approved their sample. They sign the agreement before they can pay.")) return;
       sd.disabled = true;
       api("POST", "/admin/special/send-link", { id: y.id }).then(function () { say("#spMsg", "Payment link sent to " + y.email + ".", true); loadSpecials(); })
         .catch(function (err) { say("#spMsg", friendlyError(err), false); sd.disabled = false; });

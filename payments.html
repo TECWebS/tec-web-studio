@@ -4,7 +4,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment</title>
+  <title>Start Your Website</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -199,6 +199,9 @@
     .pay-btn .ico { width: 18px; height: 18px; stroke-width: 2.5; }
     .pay-btn:hover { background: var(--teal-dark); }
     .pay-btn:disabled { background: #a0c8cc; cursor: not-allowed; }
+    .how-steps { margin: 0 0 20px 20px; padding: 0; }
+    .how-steps li { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+    .how-steps strong { color: var(--dark, #1a2e2e); }
     #payment-message { color: #c0392b; font-size: 13px; margin-top: 12px; text-align: center; }
     .or-divider { display: none; align-items: center; gap: 12px; margin: 16px 0; }
     .or-divider div { flex: 1; height: 1px; background: var(--border); }
@@ -247,7 +250,7 @@
 <div class="hero">
   <div class="hero-badge">TEC Web Studio</div>
   <h1>Ready to <span>Level Up</span><br>Your Online Presence?</h1>
-  <p>Select your package and any add-ons below. Complete your purchase securely via Stripe.</p>
+  <p>Choose your package and any add-ons, then send your request. Nothing is charged until you approve your preview and sign.</p>
 </div>
 
 <div class="container">
@@ -256,7 +259,7 @@
     <span style="color:#b08a00;display:inline-flex;"><svg class="ico" style="width:36px;height:36px;" aria-hidden="true"><use href="#i-hand"/></svg></span>
     <div>
       <div class="ttl">We've pre-selected your recommended package!</div>
-      <div class="txt">Review your selection below, add any extras you'd like, then proceed to secure checkout.</div>
+      <div class="txt">Review your selection below, add any extras you'd like, then send your request.</div>
     </div>
   </div>
 
@@ -509,7 +512,7 @@
       </div>
 
       <div class="summary-total">
-        <div class="label">Order Total</div>
+        <div class="label">Total<br><span style="font-weight:500;letter-spacing:0;text-transform:none;font-size:12px;color:var(--muted);">Due after you approve and sign</span></div>
         <div class="amounts">
           <div class="amount" id="total-display">$0</div>
           <div class="recurring" id="recurring-display"></div>
@@ -518,21 +521,23 @@
     </div>
 
     <div class="payment-section">
-      <div class="payment-title"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg> Secure Checkout</div>
-      <p class="payment-note">Your payment is securely processed through Stripe. Credit and debit cards, Apple Pay, Google Pay, and other available payment methods are accepted.</p>
+      <div class="payment-title"><svg class="ico" aria-hidden="true"><use href="#i-check-circle"/></svg> Send Your Request</div>
+      <p class="payment-note">Nothing is charged today. Here's how it works:</p>
+      <ol class="how-steps">
+        <li><strong>You send your request.</strong> Your price and any discount code are locked in.</li>
+        <li><strong>We build your preview</strong> from what you want: your colors, style and content.</li>
+        <li><strong>You approve it and sign.</strong> We email you a private link to see your preview, approve it (as it is, or with a list of changes you'd like included), and sign our service agreement.</li>
+        <li><strong>You pay in full</strong> on that same page, and we build your full website.</li>
+      </ol>
 
       <div class="disabled-notice" id="missing-notice">
-        <svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><strong>Before you check out, please:</strong>
+        <svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><strong>Before you send your request, please:</strong>
         <ul id="missing-list"></ul>
       </div>
 
-      <button type="button" class="pay-btn" id="review-pay-btn" onclick="handleReviewPay()">Complete my order <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-      <div id="stripe-loading"><svg class="ico" aria-hidden="true"><use href="#i-loader"/></svg> Loading secure payment form...</div>
-      <div id="express-checkout-element"></div>
-      <div class="or-divider" id="or-divider"><div></div><span>or pay with card</span><div></div></div>
-      <div id="payment-element"></div>
-      <button type="button" class="pay-btn" id="pay-btn" onclick="handlePayment()">Pay Now</button>
-      <div id="payment-message"></div>
+      <button type="button" class="pay-btn" id="request-btn" onclick="sendRequest()">Send my request <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <div id="payment-message" role="alert"></div>
+      <p class="payment-note" style="margin:14px 0 0;text-align:center;">Payments are processed securely by Stripe when you're ready. Questions? <a href="contact.html" style="color:var(--teal-dark);">Contact us</a>.</p>
     </div>
   </div>
 
@@ -543,15 +548,13 @@
 
 <footer>&copy; 2026 <strong>TEC Web Studio LLC</strong> · Secure payments powered by Stripe</footer>
 
-<script src="https://js.stripe.com/v3/"></script>
 <script>
-  var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
-  // Your Cloudflare Worker. It prices the order itself from the choices below
-  // (so the amount can't be edited in the browser), and only records the
-  // order and sends the receipt after Stripe confirms the payment.
+  // Your Cloudflare Worker. It prices the request itself from the choices
+  // below (so the amount can't be edited in the browser) and locks it in.
+  // Payment happens later on agreement.html, after you approve the request
+  // and the client approves their preview and signs the agreement.
   var API = 'https://api.tecwebstudio.com';
-  var INTENT_FN = API + '/checkout/order-intent';
-  var COMPLETE_FN = API + '/checkout/order-complete';
+  var REQUEST_FN = API + '/checkout/order-request';
 
   /* =====================================================
      PRICES & DESCRIPTIONS — edit everything here.
@@ -628,15 +631,9 @@
 
   /* ===================== STATE ===================== */
   var state = { pkg: null, mgmt: null, domain: null, acct: null, priority: null, care: null, editor: null };
-  // The discount the Worker confirmed (null = none). The Worker re-checks it at checkout.
+  // The discount the Worker confirmed (null = none). The Worker checks it again and locks it in with the request.
   var discount = null, discountSig = '', codeTimer = null, codePending = false, lastCheckedSig = '';
   function money(n) { return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : String(Math.round(n))); }
-  var elements = null, paymentElement = null, expressElement = null;
-  var clientSecret = null;
-  var stripeState = 'idle';   // idle | loading | ready
-  var stripeSig = null;       // order signature the current payment form was built for
-  var initToken = 0;
-  var payLabel = 'Pay Now';
 
   /* ===================== HELPERS ===================== */
   function ico(name, cls) { return '<svg class="ico ' + (cls || '') + '" aria-hidden="true"><use href="#i-' + name + '"/></svg>'; }
@@ -926,235 +923,46 @@
     notice.style.display = ready ? 'none' : 'block';
     document.getElementById('missing-list').innerHTML = missing.map(function(x) { return '<li>' + x + '</li>'; }).join('');
 
-    // Tear down the payment form if the order no longer matches what it was built for
-    if (!ready || (stripeState === 'ready' && stripeSig !== orderSignature())) teardownStripe();
-
-    document.getElementById('review-pay-btn').style.display = (ready && stripeState === 'idle') ? 'flex' : 'none';
+    var btn = document.getElementById('request-btn');
+    if (btn) btn.style.display = ready ? 'flex' : 'none';
   }
 
-  /* ===================== AFTER PAYMENT ===================== */
-  // Only used to greet them by name after a redirect-based payment. The
-  // Worker reads the real order details from the payment in Stripe.
-  function saveOrderState() {
-    try { sessionStorage.setItem('tec_order', JSON.stringify({ fullName: val('customer-name'), email: val('customer-email') })); } catch (e) {}
-  }
-
-  // Asks the Worker to confirm the payment with Stripe, record the order, and
-  // send the receipt. Retries a few times in case of a brief connection blip.
-  function fulfillOrder(paymentIntentId, name, email) {
-    try { sessionStorage.removeItem('tec_order'); } catch (e) {}
-    showProcessing();
-    function attempt(triesLeft) {
-      fetch(COMPLETE_FN, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentIntentId: paymentIntentId })
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data && data.ok) showSuccess(name);
-        else if (triesLeft > 1) setTimeout(function() { attempt(triesLeft - 1); }, 2500);
-        else showPaidButPending(email);
-      })
-      .catch(function() {
-        if (triesLeft > 1) setTimeout(function() { attempt(triesLeft - 1); }, 2500);
-        else showPaidButPending(email);
-      });
-    }
-    attempt(3);
-  }
-
-  function showProcessing() {
-    document.querySelector('.payment-section').innerHTML =
-      '<div style="text-align:center;padding:32px 24px;">' +
-      '<svg class="ico" style="width:40px;height:40px;color:#6AABB0;animation:spin 1.2s linear infinite;" aria-hidden="true"><use href="#i-loader"/></svg>' +
-      '<p style="margin-top:14px;font-size:14px;color:#557070;">Payment received — finishing up your order...</p></div>';
-  }
-
-  /* ===================== SUCCESS ===================== */
-  function showSuccess(name) {
-    document.querySelector('.payment-section').innerHTML =
-      '<div style="text-align:center;padding:32px 24px;">' +
-      '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
-      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
-      '<p style="font-size:14px;color:#557070;line-height:1.6;">Thank you' + (name ? ', ' + esc(name) : '') + '! Your receipt is on its way by email, and we\'ll be in touch shortly to get started on your project.</p>' +
-      '</div>';
-  }
-
-  function showPaidButPending(email) {
-    document.querySelector('.payment-section').innerHTML =
-      '<div style="text-align:center;padding:32px 24px;">' +
-      '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
-      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Payment Received!</p>' +
-      '<p style="font-size:14px;color:#557070;line-height:1.6;">Your payment went through. We\'re finishing up your order — if you don\'t get a receipt' + (email ? ' at <strong>' + esc(email) + '</strong>' : '') + ' within a little while, just <a href="contact.html">contact us</a> and we\'ll sort it out right away.</p>' +
-      '</div>';
-  }
-
-  /* ===================== STRIPE ===================== */
-  function teardownStripe() {
-    initToken++;
-    stripeState = 'idle';
-    clientSecret = null;
-    stripeSig = null;
-    try { if (paymentElement) paymentElement.destroy(); } catch (e) {}
-    try { if (expressElement) expressElement.destroy(); } catch (e) {}
-    paymentElement = null; expressElement = null; elements = null;
-    document.getElementById('payment-element').innerHTML = '';
-    document.getElementById('express-checkout-element').innerHTML = '';
-    document.getElementById('or-divider').style.display = 'none';
-    document.getElementById('pay-btn').style.display = 'none';
-    document.getElementById('stripe-loading').style.display = 'none';
-    document.getElementById('payment-message').textContent = '';
-  }
-
-  function handleReviewPay() {
+  /* ===================== SEND REQUEST ===================== */
+  var sending = false;
+  function sendRequest() {
+    if (sending) return;
     if (getMissing().length) { updateReadiness(); return; }
-    document.getElementById('review-pay-btn').style.display = 'none';
-    document.getElementById('stripe-loading').style.display = 'block';
-    _initStripe();
-  }
-
-  function failInit(msg) {
-    teardownStripe();
-    document.getElementById('payment-message').textContent = msg;
-    updateReadiness();
-  }
-
-  function _initStripe() {
-    var t = computeTotals();
-    var mySig = orderSignature();
-    var token = ++initToken;
-    stripeState = 'loading';
-
-    fetch(INTENT_FN, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderDetails())
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (token !== initToken) return;   // order changed while loading
-      if (!data.clientSecret) {
-        console.error('No clientSecret:', data);
-        if (data && data.message && discount) { discount = null; discountSig = ''; setApplyButton(); codeMsg(data.message, 'err'); updateSummary(); }
-        failInit(data && data.message ? data.message : 'Something went wrong loading the payment form. Please try again.');
-        return;
-      }
-      clientSecret = data.clientSecret;
-      stripeSig = mySig;
-      stripeState = 'ready';
-      payLabel = 'Pay ' + money(t.one) + ' Now';
-
-      elements = stripe.elements({ clientSecret: clientSecret, appearance: {
-        theme: 'stripe',
-        variables: { colorPrimary: '#6AABB0', borderRadius: '10px', fontFamily: 'DM Sans, sans-serif' }
-      }});
-
-      expressElement = elements.create('expressCheckout', {
-        buttonType: { applePay: 'buy', googlePay: 'buy' },
-        layout: { maxColumns: 2, maxRows: 1 }
-      });
-      expressElement.mount('#express-checkout-element');
-
-      expressElement.on('confirm', function() {
-        var eName  = val('customer-name');
-        var eEmail = val('customer-email');
-        saveOrderState();
-        var returnUrl = window.location.origin + window.location.pathname + '?payment=complete';
-        stripe.confirmPayment({
-          elements: elements,
-          clientSecret: clientSecret,
-          confirmParams: {
-            return_url: returnUrl,
-            payment_method_data: { billing_details: { name: eName || undefined, email: eEmail || undefined } }
-          },
-          redirect: 'if_required'
-        }).then(function(result) {
-          if (result.error) {
-            document.getElementById('payment-message').textContent = result.error.message;
-          } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-            fulfillOrder(result.paymentIntent.id, eName, eEmail);
-          }
-        });
-      });
-
-      expressElement.on('ready', function(e) {
-        if (e.availablePaymentMethods && Object.keys(e.availablePaymentMethods).length > 0) {
-          document.getElementById('or-divider').style.display = 'flex';
-        }
-      });
-
-      paymentElement = elements.create('payment', { layout: { type: 'accordion', defaultCollapsed: false } });
-      paymentElement.mount('#payment-element');
-      document.getElementById('stripe-loading').style.display = 'none';
-      var pb = document.getElementById('pay-btn');
-      pb.textContent = payLabel;
-      pb.style.display = 'flex';
-    })
-    .catch(function(e) {
-      if (token !== initToken) return;
-      console.error('Stripe init error:', e);
-      failInit('Something went wrong loading the payment form. Please try again.');
-    });
-  }
-
-  function handlePayment() {
-    if (!state.pkg) { alert('Please select a package before paying.'); return; }
-    var btn = document.getElementById('pay-btn');
-    btn.disabled = true;
-    btn.textContent = 'Processing...';
+    if (codePending || (val('discount-code') && !discount)) {
+      document.getElementById('payment-message').textContent = 'Apply your discount code first, or clear it.';
+      return;
+    }
+    var btn = document.getElementById('request-btn');
+    sending = true; btn.disabled = true; btn.textContent = 'Sending...';
     document.getElementById('payment-message').textContent = '';
-
-    // Capture before any redirect clears the page
-    var customerName  = val('customer-name');
-    var customerEmail = val('customer-email');
-    saveOrderState();
-
-    var returnUrl = window.location.origin + window.location.pathname + '?payment=complete';
-
-    // elements.submit() must run before confirmPayment()
-    elements.submit().then(function(submitResult) {
-      if (submitResult.error) {
-        btn.disabled = false;
-        btn.textContent = payLabel;
-        document.getElementById('payment-message').textContent = submitResult.error.message;
-        return;
-      }
-      stripe.confirmPayment({
-        elements: elements,
-        clientSecret: clientSecret,
-        confirmParams: {
-          return_url: returnUrl,
-          payment_method_data: { billing_details: { name: customerName || undefined, email: customerEmail || undefined } }
-        },
-        redirect: 'if_required'
-      }).then(function(result) {
-        btn.disabled = false;
-        btn.textContent = payLabel;
-        if (result.error) {
-          document.getElementById('payment-message').textContent = result.error.message;
-        } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-          fulfillOrder(result.paymentIntent.id, customerName, customerEmail);
-        }
+    var name = val('customer-name'), email = val('customer-email');
+    fetch(REQUEST_FN, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderDetails()) })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        sending = false;
+        if (data && data.ok) { showRequestSent(name, email); return; }
+        btn.disabled = false; btn.innerHTML = 'Send my request <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>';
+        if (data && data.message && discount) { discount = null; discountSig = ''; setApplyButton(); codeMsg(data.message, 'err'); updateSummary(); }
+        document.getElementById('payment-message').textContent = (data && data.message) || 'Something went wrong sending your request. Please check your details and try again.';
+      })
+      .catch(function () {
+        sending = false; btn.disabled = false; btn.innerHTML = 'Send my request <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>';
+        document.getElementById('payment-message').textContent = "Couldn't connect. Check your connection and try again.";
       });
-    });
   }
 
-  // Return from redirect-based payments (bank redirects, etc.)
-  function checkPaymentReturn() {
-    var params = new URLSearchParams(window.location.search);
-    if (params.get('payment') !== 'complete') return;
-    var clientSecretParam = params.get('payment_intent_client_secret');
-    if (!clientSecretParam) return;
-    stripe.retrievePaymentIntent(clientSecretParam).then(function(result) {
-      if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-        var saved = null;
-        try { saved = JSON.parse(sessionStorage.getItem('tec_order') || 'null'); } catch (e) {}
-        // Safe to call even if it already ran: the Worker only applies each payment once.
-        fulfillOrder(result.paymentIntent.id, saved ? saved.fullName : '', saved ? saved.email : '');
-      } else {
-        document.getElementById('payment-message').textContent = 'Payment was not completed. Please try again.';
-      }
-    });
+  function showRequestSent(name, email) {
+    document.querySelector('.payment-section').innerHTML =
+      '<div style="text-align:center;padding:32px 24px;">' +
+      '<div style="margin-bottom:16px;display:flex;justify-content:center;color:#6AABB0;"><svg class="ico" style="width:56px;height:56px;stroke-width:1.5;" aria-hidden="true"><use href="#i-check-circle"/></svg></div>' +
+      '<p style="font-family:\'DM Serif Display\',serif;font-size:22px;color:#1a3d3d;font-weight:400;margin-bottom:8px;">Request sent!</p>' +
+      '<p style="font-size:14px;color:#557070;line-height:1.6;">Thank you' + (name ? ', ' + esc(name) : '') + '! Nothing has been charged. We\'ll review your request and build your preview, then email you' + (email ? ' at <strong>' + esc(email) + '</strong>' : '') + ' a private link to approve it, sign and pay. A confirmation is on its way to your inbox now.</p>' +
+      '</div>';
+    document.querySelector('.payment-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   /* ===================== URL PRE-SELECT ===================== */
@@ -1197,7 +1005,6 @@
   renderCare();
   updateSummary();
   initFromURL();
-  checkPaymentReturn();
 </script>
 </body>
 </html>
