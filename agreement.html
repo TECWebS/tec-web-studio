@@ -64,6 +64,9 @@ fieldset.decide legend { font-size: 12px; font-weight: 700; letter-spacing: 1.2p
 textarea.changes { width: 100%; min-height: 110px; border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; font: 15px/1.5 var(--ui); color: var(--dark); resize: vertical; margin: 4px 0 6px; }
 textarea.changes:focus { border-color: var(--teal); outline: none; }
 .changes-note { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+select.state { width: 100%; border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; font: 16px var(--ui); color: var(--dark); background: #fff; }
+select.state:focus { border-color: var(--teal); outline: none; }
+.taxq { margin-bottom: 18px; }
 .esign { background: #f4fafa; border: 2px solid var(--border); border-radius: 12px; padding: 14px 16px 2px; margin-bottom: 18px; }
 .esign .check { margin-bottom: 12px; }
 .esign .fine { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: -4px 0 12px 32px; }
@@ -136,6 +139,11 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
           <p class="changes-note">This is your one list of changes for the preview. We'll include them in your full build, and your package's revision rounds apply to the finished website.</p>
         </div>
       </fieldset>
+      <div class="taxq" id="taxq" hidden>
+        <label class="lab" for="taxState" id="taxLabel">Where do you live?</label>
+        <select class="state" id="taxState"></select>
+        <p class="changes-note" id="taxHint" style="margin-top:6px;"></p>
+      </div>
       <div class="esign">
         <label class="check"><input type="checkbox" id="esign"><span>I agree to sign and receive this agreement and related records <strong>electronically</strong>.</span></label>
         <p class="fine">You can ask for a paper copy at any time, and you can withdraw this consent in writing (Section 18). You need a device that can open and save web pages or PDFs. We email you a copy when you sign.</p>
@@ -237,6 +245,7 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
     $('ver').textContent = info.version;
     if (info.title) $('docTitle').textContent = info.title;
     renderInitials(info.initialSpots || []);
+    setupTaxQuestion(info.taxQuestion);
     if (info.waitingForStudio && !info.signed) { $('signForm').hidden = true; $('scrollHint').textContent = 'TEC Web Studio has not signed this agreement yet. We\'ll email you when it\'s ready.'; }
     $('total').textContent = info.total;
     if (info.monthly) { $('monthly').hidden = false; $('monthly').textContent = 'Plus Website Care: ' + info.monthly + '. Nothing monthly is charged today. We\'ll email you when it starts.'; }
@@ -253,6 +262,26 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
   $('printBtn').addEventListener('click', function () { window.print(); });
   $('sigName').addEventListener('input', function () { $('sigPreview').textContent = this.value; });
   var spots = [];
+  function setupTaxQuestion(q) {
+    if (!q) return;
+    var keys = Object.keys(q.states || {}).sort(function (a, b) { return a === 'CT' ? -1 : b === 'CT' ? 1 : a === 'XX' ? 1 : b === 'XX' ? -1 : q.states[a].localeCompare(q.states[b]); });
+    $('taxState').innerHTML = '<option value="">Choose a state</option>' + keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(q.states[k]) + '</option>'; }).join('');
+    $('taxState').value = q.state || '';
+    $('taxLabel').textContent = q.label || 'Where do you live?';
+    $('taxHint').textContent = q.hint || '';
+    $('taxq').hidden = !!q.locked;
+  }
+  $('taxState').addEventListener('change', function () {
+    var q = info && info.taxQuestion, sel = this; if (!q || !sel.value) return;
+    sel.disabled = true; $('signMsg').textContent = 'Updating your total...';
+    post(q.route, { t: t, state: sel.value }).then(function (x) {
+      sel.disabled = false;
+      if (!x.j || !x.j.ok) { $('signMsg').textContent = (x.j && x.j.message) || 'Something went wrong. Please try again.'; return; }
+      $('signMsg').textContent = '';
+      q.state = sel.value; info.total = x.j.total; $('total').textContent = x.j.total;
+      if (x.j.agreementHtml) { $('doc').innerHTML = x.j.agreementHtml; }
+    }).catch(function () { sel.disabled = false; $('signMsg').textContent = 'Can\'t connect. Check your connection and try again.'; });
+  });
   function cleanIni(v) { return String(v || '').replace(/[\s.\-']/g, '').toUpperCase(); }
   function renderInitials(list) {
     spots = list;
@@ -298,6 +327,7 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
     var withPreview = !!(info && info.previewUrl), dec = decision(), changes = $('changes').value.trim();
     if (withPreview && !dec) { $('signMsg').textContent = 'Choose how you approve your preview.'; return; }
     if (withPreview && dec === 'with_changes' && changes.length < 3) { $('signMsg').textContent = 'List the changes you would like included.'; $('changes').focus(); return; }
+    if (info && info.taxQuestion && !info.taxQuestion.locked && !info.taxQuestion.state) { $('signMsg').textContent = 'Choose the state where you live first.'; $('taxState').focus(); return; }
     if (!$('esign').checked) { $('signMsg').textContent = 'Check the box to agree to sign electronically.'; return; }
     var initials = {}, missing = null;
     spots.forEach(function (s) { var v = cleanIni($('ini-' + s.id).value); if (!/^[A-Za-z\u00C0-\u024F]{1,5}$/.test(v) && !missing) missing = s; initials[s.id] = v; });
@@ -311,6 +341,7 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
       btn.disabled = false; btn.textContent = 'Sign agreement';
       if (!x.j || !x.j.ok) { if (info) info.previewDecision = ''; $('signMsg').textContent = (x.j && x.j.message) || 'Something went wrong. Please try again.'; return; }
       if (x.j.agreementHtml) $('doc').innerHTML = x.j.agreementHtml;
+      if (info && info.taxQuestion) { info.taxQuestion.locked = true; $('taxq').hidden = true; }
       showSigned(x.j.signed);
       startPayment();
       setTimeout(function () { $('payCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);

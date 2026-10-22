@@ -448,7 +448,11 @@
     <div class="admin-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
         <div class="lab" style="margin:0;" id="discCount"></div>
-        <button type="button" class="btn-ghost btn-sm" id="discRefresh">Refresh</button>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer;" id="discShowWrap" hidden><input type="checkbox" id="discShowRemoved"> <span id="discShowLabel">Show removed</span></label>
+          <button type="button" class="btn-ghost btn-sm" id="discRemoveAll" hidden>Remove finished</button>
+          <button type="button" class="btn-ghost btn-sm" id="discRefresh">Refresh</button>
+        </div>
       </div>
       <div class="table-scroll"><table>
         <thead><tr><th>Code</th><th>Offer</th><th>When</th><th>Status</th><th>Used</th><th></th></tr></thead>
@@ -1749,7 +1753,7 @@
   function renderDiscounts() {
     var promos = discData.filter(function (d) { return d.kind !== "outreach"; }), out = discData.filter(function (d) { return d.kind === "outreach"; });
     var on = promos.filter(function (d) { return d.status === "active"; }).map(function (d) { return d.code; });
-    $("#discCount").textContent = promos.length + " promotions" + (on.length ? " · on now: " + on.join(", ") : " · none running today") + " · " + out.length + " outreach code" + (out.length === 1 ? "" : "s");
+    $("#discCount").textContent = promos.length + " promotions" + (on.length ? " · on now: " + on.join(", ") : " · none running today") + " · " + out.filter(function (d) { return !d.hidden; }).length + " outreach code" + (out.filter(function (d) { return !d.hidden; }).length === 1 ? "" : "s");
     function rowHtml(d, i) {
       var st = DISC_STATUS[d.status] || ["", d.status];
       var offer = d.kind === "twoforone" ? "2-for-1" : d.percentOff + "% off";
@@ -1757,13 +1761,39 @@
       var codeCell = '<strong style="font-family:monospace;letter-spacing:1px;">' + esc(d.code) + "</strong>" +
         (d.kind === "outreach" ? "<br>" + esc(d.businessName || "") + "<br><span style=\"color:var(--ink-soft);font-size:12px;\">" + esc(d.allowedEmail || "") + "</span>" : "<br><span style=\"color:var(--ink-soft);font-size:12px;\">" + esc(d.label) + "</span>");
       var reminders = d.kind === "outreach" && d.status === "sent" ? "<br><span style=\"color:var(--ink-soft);font-size:12px;\">Reminders: " + (d.reminded7d ? "week ✓" : "week") + " · " + (d.reminded24h ? "last day ✓" : "last day") + "</span>" : "";
-      var act = d.kind === "outreach" ? "" : '<button type="button" class="btn-ghost btn-sm" data-disc-pause="' + i + '">' + (d.status === "paused" ? "Resume" : "Pause") + "</button>";
-      return "<tr><td>" + codeCell + "</td><td>" + offer + "</td><td>" + esc(d.when) + '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + reminders + "</td><td>" + d.uses + "</td><td>" + act + "</td></tr>";
+      var act = d.kind === "outreach"
+        ? (d.hidden ? '<button type="button" class="btn-ghost btn-sm" data-disc-restore="' + i + '">Restore</button>'
+          : d.status !== "sent" ? '<button type="button" class="btn-ghost btn-sm" data-disc-remove="' + i + '">Remove</button>' : "")
+        : '<button type="button" class="btn-ghost btn-sm" data-disc-pause="' + i + '">' + (d.status === "paused" ? "Resume" : "Pause") + "</button>";
+      return "<tr" + (d.hidden ? ' style="opacity:.55;"' : "") + "><td>" + codeCell + "</td><td>" + offer + "</td><td>" + esc(d.when) + '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + reminders + "</td><td>" + d.uses + "</td><td>" + act + "</td></tr>";
     }
-    $("#discRows").innerHTML = discData.length ? discData.map(rowHtml).join("") : '<tr><td colspan="6">No codes yet.</td></tr>';
+    var showRemoved = $("#discShowRemoved").checked;
+    var removed = out.filter(function (d) { return d.hidden; }).length;
+    var finished = out.filter(function (d) { return !d.hidden && d.status !== "sent"; });
+    $("#discShowWrap").hidden = !removed && !showRemoved;
+    $("#discShowLabel").textContent = "Show removed (" + removed + ")";
+    $("#discRemoveAll").hidden = !finished.length;
+    $("#discRemoveAll").textContent = "Remove finished (" + finished.length + ")";
+    var shown = discData.map(function (d, i) { return [d, i]; }).filter(function (x) { return showRemoved || !x[0].hidden; });
+    $("#discRows").innerHTML = shown.length ? shown.map(function (x) { return rowHtml(x[0], x[1]); }).join("") : '<tr><td colspan="6">No codes yet.</td></tr>';
   }
+  function removeCodes(codes, restore, btn, doneMsg) {
+    if (btn) btn.disabled = true;
+    api("POST", "/admin/discounts/remove", { codes: codes, restore: !!restore }).then(function () { loadDiscounts(); say("#discMsg", doneMsg, true); })
+      .catch(function (err) { say("#discMsg", friendlyError(err), false); if (btn) btn.disabled = false; });
+  }
+  $("#discShowRemoved").addEventListener("change", renderDiscounts);
+  $("#discRemoveAll").addEventListener("click", function () {
+    var codes = discData.filter(function (d) { return d.kind === "outreach" && !d.hidden && d.status !== "sent"; }).map(function (d) { return d.code; });
+    if (!codes.length) return;
+    if (!confirm("Remove " + codes.length + " finished outreach code" + (codes.length === 1 ? "" : "s") + " (expired, used or unsubscribed) from this list?\n\nNothing is deleted: they stay on record, unsubscribed businesses are never emailed again, and \u201cShow removed\u201d brings them back.")) return;
+    removeCodes(codes, false, this, codes.length + " finished code" + (codes.length === 1 ? "" : "s") + " removed from the list.");
+  });
   $("#discRefresh").addEventListener("click", loadDiscounts);
   $("#discRows").addEventListener("click", function (e) {
+    var rm = e.target.closest("[data-disc-remove]"), rs = e.target.closest("[data-disc-restore]");
+    if (rm) { var x = discData[+rm.dataset.discRemove]; removeCodes([x.code], false, rm, x.code + " removed from the list. It stays on record."); return; }
+    if (rs) { var y = discData[+rs.dataset.discRestore]; removeCodes([y.code], true, rs, y.code + " is back on the list."); return; }
     var b = e.target.closest("[data-disc-pause]"); if (!b) return;
     var d = discData[+b.dataset.discPause], pausing = d.status !== "paused";
     if (pausing && !confirm("Pause " + d.code + "? It stops working right away, even during its dates, until you resume it.")) return;
