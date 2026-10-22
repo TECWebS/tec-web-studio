@@ -64,6 +64,19 @@ fieldset.decide legend { font-size: 12px; font-weight: 700; letter-spacing: 1.2p
 textarea.changes { width: 100%; min-height: 110px; border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; font: 15px/1.5 var(--ui); color: var(--dark); resize: vertical; margin: 4px 0 6px; }
 textarea.changes:focus { border-color: var(--teal); outline: none; }
 .changes-note { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.esign { background: #f4fafa; border: 2px solid var(--border); border-radius: 12px; padding: 14px 16px 2px; margin-bottom: 18px; }
+.esign .check { margin-bottom: 12px; }
+.esign .fine { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: -4px 0 12px 32px; }
+.inis { border: 0; margin: 0 0 18px; padding: 0; }
+.inis legend { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 4px; }
+.inis .hint { font-size: 13px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+.ini-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px 10px 14px; margin-bottom: 8px; }
+.ini-row.done { border-color: var(--teal-dark); background: #f4fafa; }
+.ini-row label { font-size: 14.5px; line-height: 1.4; }
+.ini-row a { display: block; font-size: 12.5px; color: var(--teal-dark); margin-top: 2px; }
+.ini-row input { width: 92px; flex-shrink: 0; border: 2px solid var(--border); border-radius: 10px; padding: 8px 10px; font: 600 22px 'Caveat', 'Brush Script MT', cursive; color: var(--teal-deep); text-align: center; text-transform: uppercase; }
+.ini-row input:focus { border-color: var(--teal); outline: none; }
+.doc .spot-flash { outline: 3px solid var(--gold); outline-offset: 4px; border-radius: 4px; }
 .signed-box { display: flex; gap: 14px; align-items: flex-start; padding: 20px 26px; background: #f2faf5; }
 .signed-box svg { flex-shrink: 0; margin-top: 2px; }
 .signed-box p { font-size: 14.5px; line-height: 1.6; }
@@ -123,11 +136,20 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
           <p class="changes-note">This is your one list of changes for the preview. We'll include them in your full build, and your package's revision rounds apply to the finished website.</p>
         </div>
       </fieldset>
-      <label class="check"><input type="checkbox" id="agree"><span>I have read and agree to the TEC Web Studio Website Services Agreement (version <span id="ver"></span>), including the Order Summary.</span></label>
+      <div class="esign">
+        <label class="check"><input type="checkbox" id="esign"><span>I agree to sign and receive this agreement and related records <strong>electronically</strong>.</span></label>
+        <p class="fine">You can ask for a paper copy at any time, and you can withdraw this consent in writing (Section 18). You need a device that can open and save web pages or PDFs. We email you a copy when you sign.</p>
+      </div>
+      <fieldset class="inis" id="inis" hidden>
+        <legend>Initial these sections</legend>
+        <p class="hint">Type your initials to show you have read each of these sections. They appear in the agreement next to the section.</p>
+        <div id="iniRows"></div>
+      </fieldset>
+      <label class="check"><input type="checkbox" id="agree"><span>I have read and agree to the TEC Web Studio <span id="docTitle">General Web Services Agreement</span> (version <span id="ver"></span>), including the Order Summary and the sections I initialed.</span></label>
       <label class="lab" for="sigName">Type your full name to sign</label>
       <input class="name" type="text" id="sigName" maxlength="120" autocomplete="name">
       <div class="sig-preview" id="sigPreview" aria-hidden="true"></div>
-      <p class="sig-caption">Typing your name and selecting Sign agreement is your legal signature. We save your name, the time, and your IP address with the signed agreement, and email a copy to you.</p>
+      <p class="sig-caption">Typing your name and selecting Sign agreement is your legal signature. We save your name, initials, the time, and your IP address with the signed agreement, and email a copy to you.</p>
       <button type="submit" class="btn" id="signBtn">Sign agreement</button>
       <div class="msg" id="signMsg" role="alert"></div>
     </form>
@@ -213,6 +235,9 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
       $('subtitle').textContent = 'Hi ' + (info.fullName || 'there') + '! Look at your preview, approve it and sign, then pay below.';
     }
     $('ver').textContent = info.version;
+    if (info.title) $('docTitle').textContent = info.title;
+    renderInitials(info.initialSpots || []);
+    if (info.waitingForStudio && !info.signed) { $('signForm').hidden = true; $('scrollHint').textContent = 'TEC Web Studio has not signed this agreement yet. We\'ll email you when it\'s ready.'; }
     $('total').textContent = info.total;
     if (info.monthly) { $('monthly').hidden = false; $('monthly').textContent = 'Plus Website Care: ' + info.monthly + '. Nothing monthly is charged today. We\'ll email you when it starts.'; }
     $('loading').hidden = true;
@@ -227,6 +252,33 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
   });
   $('printBtn').addEventListener('click', function () { window.print(); });
   $('sigName').addEventListener('input', function () { $('sigPreview').textContent = this.value; });
+  var spots = [];
+  function cleanIni(v) { return String(v || '').replace(/[\s.\-']/g, '').toUpperCase(); }
+  function renderInitials(list) {
+    spots = list;
+    $('inis').hidden = !list.length;
+    $('iniRows').innerHTML = list.map(function (s) {
+      return '<div class="ini-row" id="iniRow-' + esc(s.id) + '"><label for="ini-' + esc(s.id) + '"><strong>' + esc(s.label) + '</strong><a href="#" data-goto="' + esc(s.id) + '">Read this section</a></label>' +
+        '<input id="ini-' + esc(s.id) + '" data-ini="' + esc(s.id) + '" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Your initials for ' + esc(s.label) + '"></div>';
+    }).join('');
+  }
+  $('iniRows').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-goto]'); if (!a) return;
+    e.preventDefault();
+    var spot = document.getElementById('initials-spot-' + a.dataset.goto); if (!spot) return;
+    var doc = $('doc'), h = spot.previousElementSibling;
+    while (h && !/^H[1-3]$/.test(h.tagName)) h = h.previousElementSibling;
+    doc.scrollTop = (h || spot).offsetTop - doc.offsetTop - 8;
+    doc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    spot.classList.add('spot-flash'); setTimeout(function () { spot.classList.remove('spot-flash'); }, 1800);
+  });
+  $('iniRows').addEventListener('input', function (e) {
+    var id = e.target.dataset.ini; if (!id) return;
+    var v = cleanIni(e.target.value), row = $('iniRow-' + id), spot = document.getElementById('initials-spot-' + id);
+    row.className = 'ini-row' + (/^[A-Za-z\u00C0-\u024F]{1,5}$/.test(v) ? ' done' : '');
+    var mark = spot && spot.querySelector('span');
+    if (mark) { if (!mark.dataset.orig) mark.dataset.orig = mark.textContent; mark.textContent = v || mark.dataset.orig; mark.style.fontFamily = v ? "'Caveat', cursive" : ''; mark.style.fontSize = v ? '22px' : ''; }
+  });
   function decision() { var c = document.querySelector('input[name="decision"]:checked'); return c ? c.value : ''; }
   Array.prototype.forEach.call(document.querySelectorAll('input[name="decision"]'), function (el) {
     el.addEventListener('change', function () { $('changesWrap').hidden = decision() !== 'with_changes'; if (decision() === 'with_changes') $('changes').focus(); });
@@ -246,10 +298,14 @@ textarea.changes:focus { border-color: var(--teal); outline: none; }
     var withPreview = !!(info && info.previewUrl), dec = decision(), changes = $('changes').value.trim();
     if (withPreview && !dec) { $('signMsg').textContent = 'Choose how you approve your preview.'; return; }
     if (withPreview && dec === 'with_changes' && changes.length < 3) { $('signMsg').textContent = 'List the changes you would like included.'; $('changes').focus(); return; }
+    if (!$('esign').checked) { $('signMsg').textContent = 'Check the box to agree to sign electronically.'; return; }
+    var initials = {}, missing = null;
+    spots.forEach(function (s) { var v = cleanIni($('ini-' + s.id).value); if (!/^[A-Za-z\u00C0-\u024F]{1,5}$/.test(v) && !missing) missing = s; initials[s.id] = v; });
+    if (missing) { $('signMsg').textContent = 'Type your initials for ' + missing.label + '.'; $('ini-' + missing.id).focus(); return; }
     if (!$('agree').checked) { $('signMsg').textContent = 'Check the box to confirm you agree.'; return; }
     if (name.length < 2) { $('signMsg').textContent = 'Type your full name to sign.'; $('sigName').focus(); return; }
     btn.disabled = true; btn.textContent = 'Signing...'; $('signMsg').textContent = '';
-    var body = { t: t, name: name, agree: true };
+    var body = { t: t, name: name, agree: true, esignConsent: true, initials: initials };
     if (withPreview) { body.previewDecision = dec; body.previewChanges = dec === 'with_changes' ? changes : ''; info.previewDecision = dec; }
     post(ROUTES.sign, body).then(function (x) {
       btn.disabled = false; btn.textContent = 'Sign agreement';
