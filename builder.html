@@ -160,6 +160,14 @@
   .clip{max-width:360px;overflow-wrap:anywhere;}
   .draft-warn{background:#fff3b0;border:1px solid #e6cf5a;color:#4a3d00;border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:12px;}
   .prj-approve{display:flex;flex-direction:column;gap:6px;min-width:230px;}
+  .tx-totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 6px;}
+  .tx-totals div{border:1px solid var(--line,#d0e4e6);border-radius:10px;padding:10px 12px;}
+  .tx-totals b{display:block;font-size:20px;}
+  .tx-totals span{font-size:12px;color:var(--ink-soft,#557070);}
+  .tx-h{font-size:14px;margin:18px 0 8px;}
+  .tx-table td,.tx-table th{white-space:nowrap;}
+  .tx-table td.num,.tx-table th.num{text-align:right;}
+  .tx-table tr.tx-total td{font-weight:700;border-top:2px solid var(--line,#d0e4e6);}
   .studio-sign{border:1px solid var(--line,#d0e4e6);border-radius:10px;padding:10px 12px;margin-bottom:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;max-width:560px;}
   .studio-sign label{font-size:13px;font-weight:700;}
   .studio-sign input{font-family:'Caveat','Brush Script MT',cursive;font-size:22px !important;padding:4px 10px !important;}
@@ -314,6 +322,7 @@
     <button type="button" data-admintab="requests" role="tab" aria-selected="false">Consultations</button>
     <button type="button" data-admintab="projects" role="tab" aria-selected="false">Website Requests</button>
     <button type="button" data-admintab="orders" role="tab" aria-selected="false">Orders</button>
+    <button type="button" data-admintab="tx" role="tab" aria-selected="false">Transactions</button>
     <button type="button" data-admintab="reviews" role="tab" aria-selected="false">Reviews</button>
     <button type="button" data-admintab="subs" role="tab" aria-selected="false">Subscriptions</button>
     <button type="button" data-admintab="discounts" role="tab" aria-selected="false">Discounts</button>
@@ -409,6 +418,33 @@
         <tbody id="orderRows"><tr><td colspan="6">Loading…</td></tr></tbody>
       </table></div>
       <p class="msg" id="orderMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="adminTabTx" hidden>
+    <h2>Transactions</h2>
+    <div class="admin-card">
+      <p class="sub" style="margin-bottom:12px;">Every payment: website packages, specials, Site Starter, and monthly Website Care charges. The summary splits your sales the way Connecticut sales tax is reported: business use at 1%, personal use at 6.35%, and clients outside Connecticut (no tax). Refunds aren't subtracted here, so check Stripe for any refunds before you file.</p>
+      <form class="search-row" id="txForm" style="flex-wrap:wrap;">
+        <label class="lab" for="txFrom" style="margin:0;">From</label>
+        <input type="month" id="txFrom" style="max-width:170px;">
+        <label class="lab" for="txTo" style="margin:0;">To</label>
+        <input type="month" id="txTo" style="max-width:170px;">
+        <button type="submit" class="btn-primary btn-sm">Show</button>
+        <button type="button" class="btn-ghost btn-sm" id="txCsv">Download CSV</button>
+      </form>
+      <div class="tx-totals" id="txTotals"></div>
+      <h3 class="tx-h">Sales tax by month</h3>
+      <div class="table-scroll"><table class="tx-table">
+        <thead><tr><th>Month</th><th>Payments</th><th>Total collected</th><th>CT business sales</th><th>Tax at 1%</th><th>CT personal sales</th><th>Tax at 6.35%</th><th>Outside CT</th><th>Total sales tax</th></tr></thead>
+        <tbody id="txMonths"><tr><td colspan="9">Loading…</td></tr></tbody>
+      </table></div>
+      <h3 class="tx-h">All transactions</h3>
+      <div class="table-scroll"><table class="tx-table">
+        <thead><tr><th>Date</th><th>Customer</th><th>What</th><th>Before tax</th><th>Sales tax</th><th>Total</th><th>Use / state</th><th></th></tr></thead>
+        <tbody id="txRows"><tr><td colspan="8">Loading…</td></tr></tbody>
+      </table></div>
+      <p class="msg" id="txMsg" role="status" aria-live="polite"></p>
     </div>
   </div>
 
@@ -1007,6 +1043,7 @@
     $("#adminTabRequests").hidden = t !== "requests";
     $("#adminTabProjects").hidden = t !== "projects";
     $("#adminTabOrders").hidden = t !== "orders";
+    $("#adminTabTx").hidden = t !== "tx";
     $("#adminTabReviews").hidden = t !== "reviews";
     $("#adminTabSubs").hidden = t !== "subs";
     $("#adminTabDiscounts").hidden = t !== "discounts";
@@ -1015,6 +1052,7 @@
     if (t === "requests" && !reqLoadedOnce) loadRequests();
     if (t === "projects" && !prjLoadedOnce) loadProjects();
     if (t === "orders" && !ordersLoadedOnce) loadOrders("");
+    if (t === "tx" && !txLoadedOnce) loadTx();
     if (t === "reviews" && !revLoadedOnce) loadReviews();
     if (t === "subs" && !subsLoadedOnce) loadSubs();
     if (t === "discounts" && !discLoadedOnce) loadDiscounts();
@@ -1597,6 +1635,67 @@
       r.approved = next; renderReviews();
       say("#revMsg", next ? "Now showing on your homepage." : "Hidden from your homepage.", true);
     }).catch(function (err) { say("#revMsg", friendlyError(err), false); b.disabled = false; });
+  });
+
+  /* ---- Transactions + sales tax summary ---- */
+  var txLoadedOnce = false, txData = null;
+  function cents(c) { return (c < 0 ? "-$" : "$") + (Math.abs(c || 0) / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function monthName(ym) { var p = ym.split("-"); return new Date(Date.UTC(+p[0], +p[1] - 1, 15)).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" }); }
+  (function () {
+    var now = new Date(), ym = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+    $("#txFrom").value = now.getFullYear() + "-01"; $("#txTo").value = ym;
+  })();
+  function loadTx() {
+    say("#txMsg", "Loading…", true);
+    api("GET", "/admin/transactions?from=" + encodeURIComponent($("#txFrom").value) + "&to=" + encodeURIComponent($("#txTo").value)).then(function (j) {
+      txLoadedOnce = true; txData = j; say("#txMsg", ""); renderTx();
+    }).catch(function (err) { say("#txMsg", friendlyError(err), false); });
+  }
+  function useText(x) {
+    if (x.bucket === "old") return "Before sales tax";
+    var st = x.state === "CT" ? "CT" : (x.stateName || x.state || "");
+    return (x.useType === "business" ? "Business" : x.useType === "personal" ? "Personal" : "") + (st ? " · " + st : "") + (x.rateBp ? " · " + (x.rateBp / 100) + "%" : "");
+  }
+  function renderTx() {
+    var j = txData, t = j.summary.totals;
+    $("#txTotals").innerHTML = [["Total collected", t.totalCents], ["Sales tax collected", t.taxCents], ["CT business sales (1%)", t.ctBusinessSales], ["CT personal sales (6.35%)", t.ctPersonalSales], ["Sales outside CT", t.outOfStateSales]]
+      .map(function (x) { return "<div><b>" + cents(x[1]) + "</b><span>" + esc(x[0]) + "</span></div>"; }).join("") +
+      "<div><b>" + t.count + "</b><span>payment" + (t.count === 1 ? "" : "s") + ", " + esc(monthName(j.from)) + (j.from !== j.to ? " to " + esc(monthName(j.to)) : "") + "</span></div>";
+    var mrow = function (label, m, cls) {
+      return "<tr" + (cls ? ' class="' + cls + '"' : "") + "><td>" + label + "</td><td class=\"num\">" + m.count + "</td><td class=\"num\">" + cents(m.totalCents) + "</td><td class=\"num\">" + cents(m.ctBusinessSales) + "</td><td class=\"num\">" + cents(m.ctBusinessTax) +
+        "</td><td class=\"num\">" + cents(m.ctPersonalSales) + "</td><td class=\"num\">" + cents(m.ctPersonalTax) + "</td><td class=\"num\">" + cents(m.outOfStateSales) + "</td><td class=\"num\"><strong>" + cents(m.taxCents) + "</strong></td></tr>";
+    };
+    $("#txMonths").innerHTML = j.summary.months.length
+      ? j.summary.months.map(function (m) { return mrow(esc(monthName(m.month)) + (m.oldSales ? '<br><span class="prj-note">' + cents(m.oldSales) + " before sales tax was added</span>" : ""), m); }).join("") + (j.summary.months.length > 1 ? mrow("Total", t, "tx-total") : "")
+      : '<tr><td colspan="9">No payments in these months.</td></tr>';
+    $("#txRows").innerHTML = j.results.length ? j.results.map(function (x) {
+      var who = "<strong>" + esc(x.business || x.customer || x.email) + "</strong><br><span class=\"prj-note\">" + esc(x.business ? x.customer : "") + (x.business && x.customer ? " · " : "") + esc(x.email) + "</span>";
+      var what = esc(x.kindLabel) + '<br><span class="prj-note">' + esc(x.description) + (x.discountCode ? " · code " + esc(x.discountCode) + " (-" + cents(x.discountCents) + ")" : "") + (x.free ? " · free" : "") + "</span>";
+      var link = x.stripeUrl ? '<a href="' + esc(x.stripeUrl) + '" target="_blank" rel="noopener" class="btn-ghost btn-sm">Stripe</a>' : "";
+      return "<tr><td>" + esc(fmtDate(x.at)) + "</td><td>" + who + "</td><td>" + what + '</td><td class="num">' + cents(x.netCents) + '</td><td class="num">' + cents(x.taxCents) + '</td><td class="num"><strong>' + cents(x.totalCents) + "</strong></td><td>" + esc(useText(x)) + "</td><td>" + link + "</td></tr>";
+    }).join("") : '<tr><td colspan="8">No payments in these months.</td></tr>';
+  }
+  $("#txForm").addEventListener("submit", function (e) { e.preventDefault(); loadTx(); });
+  $("#txCsv").addEventListener("click", function () {
+    if (!txData) return;
+    var q = function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var d = function (c) { return ((c || 0) / 100).toFixed(2); };
+    var lines = [["Date", "Type", "Customer", "Business", "Email", "Description", "Discount code", "Subtotal", "Discount", "Before tax", "Sales tax", "Total", "Tax rate %", "Use", "State", "Legal business name", "Business type", "Stripe reference"].join(",")];
+    txData.results.slice().reverse().forEach(function (x) {
+      lines.push([new Date(x.at).toLocaleDateString("en-US", { timeZone: "America/New_York" }), x.kindLabel, x.customer, x.business, x.email, x.description, x.discountCode,
+        d(x.subtotalCents), d(x.discountCents), d(x.netCents), d(x.taxCents), d(x.totalCents), x.rateBp ? x.rateBp / 100 : 0,
+        x.bucket === "old" ? "before sales tax" : x.useType, x.state, x.bizLegalName, x.bizType, x.paymentRef].map(q).join(","));
+    });
+    lines.push("");
+    lines.push(["Month", "Payments", "Total collected", "CT business sales", "Tax at 1%", "CT personal sales", "Tax at 6.35%", "Sales outside CT", "Before sales tax was added", "Total sales tax"].join(","));
+    txData.summary.months.slice().reverse().forEach(function (m) {
+      lines.push([m.month, m.count, d(m.totalCents), d(m.ctBusinessSales), d(m.ctBusinessTax), d(m.ctPersonalSales), d(m.ctPersonalTax), d(m.outOfStateSales), d(m.oldSales), d(m.taxCents)].map(q).join(","));
+    });
+    var blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = "TEC-transactions-" + txData.from + (txData.to !== txData.from ? "-to-" + txData.to : "") + ".csv";
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    say("#txMsg", "Downloaded " + a.download + ".", true);
   });
 
   /* ---- TEC Web Studio's signature (Managing Member) ---- */
