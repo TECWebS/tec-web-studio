@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Site Starter</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
   :root{
@@ -168,6 +168,7 @@
   .tx-table td,.tx-table th{white-space:nowrap;}
   .tx-table td.num,.tx-table th.num{text-align:right;}
   .tx-table tr.tx-total td{font-weight:700;border-top:2px solid var(--line,#d0e4e6);}
+  .studio-sign[hidden]{display:none !important;}
   .studio-sign{border:1px solid var(--line,#d0e4e6);border-radius:10px;padding:10px 12px;margin-bottom:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;max-width:560px;}
   .studio-sign label{font-size:13px;font-weight:700;}
   .studio-sign input{font-family:'Caveat','Brush Script MT',cursive;font-size:22px !important;padding:4px 10px !important;}
@@ -389,6 +390,7 @@
     <h2>Website Requests</h2>
     <div class="admin-card">
       <p class="sub" style="margin-bottom:12px;">Package requests from the payments page. Nothing is charged yet. Build their <strong>preview</strong>, paste its link, and click <strong>Approve &amp; send agreement</strong>. They see the preview, approve it (as is, or with one list of changes), sign the agreement, and pay in full on the same page. Their order then shows in Orders, and any Website Care plan waits in Subscriptions for <strong>Start billing</strong>.</p>
+      <p class="draft-warn" id="prjSignNote" hidden></p>
       <div class="studio-sign"><label for="prjSigner">Your signature for TEC Web Studio LLC (Managing Member)</label><input id="prjSigner" class="studio-signer" type="text" maxlength="120" autocomplete="name" placeholder="Type your full name"><span>You sign each agreement for TEC Web Studio when you send it. Your typed name, your admin login, the time and your IP address are saved with it, and your signature shows in the agreement the client signs.</span></div>
       <div class="draft-warn" id="prjDraft" hidden>The service agreement still has blanks for you and your attorney, so agreement links won't send yet. Fill them in (src/agreement.js) and deploy.</div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
@@ -502,6 +504,7 @@
     <h2>Special Orders</h2>
     <div class="admin-card">
       <p class="sub" style="margin-bottom:12px;">Requests for seasonal specials like the Mother's Day Memory Page. Build their sample first. Once they approve it, click <strong>Send payment link</strong>: they get a private link where they sign the service agreement, then pay the price locked in when they requested.</p>
+      <p class="draft-warn" id="spSignNote" hidden></p>
       <div class="studio-sign"><label for="spSigner">Your signature for TEC Web Studio LLC (Managing Member)</label><input id="spSigner" class="studio-signer" type="text" maxlength="120" autocomplete="name" placeholder="Type your full name"><span>You sign each agreement for TEC Web Studio when you send it. Your typed name, your admin login, the time and your IP address are saved with it, and your signature shows in the agreement the client signs.</span></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
         <div class="lab" style="margin:0;" id="spCount"></div>
@@ -1717,12 +1720,15 @@
   }
 
   /* ---- Website requests: preview -> agreement -> payment ---- */
-  var prjLoadedOnce = false, prjData = [];
+  var prjLoadedOnce = false, prjData = [], prjCanSign = true, spCanSign = true, signerOnly = "Only the Managing Member's login can sign agreements for TEC Web Studio.";
   var PRJ_STATUS = { requested: ["review", "New request"], approved: ["draft", "Preview + agreement sent"], signed: ["review", "Signed, not paid"], paid: ["live", "Paid"], declined: ["off", "Declined"] };
   function loadProjects(doneMsg) {
     say("#prjMsg", "Loading…", true);
     api("GET", "/admin/requests").then(function (j) {
       prjLoadedOnce = true; prjData = j.results || []; say("#prjMsg", typeof doneMsg === "string" ? doneMsg : "", true);
+      prjCanSign = j.canSign !== false; signerOnly = j.signerOnly || signerOnly;
+      $("#prjSigner").closest(".studio-sign").hidden = !prjCanSign;
+      $("#prjSignNote").hidden = prjCanSign; $("#prjSignNote").textContent = signerOnly + " You can view requests here, but approving and signing them is left to that account.";
       $("#prjDraft").hidden = !j.draftAgreement;
       renderProjects();
     }).catch(function (err) { say("#prjMsg", friendlyError(err), false); });
@@ -1732,7 +1738,7 @@
     $("#prjCount").textContent = prjData.length + " request" + (prjData.length === 1 ? "" : "s") + (waiting ? " · " + waiting + " need a preview" : "");
     $("#prjRows").innerHTML = prjData.length ? prjData.map(function (x, i) {
       var st = PRJ_STATUS[x.status] || ["", x.status];
-      var canSend = x.status === "requested" || x.status === "approved" || x.status === "declined";
+      var canSend = prjCanSign && (x.status === "requested" || x.status === "approved" || x.status === "declined");
       var sub = function (t) { return '<br><span class="prj-note">' + t + "</span>"; };
       var stNotes = (x.approvedAt && x.status === "approved" ? sub("Sent " + esc(fmtDate(x.approvedAt))) : "") +
         (x.studioSignature ? sub("TEC signed: " + esc(x.studioSignature.name)) : "") +
@@ -1802,7 +1808,13 @@
   function spStatus(x) { var st = SP_STATUS[x.status] || ["", x.status]; return x.status === "link_sent" && x.signedAt ? ["review", "Signed, not paid"] : st; }
   function loadSpecials() {
     say("#spMsg", "Loading…", true);
-    api("GET", "/admin/special").then(function (j) { spLoadedOnce = true; spData = j.results || []; say("#spMsg", ""); renderSpecials(); })
+    api("GET", "/admin/special").then(function (j) {
+      spLoadedOnce = true; spData = j.results || []; say("#spMsg", "");
+      spCanSign = j.canSign !== false; signerOnly = j.signerOnly || signerOnly;
+      $("#spSigner").closest(".studio-sign").hidden = !spCanSign;
+      $("#spSignNote").hidden = spCanSign; $("#spSignNote").textContent = signerOnly + " Sending payment links (which signs the agreement) is left to that account.";
+      renderSpecials();
+    })
       .catch(function (err) { say("#spMsg", friendlyError(err), false); });
   }
   function spWhere(x) { return x.hosting === "own" ? "Own web address, 3 years" + (x.wishedAddress ? ": " + x.wishedAddress : "") : "Hosted 1 year" + (x.wishedAddress ? " at " + x.wishedAddress + ".tecwebstudio.com" : ""); }
@@ -1811,7 +1823,7 @@
     $("#spCount").textContent = spData.length + " request" + (spData.length === 1 ? "" : "s") + (waiting ? " · " + waiting + " need a sample" : "");
     $("#spRows").innerHTML = spData.length ? spData.map(function (x, i) {
       var st = spStatus(x);
-      var send = x.status === "paid" ? "" : '<button type="button" class="' + (x.status === "requested" ? "btn-primary" : "btn-ghost") + ' btn-sm" data-sp-send="' + i + '">' + (x.status === "requested" ? "Send payment link" : "Resend link") + "</button>";
+      var send = x.status === "paid" || !spCanSign ? "" : '<button type="button" class="' + (x.status === "requested" ? "btn-primary" : "btn-ghost") + ' btn-sm" data-sp-send="' + i + '">' + (x.status === "requested" ? "Send payment link" : "Resend link") + "</button>";
       return '<tr class="' + (x.status === "requested" ? "needs" : "") + '"><td><strong>' + esc(x.fullName) + "</strong><br>" + esc(x.email) + "</td><td>" + esc(x.productName) +
         '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(spWhere(x)) + "</span></td><td>" + esc(fmtDate(x.createdAt)) + "</td><td>" + esc(x.price) +
         '</td><td><span class="pill ' + st[0] + '">' + esc(st[1]) + "</span>" + (x.signedAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">Signed by ' + esc(x.signedName) + "</span>" : "") + (x.paidAt ? '<br><span style="color:var(--ink-soft);font-size:12px;">' + esc(fmtDate(x.paidAt)) + "</span>" : "") +
