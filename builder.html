@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Site Builder</title>
+<title>Your Site — TEC Web Studio</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
 <style>
   :root{
@@ -655,7 +655,7 @@
     bold:       { name: "Bold & Sharp",     display: "'Raleway',sans-serif",            body: "'Lato',sans-serif",        google: "Raleway:wght@700;800&family=Lato:wght@400;700" },
     playful:    { name: "Playful",          display: "'Fredoka',sans-serif",            body: "'Nunito',sans-serif",      google: "Fredoka:wght@500;600&family=Nunito:wght@400;600" }
   };
-  var SLOTS = { hero: "Top banner photo", g1: "Photo 1", g2: "Photo 2", g3: "Photo 3" };
+  var SLOTS = { hero: "Top banner photo", g1: "Photo 1", g2: "Photo 2", g3: "Photo 3", icon: "Browser tab icon" };
   var STEP_LABELS = ["Choose what goes on your page", "Pick your look", "Add your details", "Review and publish"];
 
   function defaultContent() {
@@ -734,7 +734,7 @@
   // Photos now live in your Worker's storage and are referenced by address.
   // Only addresses of exactly the shape the Worker hands out are accepted,
   // so nothing else can ever be slipped into a page's image tags or styles.
-  var IMG_RE = new RegExp("^" + API.replace(/[.*+?^${}()|[\]\\\/]/g, "\\$&") + "\\/img\\/sites\\/[a-f0-9]+\\/(hero|g1|g2|g3)\\/\\d+-[a-f0-9]+\\.jpg$");
+  var IMG_RE = new RegExp("^" + API.replace(/[.*+?^${}()|[\]\\\/]/g, "\\$&") + "\\/img\\/sites\\/[a-f0-9]+\\/((hero|g1|g2|g3)\\/\\d+-[a-f0-9]+\\.jpg|icon\\/\\d+-[a-f0-9]+\\.png)$");
   function cleanImages(imgs) {
     var out = {};
     Object.keys(SLOTS).forEach(function (k) {
@@ -864,7 +864,8 @@
       ld = '<script type="application/ld+json">' + JSON.stringify(obj).replace(/</g, "\\u003c") + "<\/script>";
     }
     return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-      "<title>" + esc(name || "Your Business Name") + '</title><meta name="description" content="' + esc(desc) + '"><meta property="og:title" content="' + esc(name || "Your Business Name") + '"><meta property="og:description" content="' + esc(desc) + '">' + ld +
+      "<title>" + esc(name || "Your Business Name") + '</title><meta name="description" content="' + esc(desc) + '"><meta property="og:title" content="' + esc(name || "Your Business Name") + '"><meta property="og:description" content="' + esc(desc) + '">' +
+      (im.icon ? '<link rel="icon" type="image/png" href="' + im.icon + '"><link rel="apple-touch-icon" href="' + im.icon + '">' : "") + ld +
       '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=' + f.google.replace(/&/g, "&amp;") + '&amp;display=swap" rel="stylesheet">' +
       "<style>" + css + "</style></head><body>" + body + "</body></html>";
   }
@@ -1194,7 +1195,8 @@
       '<div class="field"><label for="f_ctaMode">Where should the button take people?</label><select id="f_ctaMode" data-f="ctaMode">' +
         [["contact", "Down to my contact details"], ["call", "Call my phone number"], ["email", "Start an email to me"], ["link", "A web page (booking page, Facebook, and so on)"]].map(function (o) { return '<option value="' + o[0] + '"' + (mode === o[0] ? " selected" : "") + ">" + esc(o[1]) + "</option>"; }).join("") + "</select></div>" +
       (mode === "link" ? '<div class="field"><label for="f_ctaUrl">Web address for the button</label><input type="text" id="f_ctaUrl" data-f="ctaUrl" maxlength="300" value="' + esc(c.ctaUrl) + '" placeholder="e.g. yourbooking.com/appointments"><div class="hint">It opens in a new tab so visitors never lose your page.</div></div>' : "") +
-      photoField("hero", "Banner photo (optional)", false, "Wide, landscape photos work best. It fills the top of your page and centers itself on phones.");
+      photoField("hero", "Banner photo (optional)", false, "Wide, landscape photos work best. It fills the top of your page and centers itself on phones.") +
+      iconField();
     if (images.hero) {
       h += '<div class="lab">Which part of the photo should show?</div><div class="seg" role="group" aria-label="Photo position">' +
         [[0, "Top"], [50, "Middle"], [100, "Bottom"]].map(function (o) { var on = Math.abs(c.heroPos - o[0]) < 25; return '<button type="button" class="' + (on ? "on" : "") + '" data-pos="' + o[0] + '" aria-pressed="' + on + '">' + o[1] + "</button>"; }).join("") + "</div>";
@@ -1225,6 +1227,32 @@
       SOCIALS.map(function (sc) { return '<div class="field"><label for="f_' + sc.key + '">' + sc.label + '</label><input type="text" id="f_' + sc.key + '" data-f="' + sc.key + '" maxlength="300" value="' + esc(c[sc.key]) + '" placeholder="' + esc(sc.ph) + '"></div>'; }).join("") + "</div>";
     $("#contentForm").innerHTML = h;
     if (!canEdit) $$("#contentForm input, #contentForm textarea, #contentForm select, #contentForm button").forEach(function (el) { el.disabled = true; });
+  }
+  // The small square icon on the browser tab and on phone home screens (favicon).
+  function iconField() {
+    var has = !!images.icon;
+    return '<div class="field"><div class="lab">Browser tab icon (optional)</div><div class="photo-row">' +
+      '<span class="thumb" style="width:48px;height:48px;border-radius:10px;background-color:#fff;background-size:contain;background-repeat:no-repeat;background-position:center;' + (has ? "background-image:url('" + esc(images.icon) + "')" : "") + '"></span>' +
+      '<label class="file-btn">' + (has ? "Change icon" : "Choose icon") + '<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" data-img="icon"></label>' +
+      (has ? '<button type="button" class="link-btn" data-rmimg="icon">Remove</button>' : "") + "</div>" +
+      '<div class="hint">The little picture on the browser tab and on phone home screens, usually your logo. Square works best; we trim it to a square and keep a see-through background. Without one, browsers show a plain icon.</div></div>';
+  }
+  // Icons: cropped to a centered square and saved as a small 180x180 PNG.
+  function shrinkIcon(file) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image(), url = URL.createObjectURL(file);
+      img.onload = function () {
+        var side = Math.min(img.width, img.height), cv = document.createElement("canvas");
+        cv.width = 180; cv.height = 180;
+        var ctx = cv.getContext("2d"); ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, 180, 180);
+        var out = cv.toDataURL("image/png");
+        URL.revokeObjectURL(url);
+        out.length < 160000 ? resolve(out) : reject(new Error("That icon is too detailed to use. Try a simpler logo."));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("That file couldn't be read as an image.")); };
+      img.src = url;
+    });
   }
   function photoField(slot, label, withCaption, tip) {
     var has = !!images[slot], i = slot.indexOf("g") === 0 ? +slot.slice(1) - 1 : -1;
@@ -1279,8 +1307,8 @@
     });
   }
   function handleImage(slot, file) {
-    setSaveState("Uploading photo…", "");
-    shrink(file).then(function (dataUrl) {
+    setSaveState(slot === "icon" ? "Uploading icon…" : "Uploading photo…", "");
+    (slot === "icon" ? shrinkIcon(file) : shrink(file)).then(function (dataUrl) {
       return api("POST", "/sites/image", { slot: slot, dataUrl: dataUrl });
     }).then(function (j) {
       images[slot] = API + j.url; if (slot === "hero") content.heroPos = 50; content.imgRev++; renderContentForm(); changed();
