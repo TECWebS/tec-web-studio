@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Set up Website Care — TEC Web Studio</title>
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-fixed-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-fixed-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon-fixed.png">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --teal: #6AABB0; --teal-dark: #3d7a80; --teal-deep: #2f6166; --gold: #F5C842; --dark: #1a2e2e; --muted: #557070; --border: #d0e4e6;
+  --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; --display: Georgia, "Times New Roman", serif; }
+[hidden] { display: none !important; }
+body { font-family: var(--ui); background: #f0f7f8; color: var(--dark); min-height: 100vh; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid rgba(61,122,128,.45); outline-offset: 2px; }
+.hero { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 44px 24px 34px; text-align: center; color: #fff; }
+.badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 6px 16px; border-radius: 50px; margin-bottom: 14px; }
+.hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 5vw, 36px); }
+.hero p { margin-top: 8px; opacity: .92; line-height: 1.5; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 28px 16px 60px; }
+.card { background: #fff; border: 2px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 18px; }
+.card-head { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); padding: 13px 20px; color: #fff; font-family: var(--display); font-size: 18px; }
+.card-body { padding: 20px; }
+.plan-price { font-family: var(--display); font-size: 30px; color: var(--teal-deep); }
+.plan-price small { font-family: var(--ui); font-size: 14px; color: var(--muted); }
+ul.feat { list-style: none; margin: 12px 0 0; }
+ul.feat li { font-size: 14.5px; line-height: 1.5; padding: 4px 0 4px 24px; position: relative; color: #2c3e3e; }
+ul.feat li::before { content: "✓"; position: absolute; left: 2px; color: var(--teal-dark); font-weight: 700; }
+label.lab { display: block; font-size: 12px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: var(--teal-dark); margin: 0 0 6px; }
+.field { margin-bottom: 14px; }
+.field input[type=text], .field select { width: 100%; border: 2px solid var(--border); border-radius: 10px; padding: 11px 13px; font: 15px var(--ui); color: var(--dark); background: #fff; }
+.field input:focus, .field select:focus { border-color: var(--teal); outline: none; }
+.use-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+@media (max-width: 520px) { .use-grid { grid-template-columns: 1fr; } }
+.use-opt { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: pointer; font-size: 14px; line-height: 1.45; }
+.use-opt:has(input:checked) { border-color: var(--teal-dark); background: #f4fafa; }
+.use-opt input { margin-top: 3px; accent-color: var(--teal-dark); width: 17px; height: 17px; flex-shrink: 0; }
+.use-opt small { display: block; color: var(--muted); font-size: 12.5px; }
+.check { display: flex; gap: 11px; align-items: flex-start; cursor: pointer; font-size: 14px; line-height: 1.55; margin-bottom: 12px; }
+.check input { width: 19px; height: 19px; margin-top: 2px; accent-color: var(--teal-dark); flex-shrink: 0; }
+.note { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+.totals { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 12px; }
+.trow { display: flex; justify-content: space-between; gap: 12px; font-size: 14.5px; padding: 3px 0; }
+.trow.total { font-weight: 700; font-size: 17px; padding-top: 8px; }
+.trow span:last-child { text-align: right; }
+.terms { background: #f4fafa; border: 2px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 16px 0 14px; }
+.terms p { font-size: 14px; line-height: 1.6; }
+.btn { width: 100%; background: var(--teal-dark); color: #fff; border: 0; border-radius: 50px; padding: 15px; font: 700 15px var(--ui); letter-spacing: .6px; text-transform: uppercase; cursor: pointer; }
+.btn:hover { background: var(--teal-deep); }
+.btn:disabled { background: #a0c8cc; cursor: not-allowed; }
+.msg { color: #b0331f; font-size: 13.5px; margin-top: 12px; text-align: center; min-height: 1.2em; }
+#payment-element { margin: 4px 0 18px; }
+.state { text-align: center; padding: 34px 22px; }
+.state h2 { font-family: var(--display); font-weight: 400; font-size: 24px; margin-bottom: 8px; color: var(--teal-deep); }
+.state p { color: var(--muted); line-height: 1.6; }
+.foot { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 10px; line-height: 1.6; }
+.foot a { color: var(--teal-dark); }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">TEC Web Studio</div>
+  <h1 id="title">Set up Website Care</h1>
+  <p id="subtitle">Loading...</p>
+</div>
+<div class="wrap">
+  <div class="card" id="loadingCard"><div class="state" id="loading"><p>Loading your sign-up...</p></div></div>
+
+  <div id="main" hidden>
+    <div class="card">
+      <div class="card-head" id="planName">Website Care</div>
+      <div class="card-body">
+        <div class="plan-price"><span id="planPrice"></span> <small>a month, plus any sales tax</small></div>
+        <ul class="feat" id="features"></ul>
+      </div>
+    </div>
+
+    <div class="card" id="taxCard">
+      <div class="card-head">Sales tax</div>
+      <div class="card-body">
+        <label class="lab">Who is this website for?</label>
+        <div class="use-grid">
+          <label class="use-opt"><input type="radio" name="use-type" value="business"><span><strong>For my business</strong><small>Your business uses the website</small></span></label>
+          <label class="use-opt"><input type="radio" name="use-type" value="personal"><span><strong>For personal use</strong><small>Not for a business</small></span></label>
+        </div>
+        <div class="field"><label class="lab" for="taxState" id="stateLabel">State where you live</label><select id="taxState"></select></div>
+        <div id="bizFields" hidden>
+          <div class="field"><label class="lab" for="bizName">Legal business name</label><input type="text" id="bizName" maxlength="160" autocomplete="organization" placeholder="As registered, e.g. Example Bakery LLC"></div>
+          <div class="field"><label class="lab" for="bizType">Business type</label><select id="bizType"></select></div>
+          <label class="check"><input type="checkbox" id="bizCertify"><span>I certify that this website is used by the business named above, and that this information is accurate.</span></label>
+        </div>
+        <p class="note">Connecticut sales tax is 1% for business use and 6.35% for personal use. Clients outside Connecticut are not charged Connecticut sales tax.</p>
+        <div class="totals" id="totals" hidden>
+          <div class="trow"><span id="planLine">Website Care</span><span id="baseAmt"></span></div>
+          <div class="trow"><span id="taxLabel">Sales tax</span><span id="taxAmt"></span></div>
+          <div class="trow total"><span>Monthly total</span><span id="totalAmt"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="agreeCard">
+      <div class="card-head">Monthly billing</div>
+      <div class="card-body">
+        <div class="terms"><p id="termsText"></p></div>
+        <label class="check"><input type="checkbox" id="agree"><span><strong>I agree to monthly automatic billing</strong> as described above.</span></label>
+        <button type="button" class="btn" id="continueBtn">Continue to card details</button>
+        <div class="msg" id="msg1" role="alert"></div>
+      </div>
+    </div>
+
+    <div class="card" id="payCard" hidden>
+      <div class="card-head">Your card</div>
+      <div class="card-body">
+        <div id="payment-element"></div>
+        <button type="button" class="btn" id="payBtn">Start my plan</button>
+        <div class="msg" id="msg2" role="alert"></div>
+        <p class="note" style="margin-top:10px;text-align:center;">Your card is saved securely by Stripe for the monthly charge. TEC Web Studio never sees your card number.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">Questions? Email <a href="mailto:info@tecwebstudio.com">info@tecwebstudio.com</a>.<br>&copy; 2026 TEC Web Studio LLC &middot; <a href="privacy.html">Privacy Policy</a></p>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+(function () {
+  var stripe = Stripe('pk_live_51TDUtoFUlbNwdF4YaCjZiGbEobOmm5XKIUzt6T1zQeMgMdZpzKHLjqaRf92xhJYWz05kwDUAoktYWDxGVxx32Z7n00IGkV75LZ');
+  var API = 'https://api.tecwebstudio.com';
+  var TAX_BP = { business: 100, personal: 635 };   // display only; the Worker calculates what is charged
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function money(c) { return '$' + (c / 100).toFixed(2); }
+  function post(path, body) { return fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }, function () { return { ok: false, j: {} }; }); }); }
+  var params = new URLSearchParams(location.search), t = params.get('t') || '', info = null, elements = null, clientSecret = null;
+
+  function showState(title, text) { $('main').hidden = true; $('loadingCard').hidden = false; $('loading').innerHTML = '<h2>' + esc(title) + '</h2><p>' + text + '</p>'; }
+  function useType() { var c = document.querySelector('input[name="use-type"]:checked'); return c ? c.value : ''; }
+  function bp() { return $('taxState').value === 'CT' ? (TAX_BP[useType()] || 0) : 0; }
+  function totalCents() { var b = info.plan.priceCents; return b + Math.round(b * bp() / 10000); }
+
+  function render() {
+    var biz = useType() === 'business';
+    $('bizFields').hidden = !biz;
+    $('stateLabel').textContent = biz ? 'State where your business is registered' : 'State where you live';
+    var known = useType() && $('taxState').value, b = info.plan.priceCents, tax = Math.round(b * bp() / 10000);
+    $('totals').hidden = !known;
+    $('baseAmt').textContent = money(b);
+    $('taxLabel').textContent = bp() ? 'Connecticut sales tax (' + (bp() / 100) + '%)' : 'Sales tax';
+    $('taxAmt').textContent = bp() ? money(tax) : '$0.00 (outside Connecticut)';
+    $('totalAmt').textContent = money(b + tax);
+    var amt = known ? money(b + tax) : money(b) + ' plus any sales tax';
+    $('termsText').innerHTML = 'TEC Web Studio LLC will charge your card <strong>' + esc(amt) + '</strong> today for ' + esc(info.plan.name) +
+      ', and the same amount on the same date <strong>every month</strong> after that, until you cancel. You can cancel at any time through the billing link in your confirmation email or by emailing info@tecwebstudio.com; canceling stops future charges.';
+  }
+  function missing() {
+    if (!useType()) return 'Choose whether the website is for business or personal use.';
+    if (!$('taxState').value) return useType() === 'business' ? 'Choose the state where your business is registered.' : 'Choose the state where you live.';
+    if (useType() === 'business') {
+      if (!$('bizName').value.trim()) return 'Enter your legal business name.';
+      if (!$('bizType').value) return 'Choose your business type.';
+      if (!$('bizCertify').checked) return 'Check the box to confirm the website is for business use.';
+    }
+    if (!$('agree').checked) return 'Check the box to agree to monthly billing.';
+    return '';
+  }
+  function lockForm(on) { Array.prototype.forEach.call(document.querySelectorAll('#taxCard input, #taxCard select, #agreeCard input'), function (el) { el.disabled = on; }); }
+
+  function complete(setupIntentId) {
+    $('payCard').querySelector('.card-body').innerHTML = '<div class="state"><h2>Starting your plan...</h2><p>Saving your card and charging your first month.</p></div>';
+    post('/care/complete', { t: t, setupIntentId: setupIntentId }).then(function (x) {
+      if (x.j && x.j.ok) { $('main').hidden = true; showState("You're all set!", 'Your ' + esc((info && info.plan.name) || 'Website Care') + ' plan is active. A confirmation with your receipt and the link to manage or cancel your plan is on its way to your email. To request an update, just reply to that email.'); $('title').textContent = 'Thank you!'; $('subtitle').textContent = ''; }
+      else showState('Payment not completed', esc((x.j && x.j.message) || 'Something went wrong. Please reply to your email and we\'ll sort it out.') + '<br><br><a href="' + esc(location.pathname + '?t=' + encodeURIComponent(t)) + '">Try again</a>');
+    }).catch(function () { showState('Can\'t connect', 'Check your connection, then refresh this page. If your card was saved, we\'ll finish setting up your plan.'); });
+  }
+
+  // Coming back from a card check that needed a redirect (some banks do this)
+  if (params.get('setup_intent') && params.get('setup_intent_client_secret')) {
+    $('subtitle').textContent = '';
+    stripe.retrieveSetupIntent(params.get('setup_intent_client_secret')).then(function (r) {
+      $('loadingCard').hidden = true; $('main').hidden = false; $('taxCard').hidden = true; $('agreeCard').hidden = true; $('payCard').hidden = false;
+      if (r.setupIntent && r.setupIntent.status === 'succeeded') complete(r.setupIntent.id);
+      else showState('Card not saved', 'Your card wasn\'t saved. Use the link in your email to try again.');
+    });
+    return;
+  }
+
+  fetch(API + '/care/info?t=' + encodeURIComponent(t)).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); }).then(function (x) {
+    if (!x.ok || !x.j.ok) { $('subtitle').textContent = ''; showState('Link not found', esc((x.j && x.j.message) || 'This link isn\'t valid.')); return; }
+    info = x.j;
+    $('title').textContent = 'Set up ' + info.plan.name;
+    $('subtitle').textContent = 'Hi ' + (info.fullName || 'there').split(' ')[0] + '! Two quick questions, then add your card.';
+    if (info.done) { showState('Already set up', 'Your ' + esc(info.plan.name) + ' plan is already active. Check your email for the details, or reply to it with any questions.'); return; }
+    $('planName').textContent = info.plan.name; $('planLine').textContent = info.plan.name;
+    $('planPrice').textContent = info.plan.price;
+    $('features').innerHTML = info.plan.features.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '<li>Cancel anytime</li>';
+    var keys = Object.keys(info.states).sort(function (a, b) { return a === 'CT' ? -1 : b === 'CT' ? 1 : a === 'XX' ? 1 : b === 'XX' ? -1 : info.states[a].localeCompare(info.states[b]); });
+    $('taxState').innerHTML = '<option value="">Choose a state</option>' + keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(info.states[k]) + '</option>'; }).join('');
+    $('bizType').innerHTML = '<option value="">Choose one</option>' + Object.keys(info.businessTypes).map(function (k) { return '<option value="' + esc(k) + '">' + esc(info.businessTypes[k]) + '</option>'; }).join('');
+    if (info.businessName) $('bizName').value = info.businessName;
+    if (info.lastError) $('msg1').textContent = 'Your last card was declined. Please try another card.';
+    $('loadingCard').hidden = true; $('main').hidden = false;
+    render();
+  }).catch(function () { showState('Can\'t connect', 'Check your connection and refresh the page.'); });
+
+  document.addEventListener('change', function (e) { if (info && /INPUT|SELECT/.test(e.target.tagName)) { render(); if ($('msg1').textContent && !/declined/.test($('msg1').textContent)) $('msg1').textContent = ''; } });
+
+  $('continueBtn').addEventListener('click', function () {
+    var m = missing(); if (m) { $('msg1').textContent = m; return; }
+    var btn = this; btn.disabled = true; btn.textContent = 'Loading...'; $('msg1').textContent = '';
+    post('/care/setup', { t: t, useType: useType(), taxState: $('taxState').value, bizLegalName: $('bizName').value.trim(), bizType: $('bizType').value,
+      bizCertified: $('bizCertify').checked ? 'yes' : '', agree: true }).then(function (x) {
+      if (!x.j || !x.j.clientSecret) { btn.disabled = false; btn.textContent = 'Continue to card details'; $('msg1').textContent = (x.j && x.j.message) || 'Something went wrong. Please try again.'; return; }
+      clientSecret = x.j.clientSecret;
+      lockForm(true); btn.hidden = true;
+      $('payBtn').textContent = 'Start my plan: ' + x.j.total + ' today, then monthly';
+      elements = stripe.elements({ clientSecret: clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#3d7a80', borderRadius: '10px' } } });
+      elements.create('payment', { layout: { type: 'accordion', defaultCollapsed: false } }).mount('#payment-element');
+      $('payCard').hidden = false;
+      setTimeout(function () { $('payCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+    }).catch(function () { btn.disabled = false; btn.textContent = 'Continue to card details'; $('msg1').textContent = 'Can\'t connect. Check your connection and try again.'; });
+  });
+
+  $('payBtn').addEventListener('click', function () {
+    var btn = this, label = btn.textContent; btn.disabled = true; btn.textContent = 'Processing...'; $('msg2').textContent = '';
+    elements.submit().then(function (s) {
+      if (s.error) { btn.disabled = false; btn.textContent = label; $('msg2').textContent = s.error.message; return; }
+      stripe.confirmSetup({ elements: elements, clientSecret: clientSecret, confirmParams: { return_url: location.origin + location.pathname + '?t=' + encodeURIComponent(t) }, redirect: 'if_required' }).then(function (r) {
+        if (r.error) { btn.disabled = false; btn.textContent = label; $('msg2').textContent = r.error.message; return; }
+        if (r.setupIntent && r.setupIntent.status === 'succeeded') complete(r.setupIntent.id);
+        else { btn.disabled = false; btn.textContent = label; $('msg2').textContent = 'Your card wasn\'t saved. Please try again.'; }
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
