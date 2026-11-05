@@ -473,14 +473,18 @@
     <h2>Discounts</h2>
     <div class="admin-card">
       <div class="lab" style="margin-bottom:6px;">Create an outreach code</div>
-      <p class="sub" style="margin-bottom:14px;">For a business you'd like to reach out to: sends them a one-time code for <strong>40% off Complete Brand + Website</strong> ($799 to $479.40). It only works with their email address and expires in 30 days. Reminders go out automatically a week before and on the last day, unless they use it or unsubscribe.</p>
+      <p class="sub" style="margin-bottom:14px;">For a business you'd like to reach out to: sends them a one-time code for <strong id="orOffer">40% off Complete Brand + Website ($799 to $479.40)</strong>. It only works with their email address and expires in 30 days. Reminders go out automatically a week before and on the last day, unless they use it or unsubscribe.</p>
       <form id="outreachForm" novalidate>
         <div class="field-row">
           <div class="field"><label class="lab" for="orBiz">Business name</label><input type="text" id="orBiz" maxlength="120"></div>
           <div class="field"><label class="lab" for="orName">Contact's name</label><input type="text" id="orName" maxlength="80" placeholder="First name is enough"></div>
         </div>
         <div class="field"><label class="lab" for="orEmail">Their email</label><input type="email" id="orEmail" maxlength="200"></div>
-        <div class="field"><label class="lab" for="orOpening">Opening message</label><textarea id="orOpening" rows="4" maxlength="1500">Hi {name}, I&#39;m reaching out from TEC Web Studio, a small web design studio in Connecticut. I came across {business} and would love to help you stand out online, so I&#39;ve set aside a personal offer just for you: our Complete Brand + Website package at 40% off.</textarea><p class="sub" style="font-size:12px;margin-top:6px;">Edit this for each business. <strong>{name}</strong> and <strong>{business}</strong> fill in automatically. <button type="button" class="bl-link" id="orOpeningReset" style="font:inherit;font-size:12px;">Reset to the default</button></p></div>
+        <div class="field-row">
+          <div class="field"><label class="lab" for="orPkg">Package to offer</label><select id="orPkg"><option value="quickstart">Quick Start ($299)</option><option value="business">Business Website ($599)</option><option value="complete" selected>Complete Brand + Website ($799)</option></select></div>
+          <div class="field"><label class="lab" for="orPct">Discount (10% to 40%)</label><select id="orPct"></select></div>
+        </div>
+        <div class="field"><label class="lab" for="orOpening">Opening message</label><textarea id="orOpening" rows="4" maxlength="1500">Hi {name}, I&#39;m reaching out from TEC Web Studio, a small web design studio in Connecticut. I came across {business} and would love to help you stand out online, so I&#39;ve set aside a personal offer just for you: our {package} package at {percent}% off.</textarea><p class="sub" style="font-size:12px;margin-top:6px;">Edit this for each business. <strong>{name}</strong>, <strong>{business}</strong>, <strong>{package}</strong> and <strong>{percent}</strong> fill in automatically. <button type="button" class="bl-link" id="orOpeningReset" style="font:inherit;font-size:12px;">Reset to the default</button></p></div>
         <div class="field"><label class="lab" for="orNote">Personal note (optional)</label><textarea id="orNote" rows="3" maxlength="1000" placeholder="Shows near the top of the email, e.g. something you liked about their business."></textarea></div>
         <div class="row-actions"><button type="submit" class="btn-primary">Preview email</button></div>
       </form>
@@ -1957,7 +1961,15 @@
     api("POST", "/admin/discounts/pause", { code: d.code, paused: pausing }).then(function () { say("#discMsg", d.code + (pausing ? " paused." : " resumed."), true); loadDiscounts(); })
       .catch(function (err) { say("#discMsg", friendlyError(err), false); b.disabled = false; });
   });
-  function outreachInput() { return { businessName: $("#orBiz").value.trim(), contactName: $("#orName").value.trim(), email: $("#orEmail").value.trim(), note: $("#orNote").value.trim(), opening: $("#orOpening").value.trim() }; }
+  function outreachInput() { return { businessName: $("#orBiz").value.trim(), contactName: $("#orName").value.trim(), email: $("#orEmail").value.trim(), note: $("#orNote").value.trim(), opening: $("#orOpening").value.trim(), pkg: $("#orPkg").value, percentOff: +$("#orPct").value }; }
+  var OR_PKGS = { quickstart: ["Quick Start", 299], business: ["Business Website", 599], complete: ["Complete Brand + Website", 799] };
+  (function () { var h = ""; for (var p = 10; p <= 40; p++) h += '<option value="' + p + '"' + (p === 40 ? " selected" : "") + ">" + p + "% off</option>"; $("#orPct").innerHTML = h; })();
+  function orOfferText() {
+    var k = OR_PKGS[$("#orPkg").value], pct = +$("#orPct").value, sale = Math.round(k[1] * (100 - pct)) / 100;
+    $("#orOffer").textContent = pct + "% off " + k[0] + " ($" + k[1] + " to $" + sale.toFixed(2) + ")";
+  }
+  $("#orPkg").addEventListener("change", orOfferText); $("#orPct").addEventListener("change", orOfferText);
+  $("#outreachForm").addEventListener("reset", function () { setTimeout(orOfferText, 0); });
   $("#orOpeningReset").addEventListener("click", function () { $("#orOpening").value = $("#orOpening").defaultValue; });
   $("#outreachForm").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -1981,7 +1993,7 @@
     api("POST", "/admin/outreach/send", i).then(function (j) {
       $("#orPreviewModal").classList.remove("open");
       $("#outreachForm").reset();
-      say("#orMsg", "Sent to " + i.email + " with code " + j.code + ". It expires " + fmtDate(j.expiresAt) + ".", true);
+      say("#orMsg", "Sent to " + i.email + " with code " + j.code + " (" + i.percentOff + "% off " + OR_PKGS[i.pkg][0] + "). It expires " + fmtDate(j.expiresAt) + ".", true);
       loadDiscounts();
     }).catch(function (err) { say("#orSendMsg", friendlyError(err), false); }).then(function () { btn.disabled = false; });
   });
