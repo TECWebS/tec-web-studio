@@ -64,14 +64,14 @@
           '<p>The holidays bring families together. Give yours something that lasts: a beautiful, private website that keeps your people, photos, and stories safe and easy to share with everyone you love.</p>' +
         '</div>' +
         '<div class="fam-grid">' +
-          '<div class="fam-card"><div class="fam-ico">\uD83C\uDF33</div><h3>Every Person, Every Branch</h3><p>A custom family backend where you can add and edit people and photos any time, so your tree keeps growing with your family.</p></div>' +
-          '<div class="fam-card"><div class="fam-ico">\uD83C\uDF72</div><h3>Recipes &amp; Traditions</h3><p>Optional recipe pages so Grandma\u2019s sweet potato pie and the dishes everyone asks for are never lost.</p></div>' +
-          '<div class="fam-card"><div class="fam-ico">\uD83C\uDFA5</div><h3>Videos &amp; Voices</h3><p>Add family videos and stories so the people behind the names stay present for the next generation.</p></div>' +
-          '<div class="fam-card"><div class="fam-ico">\uD83D\uDCD6</div><h3>A Photo Book Keepsake</h3><p>Optionally turn your family\u2019s photos into a photo book you can hold, gift, and pass down.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-7"/><path d="M12 15c-4.5 0-7-2.5-7-5.5 0-2 1.3-3.4 3-3.8C8.4 3.9 10 2 12 2s3.6 1.9 4 3.7c1.7.4 3 1.8 3 3.8 0 3-2.5 5.5-7 5.5z"/></svg></div><h3>Every Person, Every Branch</h3><p>A custom family backend where you can add and edit people and photos any time, so your tree keeps growing with your family.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11h18a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8z"/><path d="M8 3c-1 1.5 1 2.5 0 4M12 3c-1 1.5 1 2.5 0 4M16 3c-1 1.5 1 2.5 0 4"/></svg></div><h3>Recipes &amp; Traditions</h3><p>Optional recipe pages so Grandma\u2019s sweet potato pie and the dishes everyone asks for are never lost.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M15.5 10.5l6-3.5v10l-6-3.5z"/></svg></div><h3>Videos &amp; Voices</h3><p>Add family videos and stories so the people behind the names stay present for the next generation.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5c3-1.5 6-1.5 10 1 4-2.5 7-2.5 10-1v14c-3-1.5-6-1.5-10 1-4-2.5-7-2.5-10-1z"/><path d="M12 6v14"/></svg></div><h3>A Photo Book Keepsake</h3><p>Optionally turn your family\u2019s photos into a photo book you can hold, gift, and pass down.</p></div>' +
         '</div>' +
         '<div class="fam-cta">' +
           '<div class="fam-price">$799<small>November special \u00b7 a full year of hosting included</small></div>' +
-          '<a href="contact.html" class="fam-btn">Start My Family Tree \u2192</a>' +
+          '<a href="contact.html" class="fam-btn">Start My Family Tree <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>' +
           '<p class="fam-steps">You send a request, we build your preview first, and you only pay once you love it.</p>' +
         '</div>' +
       '</div>';
