@@ -158,7 +158,12 @@ function toggleMenu() {
       var link = document.createElement('link');
       link.rel = 'stylesheet'; link.href = 'promo.css';
       document.head.appendChild(link);
-      document.body.classList.add('promo-on', 'promo-' + promos[0].theme);
+            document.body.classList.add('promo-on', 'promo-' + promos[0].theme);
+      if (promos[0].theme === 'family') {
+        var fs = document.createElement('script');
+        fs.src = 'promo-family.js';
+        document.body.appendChild(fs);
+      }
       banner(promos);
       decorate(promos[0].theme);
       setTimeout(function () { popup(promos); }, 900);
