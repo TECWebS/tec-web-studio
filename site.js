@@ -164,6 +164,11 @@ function toggleMenu() {
         fs.src = 'promo-family.js';
         document.body.appendChild(fs);
       }
+      if (promos[0].theme === 'family') {
+        var fs = document.createElement('script');
+        fs.src = 'promo-family.js';
+        document.body.appendChild(fs);
+      }
       banner(promos);
       decorate(promos[0].theme);
       setTimeout(function () { popup(promos); }, 900);
