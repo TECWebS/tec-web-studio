@@ -1,85 +1,124 @@
-/* TEC Web Studio — "family" promo theme: hero copy, tree illustration, Family Tree section, falling leaves.
- * Loaded by site.js only when the Worker's active promotion has theme "family".
- * All styling lives in promo.css (body.promo-family block); dates live in the Worker's promos.js.
+/* TEC Web Studio - Family Tree Build promotion (homepage)
+ *
+ * Loaded by site.js whenever the Family Tree promotion is active.
+ *   window.TEC_FAMILY_MODE = 'full'     -> fall look: family hero, tree illustration, falling leaves, plus the section
+ *   window.TEC_FAMILY_MODE = 'section'  -> only the Family Tree section (used during the Cyber weekend and in December,
+ *                                          when another theme is running)
+ * Styling lives in promo.css. Dates live in the Worker's promos.js.
  */
 (function () {
   'use strict';
   if (window.__tecFamilyTheme) return;
   window.__tecFamilyTheme = true;
 
-  // ── 4. HERO COPY: make it about family ──────────────────
-  var heroLeft = document.querySelector('.hero-left');
-  if (heroLeft) {
-    heroLeft.innerHTML =
-      '<span class="fam-eyebrow">November Family Tree Special</span>' +
-      '<h1>Your Family\u2019s Story Deserves <em>a Home of Its Own.</em></h1>' +
-      '<p class="hero-sub">We build a custom family tree website for your family: every person, photo, recipe, and story, in one private place that your whole family can treasure and grow for generations.</p>' +
-      '<div class="hero-actions">' +
-        '<a href="contact.html" class="btn-primary">Start My Family Tree</a>' +
-        '<a href="#family-tree" class="btn-ghost">See What\u2019s Included</a>' +
-      '</div>' +
-      '<p class="hero-note">Family Tree Build \u00b7 $799 this November \u00b7 Built for you, start to finish</p>';
+  var MODE = window.TEC_FAMILY_MODE === 'section' ? 'section' : 'full';
+
+  // Where the "Start My Family Tree" buttons go: the "Request your family's tree" section of family-tree.html.
+  // If that section's id is different on the page, change it here (one place).
+  var REQUEST_URL = 'family-tree.html#request';
+
+  var path = location.pathname;
+  var isHome = path === '/' || /\/index(\.html)?$/.test(path);
+  var isNov = new Date().getMonth() === 10;
+  var season = isNov ? 'November' : 'Holiday';
+
+  var ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+  // ── HERO COPY (fall look only) ──────────────────────────
+  if (MODE === 'full' && isHome) {
+    var heroLeft = document.querySelector('.hero-left');
+    if (heroLeft) {
+      heroLeft.innerHTML =
+        '<span class="fam-eyebrow">' + season + ' Family Tree Special</span>' +
+        '<h1>Your Family’s Story Deserves <em>a Home of Its Own.</em></h1>' +
+        '<p class="hero-sub">We build a custom family tree website for your family: every person, photo, recipe, and story in one place that your whole family can treasure and grow for generations.</p>' +
+        '<div class="hero-actions">' +
+          '<a href="' + REQUEST_URL + '" class="btn-primary">Start My Family Tree</a>' +
+          '<a href="#family-tree" class="btn-ghost">See What’s Included</a>' +
+        '</div>' +
+        '<p class="hero-note">Family Tree Build · $799' + (isNov ? ' this November' : '') + ' · Built for you, start to finish</p>';
+    }
+
+    // ── HERO VISUAL: a family tree instead of the browser mockup ──
+    var heroVisual = document.querySelector('.hero-visual');
+    if (heroVisual) {
+      var portraits = [[200, 150], [120, 205], [280, 205], [75, 120], [325, 120], [150, 105], [250, 105]];
+      var frames = portraits.map(function (p, i) {
+        var tone = ['#F3D9B1', '#E8C39A', '#D9A877', '#F0CFA6', '#E3B98B', '#EBCB9E', '#DDAF80'][i];
+        return '<g transform="translate(' + p[0] + ' ' + p[1] + ')">' +
+          '<circle r="26" fill="#FFF6E6" stroke="#7a3a18" stroke-width="3"/>' +
+          '<circle cy="-6" r="9" fill="' + tone + '" stroke="#7a3a18" stroke-width="1.5"/>' +
+          '<path d="M-15 17 Q0 -1 15 17 Z" fill="' + tone + '" stroke="#7a3a18" stroke-width="1.5"/>' +
+          '</g>';
+      }).join('');
+      heroVisual.innerHTML =
+        '<svg class="fam-tree" viewBox="0 0 400 440" role="img" aria-label="Illustration of a family tree with portraits hanging from the branches">' +
+          '<ellipse cx="200" cy="415" rx="150" ry="14" fill="rgba(60,25,8,.25)"/>' +
+          '<path d="M178 415 C182 340 176 300 170 255 C150 235 120 225 100 205 M222 415 C218 340 224 300 230 255 C250 235 280 225 300 205" stroke="#6b3a1d" stroke-width="20" stroke-linecap="round" fill="none"/>' +
+          '<path d="M200 300 C200 240 200 200 200 160 M175 250 C150 230 110 190 85 140 M225 250 C250 230 290 190 315 140 M200 200 C170 180 150 150 150 112 M200 200 C230 180 250 150 250 112" stroke="#6b3a1d" stroke-width="12" stroke-linecap="round" fill="none"/>' +
+          '<g opacity=".95">' +
+            '<circle cx="200" cy="90" r="62" fill="#D9822B"/><circle cx="130" cy="120" r="52" fill="#C2571F"/>' +
+            '<circle cx="270" cy="120" r="52" fill="#E3A33A"/><circle cx="80" cy="170" r="38" fill="#E3A33A"/>' +
+            '<circle cx="320" cy="170" r="38" fill="#C2571F"/><circle cx="200" cy="140" r="52" fill="#B8421A"/>' +
+          '</g>' + frames +
+          '<path d="M160 420 q10-14 20 0 M225 422 q10-14 20 0" stroke="#FFE08A" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+        '</svg>';
+      heroVisual.removeAttribute('aria-hidden');
+    }
   }
 
-  // ── 5. HERO VISUAL: a family tree instead of the browser mockup ──
-  var heroVisual = document.querySelector('.hero-visual');
-  if (heroVisual) {
-    var portraits = [
-      [200, 150], [120, 205], [280, 205], [75, 120], [325, 120], [150, 105], [250, 105]
-    ];
-    var frames = portraits.map(function (p, i) {
-      var tone = ['#F3D9B1', '#E8C39A', '#D9A877', '#F0CFA6', '#E3B98B', '#EBCB9E', '#DDAF80'][i];
-      return '<g transform="translate(' + p[0] + ' ' + p[1] + ')">' +
-        '<circle r="26" fill="#FFF6E6" stroke="#7a3a18" stroke-width="3"/>' +
-        '<circle cy="-6" r="9" fill="' + tone + '" stroke="#7a3a18" stroke-width="1.5"/>' +
-        '<path d="M-15 17 Q0 -1 15 17 Z" fill="' + tone + '" stroke="#7a3a18" stroke-width="1.5"/>' +
-        '</g>';
-    }).join('');
-    heroVisual.innerHTML =
-      '<svg class="fam-tree" viewBox="0 0 400 440" role="img" aria-label="Illustration of a family tree with portraits hanging from the branches">' +
-        '<ellipse cx="200" cy="415" rx="150" ry="14" fill="rgba(60,25,8,.25)"/>' +
-        '<path d="M178 415 C182 340 176 300 170 255 C150 235 120 225 100 205 M222 415 C218 340 224 300 230 255 C250 235 280 225 300 205" stroke="#6b3a1d" stroke-width="20" stroke-linecap="round" fill="none"/>' +
-        '<path d="M200 300 C200 240 200 200 200 160 M175 250 C150 230 110 190 85 140 M225 250 C250 230 290 190 315 140 M200 200 C170 180 150 150 150 112 M200 200 C230 180 250 150 250 112" stroke="#6b3a1d" stroke-width="12" stroke-linecap="round" fill="none"/>' +
-        '<g opacity=".95">' +
-          '<circle cx="200" cy="90" r="62" fill="#D9822B"/><circle cx="130" cy="120" r="52" fill="#C2571F"/>' +
-          '<circle cx="270" cy="120" r="52" fill="#E3A33A"/><circle cx="80" cy="170" r="38" fill="#E3A33A"/>' +
-          '<circle cx="320" cy="170" r="38" fill="#C2571F"/><circle cx="200" cy="140" r="52" fill="#B8421A"/>' +
-        '</g>' + frames +
-        '<path d="M160 420 q10-14 20 0 M225 422 q10-14 20 0" stroke="#FFE08A" stroke-width="3" fill="none" stroke-linecap="round"/>' +
-      '</svg>';
-    heroVisual.removeAttribute('aria-hidden');
-  }
-
-  // ── 6. FAMILY TREE PROMO SECTION (right under the hero) ─
+  // ── FAMILY TREE SECTION (right under the hero, in every mode) ──
   var heroWrap = document.querySelector('.hero-wrap');
-  if (heroWrap && !document.getElementById('family-tree')) {
+  if (isHome && heroWrap && !document.getElementById('family-tree')) {
     var sec = document.createElement('section');
     sec.className = 'fam-section';
     sec.id = 'family-tree';
     sec.innerHTML =
       '<div class="fam-inner">' +
         '<div class="fam-head">' +
-          '<span class="fam-tag">Gather \u2022 Remember \u2022 Share</span>' +
+          '<span class="fam-tag">Gather • Remember • Share</span>' +
           '<h2>The Family Tree Build</h2>' +
-          '<p>The holidays bring families together. Give yours something that lasts: a beautiful, private website that keeps your people, photos, and stories safe and easy to share with everyone you love.</p>' +
+          '<p>The holidays bring families together. Give yours something that lasts: a beautiful website that keeps your people, photos, and stories safe and easy to share with everyone you love.</p>' +
         '</div>' +
+
         '<div class="fam-grid">' +
-          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-7"/><path d="M12 15c-4.5 0-7-2.5-7-5.5 0-2 1.3-3.4 3-3.8C8.4 3.9 10 2 12 2s3.6 1.9 4 3.7c1.7.4 3 1.8 3 3.8 0 3-2.5 5.5-7 5.5z"/></svg></div><h3>Every Person, Every Branch</h3><p>A custom family backend where you can add and edit people and photos any time, so your tree keeps growing with your family.</p></div>' +
-          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11h18a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8z"/><path d="M8 3c-1 1.5 1 2.5 0 4M12 3c-1 1.5 1 2.5 0 4M16 3c-1 1.5 1 2.5 0 4"/></svg></div><h3>Recipes &amp; Traditions</h3><p>Optional recipe pages so Grandma\u2019s sweet potato pie and the dishes everyone asks for are never lost.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-7"/><path d="M12 15c-4.5 0-7-2.5-7-5.5 0-2 1.3-3.4 3-3.8C8.4 3.9 10 2 12 2s3.6 1.9 4 3.7c1.7.4 3 1.8 3 3.8 0 3-2.5 5.5-7 5.5z"/></svg></div><h3>Every Person, Every Branch</h3><p>Add, edit, and remove family members and photos any time from your family dashboard, so your tree keeps growing with your family.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11h18a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8z"/><path d="M8 3c-1 1.5 1 2.5 0 4M12 3c-1 1.5 1 2.5 0 4M16 3c-1 1.5 1 2.5 0 4"/></svg></div><h3>Recipes &amp; Traditions</h3><p>Optional recipe pages so Grandma’s sweet potato pie and the dishes everyone asks for are never lost.</p></div>' +
           '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M15.5 10.5l6-3.5v10l-6-3.5z"/></svg></div><h3>Videos &amp; Voices</h3><p>Add family videos and stories so the people behind the names stay present for the next generation.</p></div>' +
-          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5c3-1.5 6-1.5 10 1 4-2.5 7-2.5 10-1v14c-3-1.5-6-1.5-10 1-4-2.5-7-2.5-10-1z"/><path d="M12 6v14"/></svg></div><h3>A Photo Book Keepsake</h3><p>Optionally turn your family\u2019s photos into a photo book you can hold, gift, and pass down.</p></div>' +
+          '<div class="fam-card"><div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5c3-1.5 6-1.5 10 1 4-2.5 7-2.5 10-1v14c-3-1.5-6-1.5-10 1-4-2.5-7-2.5-10-1z"/><path d="M12 6v14"/></svg></div><h3>A Photo Book Keepsake</h3><p>Optionally turn your family’s photos into a photo book you can hold, gift, and pass down.</p></div>' +
         '</div>' +
+
+        '<div class="fam-two">' +
+          '<h3 class="fam-two-title">Your price includes two websites</h3>' +
+          '<div class="fam-two-grid">' +
+            '<div class="fam-two-card">' +
+              '<div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2c3 3 4.5 6.5 4.5 10S15 19 12 22c-3-3-4.5-6.5-4.5-10S9 5 12 2z"/></svg></div>' +
+              '<h4>1. Your Family Site</h4>' +
+              '<p class="fam-two-who">Seen by your family and the public</p>' +
+              '<p>The beautiful tree, photos, stories, and recipes that everyone visits and shares. This is the website your relatives and visitors see.</p>' +
+            '</div>' +
+            '<div class="fam-two-card">' +
+              '<div class="fam-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="9" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg></div>' +
+              '<h4>2. Your Family Dashboard</h4>' +
+              '<p class="fam-two-who">Managed by a few family members you choose, at a separate link</p>' +
+              '<p>An admin board, basically a second website, where your family managers add, update, and remove family members, upload photos, and manage the features you chose, whenever they need to.</p>' +
+            '</div>' +
+          '</div>' +
+          '<p class="fam-two-note">Both are built for you and included in the price, so your tree can keep growing without calling a developer.</p>' +
+        '</div>' +
+
         '<div class="fam-cta">' +
-          '<div class="fam-price">$799<small>November special \u00b7 a full year of hosting included</small></div>' +
-          '<a href="contact.html" class="fam-btn">Start My Family Tree <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>' +
+          '<div class="fam-price">$799<small>' + season + ' special · a full year of hosting included</small></div>' +
+          '<a href="' + REQUEST_URL + '" class="fam-btn">Start My Family Tree ' + ARROW + '</a>' +
           '<p class="fam-steps">You send a request, we build your preview first, and you only pay once you love it.</p>' +
+          '<a href="family-tree.html" class="fam-sample">Explore a sample tree first</a>' +
         '</div>' +
       '</div>';
     heroWrap.parentNode.insertBefore(sec, heroWrap.nextSibling);
   }
 
-  // ── 7. FALLING LEAVES ───────────────────────────────────
-  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // ── FALLING LEAVES (fall look only) ─────────────────────
+  if (MODE === 'full' && (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
     var colors = ['#C2571F', '#D9822B', '#E3A33A', '#B8421A', '#9C3D1A', '#E8B04A'];
     var shapes = [
       // maple-ish
@@ -87,7 +126,7 @@
       // simple oval leaf with vein
       '<svg viewBox="0 0 24 24"><path fill="COLOR" d="M12 1C5 6 4 14 12 23c8-9 7-17 0-22z"/><path d="M12 5v16" stroke="rgba(0,0,0,.25)" stroke-width="1" fill="none"/></svg>',
       // round oak-ish
-      '<svg viewBox="0 0 24 24"><path fill="COLOR" d="M12 2c3 0 4 2 4.5 3.5C19 6 21 8 20 11c2 2 1 5-1.5 6C18 20 15 21 12 22c-3-1-6-2-6.5-5C3 16 2 13 4 11 3 8 5 6 7.500 5.500 8 4 9 2 12 2z"/></svg>'
+      '<svg viewBox="0 0 24 24"><path fill="COLOR" d="M12 2c3 0 4 2 4.5 3.5C19 6 21 8 20 11c2 2 1 5-1.5 6C18 20 15 21 12 22c-3-1-6-2-6.5-5C3 16 2 13 4 11 3 8 5 6 7.5 5.5 8 4 9 2 12 2z"/></svg>'
     ];
     var layer = document.createElement('div');
     layer.className = 'leaf-layer';
