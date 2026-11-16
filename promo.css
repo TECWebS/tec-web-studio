@@ -1,250 +1,51 @@
-/* TEC Web Studio — seasonal promotion themes
-   Loaded by site.js only while a promotion is running (or previewing).
-   Each theme recolors the existing design through the same color
-   variables site.css uses, then restyles the few hard-coded teal areas. */
+/* ═══ FAMILY TREE — "Family Gathering" (fall) ═══
+   Autumn rust, harvest gold, warm cream, with falling leaves.
+   Paste this block at the bottom of promo.css. */
+body.promo-family {
+  --teal: #8B4A2B; --teal-dark: #6b3a1d; --teal-deep: #7a3a18; --teal-light: #fbf1e4;
+  --gold: #F5C842; --cream: #fdf8f0; --border: #ecd9c0; --text: #6e5646; --text-muted: #6e5646;
+  --promo-banner-bg: #8B4A2B; --promo-accent: #E3A33A; --promo-accent-on: #3b2412; --promo-accent-text: #A24A25;
+  --promo-cta-bg: #B5532A; --promo-code-bg: #fbf1e4; --promo-footer: #6b3a1d;
+}
+body.promo-family .hero-wrap, body.promo-family .page-hero, body.promo-family .cta-section { background: linear-gradient(160deg, #B5532A 0%, #A24A25 55%, #C9803F 100%); }
+body.promo-family .hero-wrap::before { background: radial-gradient(circle, rgba(255,214,120,.22) 0%, transparent 70%); }
+body.promo-family .hero-wrap::after { background: radial-gradient(circle, rgba(120,50,20,.25) 0%, transparent 70%); }
+body.promo-family .hero h1 em { color: #FFE08A; }
+body.promo-family .pain-section { background: #8B4A2B; }
+body.promo-family .testimonials-wrap { background: #6b3a1d; }
+body.promo-family .promo-pop-copy, body.promo-family .promo-pop-cta { color: #fff; }
+body.promo-family .promo-pop-copy { background: #B5532A; }
 
-/* ── Banner under the menu ───────────────────────── */
-.promo-banner { background: var(--promo-banner-bg, #1a2e2e); color: var(--promo-banner-fg, #fff); position: relative; z-index: 150; }
-.promo-banner-inner { max-width: 1080px; margin: auto; padding: 10px 24px; display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 14px; text-align: center; }
-.promo-banner-title { font-weight: 700; }
-.promo-banner-cta { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
-.promo-banner-ends { opacity: .85; font-size: 12.5px; }
-.promo-code-btn { font: 700 13px/1 'Courier New', monospace; letter-spacing: 1.5px; background: rgba(255,255,255,.16); color: inherit; border: 1.5px dashed currentColor; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
-.promo-code-btn:hover { background: rgba(255,255,255,.28); }
+/* hero copy + tree illustration (added by promo-family.js on the homepage) */
+.fam-eyebrow { display: inline-block; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 6px 14px; border-radius: 50px; margin-bottom: 18px; }
+.fam-tree { width: 100%; max-width: 440px; margin: auto; display: block; filter: drop-shadow(0 18px 30px rgba(60,25,8,.35)); }
 
-/* ── Popup ───────────────────────────────────────── */
-.promo-pop-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(15,25,25,.55); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity .25s; }
-.promo-pop-backdrop.open { opacity: 1; }
-.promo-pop { position: relative; background: var(--promo-pop-bg, #fff); color: var(--promo-pop-fg, #1a2e2e); border-radius: 18px; max-width: 440px; width: 100%; padding: 32px 28px 26px; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,.3); border-top: 6px solid var(--promo-accent, #F5C842); transform: translateY(12px); transition: transform .25s; }
-.promo-pop-backdrop.open .promo-pop { transform: none; }
-.promo-pop-x { position: absolute; top: 10px; right: 12px; background: none; border: 0; font-size: 26px; line-height: 1; color: inherit; opacity: .6; cursor: pointer; padding: 4px 8px; }
-.promo-pop-x:hover { opacity: 1; }
-.promo-pop-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--promo-accent-text, #3d7a80); margin-bottom: 10px; }
-.promo-pop h2 { font-family: var(--promo-display, var(--serif)); font-weight: 400; font-size: 27px; line-height: 1.2; margin-bottom: 10px; color: inherit; }
-.promo-pop-msg { font-size: 15px; line-height: 1.65; opacity: .9; margin-bottom: 18px; }
-.promo-pop-code { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; background: var(--promo-code-bg, #f4f8f8); border: 2px dashed var(--promo-accent, #F5C842); border-radius: 12px; padding: 12px; margin-bottom: 18px; }
-.promo-pop-code span { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: .7; width: 100%; }
-.promo-pop-code strong { font: 700 22px/1.2 'Courier New', monospace; letter-spacing: 3px; }
-.promo-pop-copy { background: var(--promo-accent, #F5C842); color: var(--promo-accent-on, #1a2e2e); border: 0; border-radius: 50px; padding: 8px 16px; font-weight: 700; font-size: 13px; cursor: pointer; }
-.promo-pop-actions { display: flex; flex-direction: column; gap: 8px; }
-.promo-pop-cta { display: block; background: var(--promo-cta-bg, #3d7a80); color: var(--promo-cta-fg, #fff); border-radius: 50px; padding: 14px 20px; font-weight: 700; text-decoration: none; }
-.promo-pop-later { background: none; border: 0; color: inherit; opacity: .7; text-decoration: underline; cursor: pointer; font-size: 13px; padding: 6px; }
-.promo-pop-others { list-style: none; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid rgba(128,128,128,.25); font-size: 13px; opacity: .85; }
-.promo-pop-others li { margin: 4px 0; }
+/* Family Tree Build section right under the hero */
+.fam-section { background: #FBF4EA; border-top: 1px solid #EAD9C2; border-bottom: 1px solid #EAD9C2; }
+.fam-inner { max-width: 1080px; margin: auto; padding: 88px 24px; }
+.fam-head { text-align: center; max-width: 720px; margin: 0 auto; }
+.fam-tag { display: inline-block; background: #F5C842; color: #3b2412; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 5px 14px; border-radius: 50px; margin-bottom: 16px; }
+.fam-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.2; color: #6b2f12; margin-bottom: 14px; }
+.fam-head p { font-size: 17px; line-height: 1.8; color: #6e5646; }
+.fam-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+.fam-card { background: #fff; border: 1px solid #EAD9C2; border-radius: 14px; padding: 28px 24px; transition: transform .25s, box-shadow .25s; }
+.fam-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(107,47,18,.12); }
+.fam-ico { width: 44px; height: 44px; border-radius: 12px; background: #FCE8CF; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; font-size: 22px; }
+.fam-card h3 { font-family: var(--serif); font-weight: 400; font-size: 20px; color: #6b2f12; margin-bottom: 8px; }
+.fam-card p { font-size: 14px; line-height: 1.75; color: #6e5646; }
+.fam-cta { margin-top: 48px; text-align: center; }
+.fam-price { font-family: var(--serif); font-size: 56px; line-height: 1; color: #3b2412; }
+.fam-price small { display: block; font-family: var(--sans); font-size: 14px; color: #6e5646; margin-top: 8px; }
+.fam-btn { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; background: #B5532A; color: #fff; font-weight: 700; font-size: 16px; padding: 15px 34px; border-radius: 50px; text-decoration: none; transition: background .2s, transform .15s; }
+.fam-btn:hover { background: #9c4521; transform: translateY(-1px); }
+.fam-steps { margin-top: 14px; font-size: 14px; color: #6e5646; }
+@media (max-width: 1000px) { .fam-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .fam-grid { grid-template-columns: 1fr; } .fam-inner { padding: 64px 24px; } }
 
-/* ── Falling decorations ─────────────────────────── */
-.promo-fx { position: fixed; inset: 0; pointer-events: none; z-index: 120; overflow: hidden; }
-.promo-fx span { position: absolute; top: -40px; color: var(--promo-fx, #fff); animation: promoFall linear infinite; will-change: transform; }
-@keyframes promoFall { from { transform: translateY(-40px) rotate(0deg); } to { transform: translateY(110vh) rotate(200deg); } }
-.promo-cursor { display: inline-block; margin-left: 2px; animation: promoBlink 1s steps(1) infinite; }
-@keyframes promoBlink { 50% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .promo-fx { display: none; }
-  .promo-cursor { animation: none; }
-  .promo-pop-backdrop, .promo-pop { transition: none; }
-}
-
-/* Shared: the hard-coded teal areas follow each theme's colors */
-body.promo-on footer { background: var(--promo-footer, var(--teal-dark)); }
-body.promo-on .pain-section, body.promo-on .testimonials-wrap { background: var(--teal); }
-body.promo-on .browser-content > div[style] { background: linear-gradient(135deg, var(--teal), var(--teal-dark)) !important; }
-body.promo-on .mock-cta-btn { background: var(--gold); }
-
-/* Hero decorations live inside the hero itself */
-.promo-hero-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-.hero, .page-hero-inner, .cta-inner { position: relative; z-index: 1; }
-
-/* ═══ HOLIDAY — "Family Traditions" ═══
-   Deep red, red, sage, evergreen and soft gray, with falling snowflakes. */
-body.promo-winter {
-  --teal: #24432f; --teal-dark: #1b3424; --teal-deep: #24432f; --teal-light: #eef1ee;
-  --gold: #a63a2e; --cream: #f6f7f8; --border: #dcdfdc; --text-muted: #55605a;
-  --promo-banner-bg: #74271f; --promo-accent: #a63a2e; --promo-accent-on: #fff; --promo-accent-text: #a63a2e;
-  --promo-cta-bg: #24432f; --promo-code-bg: #e9ebee; --promo-fx: #ffffff; --promo-footer: #1b3424;
-}
-/* Anything that sits on the red or burgundy gets white text */
-body.promo-winter .btn-primary, body.promo-winter .btn-primary-lg, body.promo-winter .nav-links a.nav-cta, body.promo-winter .mobile-menu a.mobile-cta,
-body.promo-winter .pkg-badge, body.promo-winter .starter-tag, body.promo-winter .starter-callout-tag, body.promo-winter .submit-btn,
-body.promo-winter .review-submit-btn, body.promo-winter .code-btn:hover, body.promo-winter .promo-pop-copy { color: #fff !important; }
-body.promo-winter .pkg-badge .ico, body.promo-winter .starter-tag .ico { color: #fff; fill: #fff; }
-body.promo-winter .testimonials-wrap .section-eyebrow, body.promo-winter .testimonials-wrap [style*="color:var(--gold)"],
-body.promo-winter .cta-section [style*="color:var(--gold)"], body.promo-winter .pain-section [style*="color:var(--gold)"] { color: #fff !important; }
-body.promo-winter .testimonials-wrap .section-eyebrow::before { background: #fff; }
-body.promo-winter .hero-wrap, body.promo-winter .page-hero, body.promo-winter .cta-section { background: linear-gradient(160deg, #1b3424 0%, #24432f 50%, #3f6449 100%); }
-body.promo-winter .hero h1 em { color: #e9b3a6; }
-body.promo-winter .pain-section { background: #4f6b4e; }   /* deeper sage so white text stays easy to read */
-body.promo-winter .testimonials-wrap { background: #74271f; }
-body.promo-winter .promo-pop { border-top-color: #a63a2e; }
-body.promo-winter .promo-pop::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; border-radius: 0 0 18px 18px; background: linear-gradient(90deg, #74271f 0 20%, #a63a2e 20% 40%, #6a8a68 40% 60%, #24432f 60% 80%, #e9ebee 80%); }
-body.promo-winter .promo-fx span { text-shadow: 0 0 6px rgba(255,255,255,.7); }
-
-/* ═══ CYBER — Y2K desktop, in TEC Web Studio colors ═══
-   Teal grid, TEC gold, ink outlines, retro windows, chunky buttons. */
-body.promo-cyber {
-  --teal: #33696e; --teal-dark: #285458; --teal-deep: #33696e; --teal-light: #e8f4f5;
-  --gold: #F5C842; --border: #1a2e2e; --cream: #f4fafa; --text-muted: #2f4a4a;
-  --promo-banner-bg: #3d7a80; --promo-banner-fg: #fff; --promo-accent: #F5C842; --promo-accent-on: #1a2e2e; --promo-accent-text: #3d7a80;
-  --promo-pop-bg: #f4fafa; --promo-pop-fg: #1a2e2e; --promo-code-bg: #ffffff; --promo-cta-bg: #F5C842; --promo-cta-fg: #1a2e2e;
-  --promo-display: 'Courier New', ui-monospace, monospace; --promo-footer: #2f6166;
-}
-body.promo-cyber .hero-wrap, body.promo-cyber .page-hero, body.promo-cyber .cta-section {
-  background-color: #dff0f1;
-  background-image: linear-gradient(rgba(61,122,128,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(61,122,128,.16) 1px, transparent 1px),
-    radial-gradient(ellipse at 82% 18%, #fff6d1 0%, #e8f4f5 50%, #c9e4e6 100%);
-  background-size: 28px 28px, 28px 28px, auto;
-}
-body.promo-cyber .hero-wrap::before, body.promo-cyber .hero-wrap::after, body.promo-cyber .page-hero::before, body.promo-cyber .cta-section::before { display: none; }
-body.promo-cyber .hero h1, body.promo-cyber .page-hero h1, body.promo-cyber .cta-title { color: #1a2e2e; font-family: 'Courier New', ui-monospace, monospace; font-weight: 700; letter-spacing: -1px; text-shadow: 3px 3px 0 #F5C842; }
-body.promo-cyber .hero h1 em { color: #2f6166; text-shadow: 3px 3px 0 #fff; }
-body.promo-cyber .hero-sub, body.promo-cyber .page-hero p, body.promo-cyber .cta-sub, body.promo-cyber .hero-note, body.promo-cyber .cta-note, body.promo-cyber .btn-ghost { color: #1f3a3a; }
-/* chunky Y2K buttons */
-body.promo-cyber .btn-primary, body.promo-cyber .btn-primary-lg, body.promo-cyber .nav-links a.nav-cta, body.promo-cyber .mobile-menu a.mobile-cta, body.promo-cyber .btn-outline-light,
-body.promo-cyber .submit-btn, body.promo-cyber .review-submit-btn {
-  background: #F5C842; color: #1a2e2e; border: 2px solid #1a2e2e; border-radius: 6px; box-shadow: 4px 4px 0 #1a2e2e; font-family: 'Courier New', ui-monospace, monospace; font-weight: 700;
-}
-body.promo-cyber .btn-outline-light { background: #fff; }
-body.promo-cyber .btn-primary:hover, body.promo-cyber .btn-primary-lg:hover, body.promo-cyber .nav-links a.nav-cta:hover, body.promo-cyber .submit-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1a2e2e; background: #ffd54f; }
-body.promo-cyber .pkg-badge, body.promo-cyber .starter-tag, body.promo-cyber .starter-callout-tag { border: 2px solid #1a2e2e; box-shadow: 2px 2px 0 #1a2e2e; border-radius: 6px; font-family: 'Courier New', monospace; }
-body.promo-cyber .browser-mockup { border: 2px solid #1a2e2e; box-shadow: 6px 6px 0 #1a2e2e; transform: none; border-radius: 8px; }
-body.promo-cyber .browser-bar { background: #6AABB0; border-bottom: 2px solid #1a2e2e; }
-body.promo-cyber .pain-section, body.promo-cyber .testimonials-wrap { background: #285458; }
-body.promo-cyber .promo-banner { border-bottom: 2px solid #1a2e2e; }
-body.promo-cyber .promo-banner-inner { font-family: 'Courier New', ui-monospace, monospace; font-weight: 700; }
-body.promo-cyber .promo-code-btn { background: #F5C842; color: #1a2e2e; border: 2px solid #1a2e2e; border-style: solid; box-shadow: 2px 2px 0 #1a2e2e; }
-/* the popup becomes a little CYBERWEB.exe window */
-body.promo-cyber .promo-pop { border: 2px solid #1a2e2e; border-radius: 10px; box-shadow: 8px 8px 0 #1a2e2e; padding-top: 58px; overflow: hidden; }
-body.promo-cyber .promo-pop::before { content: 'CYBERWEB.exe'; position: absolute; top: 0; left: 0; right: 0; height: 36px; display: flex; align-items: center; padding: 0 14px; background: #6AABB0; color: #fff; border-bottom: 2px solid #1a2e2e; font: 700 13px 'Courier New', monospace; letter-spacing: 1px; text-align: left; }
-body.promo-cyber .promo-pop-x { top: 5px; right: 8px; width: 26px; height: 26px; padding: 0; font-size: 18px; line-height: 22px; background: #fff; color: #1a2e2e; border: 2px solid #1a2e2e; border-radius: 4px; opacity: 1; box-shadow: 2px 2px 0 #1a2e2e; }
-body.promo-cyber .promo-pop h2::before { content: none; }
-body.promo-cyber .promo-pop-code { border: 2px solid #1a2e2e; border-radius: 6px; box-shadow: inset 2px 2px 0 rgba(0,0,0,.12); }
-body.promo-cyber .promo-pop-copy, body.promo-cyber .promo-pop-cta { border: 2px solid #1a2e2e; border-radius: 6px; box-shadow: 3px 3px 0 #1a2e2e; font-family: 'Courier New', monospace; font-weight: 700; }
-body.promo-cyber .promo-pop-copy { background: #e8f4f5; }
-body.promo-cyber .promo-pop-msg::after { content: ''; display: block; height: 14px; margin: 14px auto 0; max-width: 260px; border: 2px solid #1a2e2e; border-radius: 4px; background: linear-gradient(90deg, #6AABB0 0 30%, #fff 30%); }
-/* retro desktop bits in the hero */
-.y2k-win { position: absolute; background: #fff; border: 2px solid #1a2e2e; border-radius: 6px; box-shadow: 4px 4px 0 #1a2e2e; font: 700 11px 'Courier New', monospace; color: #1a2e2e; }
-.y2k-win b { display: block; background: #3d7a80; color: #fff; padding: 3px 8px; border-bottom: 2px solid #1a2e2e; border-radius: 3px 3px 0 0; font-weight: 700; }
-.y2k-win b::after { content: '\2715'; float: right; }
-.y2k-win span { display: block; padding: 8px 10px; }
-.y2k-win.w1 { top: 7%; right: 5%; width: 170px; transform: rotate(3deg); }
-.y2k-win.w2 { bottom: 7%; left: 40%; width: 150px; transform: rotate(-4deg); }
-.page-hero .y2k-win.w2 { left: 3%; }
-.y2k-win.w2 b { background: #F5C842; color: #1a2e2e; }
-.y2k-bar { display: block; height: 10px; margin-top: 6px; border: 2px solid #1a2e2e; background: linear-gradient(90deg, #6AABB0 0 70%, #fff 70%); }
-.y2k-cursor { position: absolute; width: 0; height: 0; border-left: 9px solid transparent; border-right: 9px solid transparent; border-bottom: 22px solid #fff; filter: drop-shadow(2px 2px 0 #1a2e2e); }
-.y2k-cursor.c1 { top: 28%; right: 26%; transform: rotate(-25deg); }
-.y2k-cursor.c2 { bottom: 22%; right: 9%; transform: rotate(-35deg); }
-.y2k-cursor.c3 { top: 14%; left: 42%; transform: rotate(-20deg); }
-@media (max-width: 900px) { .y2k-win { display: none; } }
-
-/* ═══ MOTHER'S DAY ═══  Hearts and flowers, rosy reds and pinks. */
-body.promo-mothers {
-  --teal: #c97060; --teal-dark: #a05040; --teal-deep: #b35a4a; --teal-light: #fbe9e4;
-  --gold: #f6b8c6; --cream: #fdf5f2; --border: #f0d4cc; --text-muted: #8a6060;
-  --promo-banner-bg: #a05040; --promo-accent: #e8728a; --promo-accent-on: #fff; --promo-accent-text: #b35a4a; --promo-cta-bg: #c0485f;
-  --promo-code-bg: #fdf5f2; --promo-fx: #e8728a; --promo-footer: #a05040;
-}
-body.promo-mothers .hero-wrap, body.promo-mothers .page-hero, body.promo-mothers .cta-section { background: linear-gradient(160deg, #f2b4a4 0%, #e08b86 45%, #c95f6e 100%); }
-body.promo-mothers .hero h1 em { color: #fff2c4; }
-
-/* ═══ TEACHER APPRECIATION — "Nostalgic Notebook" ═══
-   Chalkboard Green #2D5A27, Composition Black #1F2937, Soft Cream #FDFBF7,
-   No. 2 Pencil Yellow #FBBF24, Notebook Paper Blue #3B82F6. */
-body.promo-teacher {
-  --teal: #2D5A27; --teal-dark: #23471f; --teal-deep: #2D5A27; --teal-light: #eef4ec;
-  --gold: #FBBF24; --cream: #FDFBF7; --border: #e6e1d6; --text-muted: #4b5563; --ink: #1F2937;
-  --promo-banner-bg: #2D5A27; --promo-accent: #FBBF24; --promo-accent-on: #1F2937; --promo-accent-text: #2D5A27;
-  --promo-pop-bg: #FDFBF7; --promo-pop-fg: #1F2937; --promo-cta-bg: #1F2937; --promo-code-bg: #ffffff; --promo-footer: #1F2937;
-}
-/* composition-notebook cover */
-body.promo-teacher .hero-wrap, body.promo-teacher .page-hero, body.promo-teacher .cta-section {
-  background-color: #1F2937;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,.10) 0 2px, transparent 3px),
-    radial-gradient(circle at 70% 60%, rgba(255,255,255,.08) 0 3px, transparent 4px),
-    radial-gradient(circle at 40% 80%, rgba(255,255,255,.07) 0 2px, transparent 3px),
-    radial-gradient(circle at 85% 20%, rgba(255,255,255,.09) 0 1px, transparent 2px);
-  background-size: 23px 19px, 31px 29px, 17px 23px, 13px 11px;
-}
-body.promo-teacher .hero-wrap::before, body.promo-teacher .page-hero::before, body.promo-teacher .cta-section::before { display: none; }
-body.promo-teacher .hero-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 34px; height: auto; border-radius: 0; background: #111827; box-shadow: inset -3px 0 0 rgba(255,255,255,.08); }
-body.promo-teacher .hero h1 em { color: #FBBF24; }
-body.promo-teacher .pain-section { background: #2D5A27; }
-body.promo-teacher .testimonials-wrap { background: #1F2937; }
-body.promo-teacher .promo-pop { background-image: repeating-linear-gradient(180deg, transparent 0 27px, rgba(59,130,246,.22) 27px 28px); border-top-color: #FBBF24; }
-body.promo-teacher .promo-pop-code { border-color: #3B82F6; }
-body.promo-teacher .promo-code-btn { background: #FBBF24; color: #1F2937; border: 2px solid #1F2937; }
-.notebook-label { position: absolute; top: 22px; right: 4%; background: #FDFBF7; border: 2px solid #1F2937; border-radius: 6px; padding: 8px 16px 10px; text-align: center; font: 600 12px Georgia, serif; color: #1F2937; transform: rotate(2deg); box-shadow: 3px 3px 0 rgba(0,0,0,.25); }
-.notebook-label i { display: block; height: 1px; background: #3B82F6; margin: 5px 0; opacity: .7; }
-.notebook-pencil { position: absolute; bottom: 14%; right: 6%; width: 150px; height: 16px; background: #FBBF24; border: 2px solid #1F2937; border-radius: 3px; transform: rotate(-14deg); }
-.notebook-pencil::before { content: ''; position: absolute; left: -22px; top: -2px; border-right: 22px solid #f3d9a4; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
-.notebook-pencil::after { content: ''; position: absolute; right: -16px; top: -2px; width: 14px; height: 16px; background: #f4a3b5; border: 2px solid #1F2937; border-left: 6px solid #b0b8c4; border-radius: 0 4px 4px 0; }
-@media (max-width: 900px) { .notebook-label, .notebook-pencil { display: none; } }
-
-/* ═══ BACK TO SCHOOL — Chalkboard ═══
-   Chalkboard green, chalk dust, chalk lettering, wooden frame and eraser. */
-body.promo-school {
-  --teal: #2f5a45; --teal-dark: #24473a; --teal-deep: #2f5a45; --teal-light: #eef4f0;
-  --gold: #f5c842; --border: #d5e2da;
-  --promo-banner-bg: #24473a; --promo-accent: #f5c842; --promo-accent-text: #2f5a45; --promo-cta-bg: #24473a;
-  --promo-pop-bg: #2f5a45; --promo-pop-fg: #f4f4ef; --promo-code-bg: rgba(255,255,255,.06);
-  --promo-display: 'Chalkboard SE', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive; --promo-footer: #24473a;
-}
-body.promo-school .hero-wrap, body.promo-school .page-hero, body.promo-school .cta-section {
-  background-color: #2f5a45;
-  background-image:
-    radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.07) 0%, transparent 45%),
-    radial-gradient(ellipse at 75% 70%, rgba(255,255,255,.05) 0%, transparent 40%),
-    radial-gradient(circle at 10% 90%, rgba(255,255,255,.04) 0%, transparent 30%),
-    linear-gradient(160deg, #335f49 0%, #2a5340 100%);
-  border-top: 14px solid #8b5a2b; border-bottom: 22px solid #8b5a2b;
-  box-shadow: inset 0 0 0 4px #6e4520, inset 0 0 60px rgba(0,0,0,.35);
-}
-body.promo-school .hero-wrap::before, body.promo-school .hero-wrap::after, body.promo-school .page-hero::before, body.promo-school .cta-section::before { display: none; }
-body.promo-school .hero h1, body.promo-school .page-hero h1, body.promo-school .cta-title { font-family: 'Chalkboard SE', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive; color: #f4f4ef; text-shadow: 0 0 2px rgba(255,255,255,.55), 1px 1px 0 rgba(255,255,255,.15); letter-spacing: .5px; }
-body.promo-school .hero h1 em { color: #f9e27a; }
-body.promo-school .hero-sub, body.promo-school .page-hero p { color: #e6ece8; }
-body.promo-school .promo-pop { border: 10px solid #8b5a2b; border-top-width: 10px; box-shadow: 0 24px 64px rgba(0,0,0,.4), inset 0 0 40px rgba(0,0,0,.3); }
-body.promo-school .promo-pop h2 { color: #f4f4ef; text-shadow: 0 0 2px rgba(255,255,255,.5); }
-body.promo-school .promo-pop-code { border-color: rgba(244,244,239,.7); }
-body.promo-school .promo-pop-cta { background: #f5c842; color: #1a2e2e; }
-body.promo-school .promo-pop-eyebrow { color: #f9e27a; }
-.chalk-tray { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: #6e4520; box-shadow: 0 -2px 0 rgba(0,0,0,.25); }
-.chalk-eraser { position: absolute; bottom: 12px; right: 9%; width: 120px; height: 34px; border-radius: 4px; background: linear-gradient(180deg, #a8743f 0 55%, #474a4f 55% 100%); border: 2px solid #3d2a14; box-shadow: 0 3px 0 rgba(0,0,0,.3); }
-.chalk-eraser::after { content: ''; position: absolute; left: 10px; right: 10px; top: 5px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.25); }
-.chalk-stick { position: absolute; bottom: 12px; width: 46px; height: 10px; border-radius: 5px; background: #f4f4ef; box-shadow: 0 2px 0 rgba(0,0,0,.25); }
-.chalk-stick.s1 { right: calc(9% + 140px); } .chalk-stick.s2 { right: calc(9% + 196px); width: 30px; background: #f9e27a; }
-.chalk-doodle { position: absolute; font: 26px 'Chalkboard SE', 'Segoe Print', 'Bradley Hand', cursive; color: rgba(244,244,239,.55); }
-.chalk-doodle.d1 { top: 10%; right: 7%; transform: rotate(-8deg); }
-.chalk-doodle.d2 { top: 34%; right: 30%; font-size: 20px; transform: rotate(6deg); }
-.chalk-doodle.d3 { bottom: 26%; left: 4%; font-size: 22px; transform: rotate(-5deg); }
-body.promo-school .page-hero .chalk-doodle.d2, body.promo-school .page-hero .chalk-doodle.d3 { display: none; }
-@media (max-width: 900px) { .chalk-doodle.d2 { display: none; } .chalk-eraser { right: 4%; } .chalk-stick { display: none; } }
-
-/* ═══ NEW YEAR — black, gold, white and silver, with fireworks ═══ */
-body.promo-newyear {
-  --teal: #1a1a1a; --teal-dark: #000000; --teal-deep: #1a1a1a; --teal-light: #f5f2ea;
-  --gold: #d4af37; --cream: #fbfaf6; --border: #e3ddcc; --text-muted: #555555;
-  --promo-banner-bg: #0b0b0b; --promo-banner-fg: #f3e2a6; --promo-accent: #d4af37; --promo-accent-text: #a8862a;
-  --promo-cta-bg: #0b0b0b; --promo-cta-fg: #f3e2a6; --promo-code-bg: #faf8f1; --promo-footer: #0b0b0b;
-}
-body.promo-newyear .hero-wrap, body.promo-newyear .page-hero, body.promo-newyear .cta-section { background: radial-gradient(ellipse at 50% 120%, #2a2a2a 0%, #111 55%, #050505 100%); }
-body.promo-newyear .hero-wrap::before, body.promo-newyear .hero-wrap::after, body.promo-newyear .page-hero::before, body.promo-newyear .cta-section::before { display: none; }
-body.promo-newyear .hero h1 em { background: linear-gradient(90deg, #f3e2a6, #d4af37 40%, #e8e8e8 70%, #c0c0c0); -webkit-background-clip: text; background-clip: text; color: transparent; }
-body.promo-newyear .btn-primary, body.promo-newyear .btn-primary-lg, body.promo-newyear .nav-links a.nav-cta { background: linear-gradient(135deg, #f3e2a6, #d4af37 55%, #b8962e); color: #0b0b0b; }
-body.promo-newyear .pain-section { background: #111; }
-body.promo-newyear .testimonials-wrap { background: #1a1a1a; }
-body.promo-newyear .promo-pop { border-top: 6px solid transparent; border-image: linear-gradient(90deg, #c0c0c0, #d4af37, #f3e2a6, #d4af37, #c0c0c0) 1; border-image-slice: 6 0 0 0; border-image-width: 6px 0 0 0; }
-body.promo-newyear .promo-pop-copy { background: linear-gradient(135deg, #f3e2a6, #d4af37); }
-body.promo-newyear .promo-code-btn { border-color: #d4af37; color: #f3e2a6; }
-.fw { position: absolute; width: 7px; height: 7px; border-radius: 50%; animation: fwBurst 3.2s ease-out infinite; opacity: 0; filter: drop-shadow(0 0 6px currentColor); }
-.fw::before, .fw::after { content: ''; position: absolute; inset: 0; border-radius: 50%; }
-.fw.gold { color: #f3d27a; } .fw.silver { color: #e6e6e6; } .fw.white { color: #ffffff; }
-.fw, .fw::before, .fw::after {
-  box-shadow: 0 -95px 0 currentColor, 36px -88px 0 currentColor, 67px -67px 0 currentColor, 88px -36px 0 currentColor,
-              95px 0 0 currentColor, 88px 36px 0 currentColor, 67px 67px 0 currentColor, 36px 88px 0 currentColor,
-              0 95px 0 currentColor, -36px 88px 0 currentColor, -67px 67px 0 currentColor, -88px 36px 0 currentColor,
-              -95px 0 0 currentColor, -88px -36px 0 currentColor, -67px -67px 0 currentColor, -36px -88px 0 currentColor;
-}
-.fw::before { transform: rotate(11deg) scale(.68); } .fw::after { transform: rotate(-11deg) scale(.4); }
-@keyframes fwBurst { 0% { transform: scale(.05); opacity: 0; } 8% { opacity: 1; } 55% { transform: scale(1); opacity: .9; } 100% { transform: scale(1.15) translateY(14px); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .fw { animation: none; opacity: .45; transform: scale(.9); } }
+/* falling leaves */
+.leaf-layer { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 120; }
+.leaf { position: absolute; top: -60px; will-change: transform; animation-name: leafFall; animation-timing-function: linear; animation-iteration-count: infinite; }
+.leaf svg { display: block; width: 100%; height: 100%; animation: leafSway 4s ease-in-out infinite alternate; }
+@keyframes leafFall { 0% { transform: translate3d(0,-60px,0) rotate(0deg); } 100% { transform: translate3d(var(--drift,60px),112vh,0) rotate(var(--spin,540deg)); } }
+@keyframes leafSway { 0% { transform: translateX(-14px) rotate(-12deg); } 100% { transform: translateX(14px) rotate(12deg); } }
+@media (prefers-reduced-motion: reduce) { .leaf-layer { display: none; } }
