@@ -20,16 +20,19 @@ body { font-family: var(--sans); background: var(--cream); color: var(--ink); li
 a { color: var(--red); }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(166,58,46,.5); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .snow span { display: none; } }
+svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 .topnav { background: rgba(251,248,242,.96); border-bottom: 1px solid var(--line); }
 .topnav-inner { max-width: 1080px; margin: auto; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
 .topnav a { text-decoration: none; font-weight: 600; }
+.topnav a svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; stroke-width: 2.4; }
 .brand { font-family: var(--serif); font-size: 18px; color: var(--evergreen); }
 
 /* ── HERO ── */
 .hero { background: linear-gradient(160deg, #3a2420 0%, #74271f 35%, #3f5a3f 75%, #24432f 100%); color: #fff; text-align: center; position: relative; overflow: hidden; padding: 72px 24px 80px; }
 .snow { position: absolute; inset: 0; pointer-events: none; }
-.snow span { position: absolute; top: -20px; color: rgba(255,255,255,.75); animation: fall linear infinite; }
+.snow span { position: absolute; top: -40px; color: rgba(255,255,255,.75); line-height: 0; animation: fall linear infinite; }
+.snow span svg { display: block; width: 100%; height: 100%; }
 @keyframes fall { to { transform: translateY(560px) rotate(180deg); } }
 .eyebrow { display: inline-block; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.35); border-radius: 50px; padding: 6px 18px; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 18px; position: relative; }
 .hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(36px, 6vw, 64px); line-height: 1.1; margin-bottom: 18px; position: relative; text-shadow: 0 2px 20px rgba(0,0,0,.25); }
@@ -55,6 +58,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .demo-head h3 { font-family: var(--serif); font-size: clamp(26px, 4vw, 38px); font-weight: 700; }
 .demo-head p { font-style: italic; opacity: .9; margin: 4px 0 14px; }
 .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.chip svg { width: 15px; height: 15px; }
 .chip { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.3); border-radius: 50px; padding: 5px 13px; font-size: 13px; color: #fff; }
 .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 .toggle { background: rgba(255,255,255,.92); color: var(--evergreen); border: 0; font-weight: 700; cursor: pointer; }
@@ -76,7 +80,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .person.married { background: linear-gradient(160deg, #eef7f0, var(--green-card)); border-color: #8fbf98; }
 .person .nick { display: block; font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--red); font-size: 12.5px; }
 .person .yrs { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); }
-.person .marks { display: block; font-size: 13px; margin-top: 2px; letter-spacing: 2px; }
+.person .marks { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
+.person .marks svg { width: 14px; height: 14px; color: #7a5a2a; }
 .person .more { display: block; font-size: 11px; font-style: italic; font-weight: 400; color: #4f7a52; margin-top: 2px; }
 .tree.bloodline .person.married { opacity: .35; }
 .tree.bloodline .person.blood { box-shadow: 0 0 0 3px rgba(214,165,49,.35); }
@@ -89,7 +94,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .avatar { position: absolute; left: 22px; top: 22px; width: 92px; height: 92px; border-radius: 50%; border: 3px solid var(--gold); background: var(--sage-lt); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 32px; color: var(--evergreen); box-shadow: 0 6px 18px rgba(0,0,0,.2); }
 .card-top h4 { font-family: var(--serif); font-size: 23px; }
 .card-top p { font-style: italic; font-size: 13.5px; opacity: .9; }
-.card-x { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.25); color: #fff; font-size: 20px; cursor: pointer; }
+.card-x { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.25); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-x svg { width: 16px; height: 16px; stroke-width: 2.4; }
 .tabs { display: flex; border-bottom: 2px solid var(--line); margin-top: 18px; }
 .tab { flex: 1; background: none; border: 0; padding: 12px 6px; font: 600 14px var(--sans); color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
 .tab[aria-selected="true"] { color: #5c3a2e; border-bottom-color: var(--gold); }
@@ -103,6 +109,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .fav .lab { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #8a6a4a; display: block; margin-bottom: 4px; }
 .fav-song { cursor: pointer; }
 .fav-song .hint { display: block; font-size: 11.5px; font-style: italic; color: #4f7a52; margin-top: 4px; }
+.play svg { width: 10px; height: 10px; fill: currentColor; stroke: none; vertical-align: -1px; margin-right: 5px; }
 .play { margin-top: 6px; background: var(--evergreen); color: #fff; border: 0; border-radius: 50px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
 .recipe h5 { font-family: var(--serif); font-size: 20px; color: var(--burgundy); margin-bottom: 6px; }
 .recipe .lab { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #8a6a4a; margin: 12px 0 4px; }
@@ -114,7 +121,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 @media (max-width: 860px) { .feat-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .feat-grid { grid-template-columns: 1fr; } }
 .feat { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
-.feat .ic { font-size: 24px; margin-bottom: 8px; }
+.feat .ic { margin-bottom: 10px; }
+.feat .ic svg { width: 28px; height: 28px; color: var(--evergreen); }
 .feat h4 { font-family: var(--serif); font-size: 18px; color: var(--evergreen); margin-bottom: 4px; }
 .feat p { font-size: 14px; color: var(--muted); }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px; counter-reset: s; }
@@ -164,23 +172,38 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .form-msg { color: #b03a2e; text-align: center; font-size: 13.5px; margin-top: 10px; min-height: 1.2em; }
 .state-box { display: none; text-align: center; padding: 36px 20px; }
 .state-box.show { display: block; }
-.state-box .big { font-size: 46px; }
+.state-box .big svg { width: 54px; height: 54px; color: var(--evergreen); }
 .state-box h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; color: var(--evergreen); margin: 8px 0; }
 .state-box p { color: var(--muted); max-width: 480px; margin: 0 auto 8px; }
 .honey { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .foot { text-align: center; padding: 28px 24px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
+
+/* FALL LOOK (November) */
+body.fall {
+  --evergreen: #7a3a18; --evergreen-dk: #5a2a10; --sage: #C9803F; --sage-lt: #FCE8CF; --burgundy: #8B3A1A; --red: #B5532A;
+  --cream: #fdf8f0; --line: #ecd9c0; --gold: #E3A33A; --gold-lt: #FFE08A;
+}
+body.fall .hero { background: linear-gradient(160deg, #B5532A 0%, #A24A25 55%, #C9803F 100%); }
+body.fall .demo-head, body.fall .card-top { background: linear-gradient(120deg, #6b3a1d 0%, #A24A25 55%, #C9803F 100%); }
 </style>
 </head>
 <body>
+<script>
+(function () {
+  var q = location.search, b = document.body;
+  if (new Date().getMonth() === 10 || /[?&]theme=fall/.test(q)) b.classList.add('fall');
+  if (/[?&]theme=holiday/.test(q)) b.classList.remove('fall');
+})();
+</script>
 
 <div class="topnav"><div class="topnav-inner">
   <a class="brand" href="index.html">TEC Web Studio</a>
-  <a href="index.html">&larr; Back to the main site</a>
+  <a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to the main site</a>
 </div></div>
 
 <header class="hero">
   <div class="snow" id="snow" aria-hidden="true"></div>
-  <div class="eyebrow">Holiday Special · Family Tree Build</div>
+  <div class="eyebrow" id="heroEyebrow">Holiday Special · Family Tree Build</div>
   <h1>Give thanks for the people<br>who make you <em>you.</em></h1>
   <p>The holidays are a time to give thanks and learn about your family links. We'll build your family its very own interactive family tree website, with photos, stories, favorite songs and recipes, that everyone can keep adding to for years.</p>
   <p class="talk">Let's give your family something to talk about.</p>
@@ -188,7 +211,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     <a class="btn btn-light" href="#demo">Explore a sample tree</a>
     <a class="btn btn-outline" href="#request">Request yours · $799</a>
   </div>
-  <p class="dates" id="heroDates">Requests open November 15 – December 15</p>
+  <p class="dates" id="heroDates">Requests open November 15 – December 31</p>
 </header>
 
 <section class="section" id="demo">
@@ -205,10 +228,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
       <div class="legend">
         <span class="chip"><span class="swatch" style="background:#d6a531"></span>Family bloodline</span>
         <span class="chip"><span class="swatch" style="background:#8fbf98"></span>Married in</span>
-        <span class="chip">🕊️ At rest</span>
-        <span class="chip">👑 Living matriarch</span>
-        <span class="chip">♥ Adopted family</span>
-        <span class="chip">🍴 Family recipe</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg>At rest</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>Living matriarch</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.7 1.2 5.7 3.3C14 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>Adopted family</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7a2 2 0 0 1-2 2M9 3v7"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 2.5 3 2.5V21"/></svg>Family recipe</span>
         <button type="button" class="chip toggle" id="bloodToggle" aria-pressed="false">Highlight the bloodline</button>
       </div>
     </div>
@@ -222,18 +245,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   <div class="center">
     <p class="sec-eyebrow">What your family gets</p>
     <h2 class="sec-title">A home for your family's story</h2>
-    <p class="sec-sub">Every tree is custom-built for your family, then handed over with a private editor so you can keep it growing.</p>
+    <p class="sec-sub">Every tree is custom-built for your family, then handed over with its own family dashboard so you can keep it growing.</p>
   </div>
   <div class="feat-grid">
-    <div class="feat"><div class="ic" aria-hidden="true">🌳</div><h4>An interactive tree</h4><p>Starting with your matriarch and patriarch, their children, their spouses and grandchildren, laid out so anyone can follow the branches.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">✏️</div><h4>Your own private editor</h4><p>Add new babies, spouses and branches, upload photos, and update stories whenever you like. No tech skills needed.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">🪪</div><h4>A card for every person</h4><p>Photos, birth and hometown, school and work, and their favorites: color, song, snack, hobbies.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">🎵</div><h4>Favorite song previews</h4><p>Hover over someone's favorite song to hear a short preview. A sweet way to remember the people we love.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">🍲</div><h4>Family recipe box</h4><p>Save Grandma's cobbler and Uncle's famous ribs right on their card, so the recipes are never lost.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">📸</div><h4>Videos &amp; photo book</h4><p>Optional sections for family videos and a photo book of reunions, holidays and everyday moments.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">🕊️</div><h4>Honor those at rest</h4><p>Gently mark loved ones who have passed, and keep their stories, photos and favorites close.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">🎨</div><h4>Your colors, your way</h4><p>You approve the colors and layout, and choose whether the bloodline stands out from those who married in.</p></div>
-    <div class="feat"><div class="ic" aria-hidden="true">📱</div><h4>Made for every screen</h4><p>Works beautifully on phones, tablets and computers, so the whole family can explore it anywhere.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-7"/><path d="M12 15c-4.5 0-7-2.5-7-5.5 0-2 1.3-3.4 3-3.8C8.4 3.9 10 2 12 2s3.6 1.9 4 3.7c1.7.4 3 1.8 3 3.8 0 3-2.5 5.5-7 5.5z"/></svg></div><h4>An interactive tree</h4><p>Starting with your matriarch and patriarch, their children, their spouses and grandchildren, laid out so anyone can follow the branches.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="9" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg></div><h4>Your family dashboard</h4><p>A separate admin board, basically a second website, where a few family members you choose can add babies, spouses and branches, upload photos, update stories, and remove or edit people whenever they need to. No tech skills needed.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M6 16c.5-1.5 1.7-2.2 3-2.2s2.5.7 3 2.2M14.5 10h4M14.5 13h3"/></svg></div><h4>A card for every person</h4><p>Photos, birth and hometown, school and work, and their favorites: color, song, snack, hobbies.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div><h4>Favorite song previews</h4><p>Hover over someone's favorite song to hear a short preview. A sweet way to remember the people we love.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11h18a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8z"/><path d="M8 3c-1 1.5 1 2.5 0 4M12 3c-1 1.5 1 2.5 0 4M16 3c-1 1.5 1 2.5 0 4"/></svg></div><h4>Family recipe box</h4><p>Save Grandma's cobbler and Uncle's famous ribs right on their card, so the recipes are never lost.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div><h4>Videos &amp; photo book</h4><p>Optional sections for family videos and a photo book of reunions, holidays and everyday moments.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg></div><h4>Honor those at rest</h4><p>Gently mark loved ones who have passed, and keep their stories, photos and favorites close.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="16" cy="10" r="1.2"/><path d="M12 21c-1.5 0-1.8-1.5-1-2.5s.5-2.5-1.5-2.5H8"/></svg></div><h4>Your colors, your way</h4><p>You approve the colors and layout, and choose whether the bloodline stands out from those who married in.</p></div>
+    <div class="feat"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h4>Made for every screen</h4><p>Works beautifully on phones, tablets and computers, so the whole family can explore it anywhere.</p></div>
   </div>
 </section>
 </div>
@@ -247,26 +270,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     <div class="step"><strong>Send a request</strong>Tell us about your family and what you'd like. Nothing is charged yet.</div>
     <div class="step"><strong>See your shell</strong>We build a sample layout so you can see your tree take shape and approve the colors.</div>
     <div class="step"><strong>Share your first 20–25</strong>Send the names and details, starting with your matriarch and patriarch, then their children, spouses, and grandchildren.</div>
-    <div class="step"><strong>Approve, pay, celebrate</strong>Once you love it, we send a private payment link, finish the build, and hand you the editor.</div>
+    <div class="step"><strong>Approve, pay, celebrate</strong>Once you love it, we send a private payment link, finish the build, and hand you the dashboard.</div>
   </div>
 </section>
 
 <div class="bg-tint">
 <section class="section" id="request">
   <div class="center">
-    <p class="sec-eyebrow">Holiday special</p>
+    <p class="sec-eyebrow" id="reqEyebrow">Holiday special</p>
     <h2 class="sec-title">Request your family's tree</h2>
     <p class="sec-sub">Your price is locked in when you request, even if your tree is finished after the holidays.</p>
   </div>
   <div class="form-card">
     <div class="state-box" id="closedBox" role="status">
-      <div class="big" aria-hidden="true">❄️</div>
+      <div class="big" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path transform="rotate(0 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(60 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(120 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(180 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(240 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(300 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/></svg></div>
       <h3>Requests open in November</h3>
-      <p id="closedText">Family Tree Build requests open November 15 and close December 15 each year.</p>
+      <p id="closedText">Family Tree Build requests open November 15 and close December 31 each year.</p>
       <p>Have a family project in mind sooner? <a href="contact.html">Tell us about it</a>.</p>
     </div>
     <div class="state-box" id="doneBox" role="status" tabindex="-1">
-      <div class="big" aria-hidden="true">🌳</div>
+      <div class="big" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-7"/><path d="M12 15c-4.5 0-7-2.5-7-5.5 0-2 1.3-3.4 3-3.8C8.4 3.9 10 2 12 2s3.6 1.9 4 3.7c1.7.4 3 1.8 3 3.8 0 3-2.5 5.5-7 5.5z"/></svg></div>
       <h3>Request received!</h3>
       <p>Thank you! We'll be in touch soon to start your family's shell. Nothing is charged until you approve it.</p>
       <p>Start gathering names, dates and photos for your first 20–25 family members.</p>
@@ -275,8 +298,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     <form id="treeForm" novalidate>
       <div class="honey" aria-hidden="true"><label for="website2">Leave this empty</label><input type="text" id="website2" tabindex="-1" autocomplete="off"></div>
       <div class="price-row">
-        <div><div class="price">$799</div><small>One-time · your custom tree, editor, and first 20–25 people</small></div>
-        <div style="max-width:380px;font-size:14px;color:var(--muted);">Includes the interactive tree, a card for every person, and your private editor to keep adding family, photos and stories.</div>
+        <div><div class="price">$799</div><small>One-time · your family site, family dashboard, and first 20–25 people</small></div>
+        <div style="max-width:380px;font-size:14px;color:var(--muted);">Includes two websites: your interactive family tree that family and the public see, and a family dashboard at a separate link where a few family members add photos, update stories, and add, remove, or edit family members whenever they need to.</div>
       </div>
 
       <p class="group-lab" id="hostLab">Where your tree lives</p>
@@ -333,7 +356,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
       <div class="avatar" id="cardAvatar" aria-hidden="true"></div>
       <h4 id="cardName"></h4>
       <p id="cardSub">The Sample Family Tree</p>
-      <button type="button" class="card-x" id="cardClose" aria-label="Close">&times;</button>
+      <button type="button" class="card-x" id="cardClose" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     </div>
     <div class="tabs" role="tablist" id="tabs"></div>
     <div class="panel" id="panel" role="tabpanel"></div>
@@ -347,13 +370,29 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   $('yr').textContent = new Date().getFullYear();
+  var FALL = document.body.classList.contains('fall');
+  if (FALL) { $('heroEyebrow').textContent = 'November Special · Family Tree Build'; $('reqEyebrow').textContent = 'November special'; }
+  var IC = {
+    rest: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg>',
+    crown: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.7 1.2 5.7 3.3C14 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>',
+    recipe: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7a2 2 0 0 1-2 2M9 3v7"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 2.5 3 2.5V21"/></svg>',
+  };
 
-  // gentle snow in the hero
+  // falling leaves (fall) or snow (holiday): SVG only
   (function () {
-    var snow = $('snow'), chars = ['❄', '❅', '•'];
+    var snow = $('snow');
+    var FLAKE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path transform="rotate(0 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(60 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(120 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(180 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(240 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/><path transform="rotate(300 12 12)" d="M12 12V2.5M9.7 4.8L12 7.1l2.3-2.3"/></svg>';
+    var colors = ['#FFE08A', '#F5C842', '#FFFFFF', '#FBD9A0', '#E8B04A', '#F3B27A'];
+    var shapes = [
+      '<svg viewBox="0 0 24 24" style="stroke:none"><path fill="COLOR" d="M12 1l2.2 4.6 3.2-1.2-.8 4.6 4.1-1.3-2.2 4.2 2.7 1.1-5.7 3.2.6 2.3-4.3-1-.2 4.5h-1.2l-.2-4.5-4.3 1 .6-2.3-5.7-3.2 2.7-1.1L1.5 7.7l4.1 1.3-.8-4.6 3.2 1.2z"/></svg>',
+      '<svg viewBox="0 0 24 24" style="stroke:none"><path fill="COLOR" d="M12 1C5 6 4 14 12 23c8-9 7-17 0-22z"/></svg>',
+      '<svg viewBox="0 0 24 24" style="stroke:none"><path fill="COLOR" d="M12 2c3 0 4 2 4.5 3.5C19 6 21 8 20 11c2 2 1 5-1.5 6C18 20 15 21 12 22c-3-1-6-2-6.5-5C3 16 2 13 4 11 3 8 5 6 7.5 5.5 8 4 9 2 12 2z"/></svg>'
+    ];
     for (var i = 0; i < 26; i++) {
-      var s = document.createElement('span'); s.textContent = chars[i % 3];
-      s.style.left = (Math.random() * 100) + '%'; s.style.fontSize = (9 + Math.random() * 12) + 'px';
+      var s = document.createElement('span'), px = FALL ? 14 + Math.random() * 18 : 9 + Math.random() * 12;
+      s.innerHTML = FALL ? shapes[i % 3].replace(/COLOR/g, colors[i % colors.length]) : FLAKE;
+      s.style.left = (Math.random() * 100) + '%'; s.style.width = s.style.height = px + 'px';
       s.style.animationDuration = (9 + Math.random() * 9) + 's'; s.style.animationDelay = (-Math.random() * 16) + 's';
       snow.appendChild(s);
     }
@@ -394,10 +433,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
   function card(id) {
     var p = P[id];
-    var marks = (p.rest ? '🕊️' : '') + (p.crown ? '👑' : '') + (p.adopted ? '♥' : '') + (p.recipe ? '🍴' : '');
+    var marks = (p.rest ? IC.rest : '') + (p.crown ? IC.crown : '') + (p.adopted ? IC.heart : '') + (p.recipe ? IC.recipe : '');
     return '<button type="button" class="person ' + p.kind + '" data-id="' + id + '" aria-label="' + esc(p.name + (p.nick ? ', ' + p.nick : '') + '. Open card') + '">' +
       (p.nick ? '<span class="nick">' + esc(p.nick) + '</span>' : '') + esc(p.name) + '<span class="yrs">' + esc(p.yrs) + '</span>' +
-      (marks ? '<span class="marks" aria-hidden="true">' + marks + '</span>' : '') + '<span class="more">ⓘ learn more</span></button>';
+      (marks ? '<span class="marks" aria-hidden="true">' + marks + '</span>' : '') + '<span class="more">Learn more</span></button>';
   }
   function branch(node) {
     var html = '<div class="branch"><div class="couple">' + card(node.a) + (node.b ? '<span class="plus" aria-hidden="true">+</span>' + card(node.b) : '') + '</div>';
@@ -447,13 +486,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
       html = '<div class="photo-ph"><span class="big">' + esc(p.name.charAt(0)) + '</span><strong>' + esc(p.name) + '</strong>Families upload real photos here: one main portrait, plus as many memories as you like.</div>';
     } else if (tab === 'about') {
       html = Object.keys(p.about).map(function (k) { return '<div class="about-row"><div class="lab">' + esc(k) + '</div>' + esc(p.about[k]) + '</div>'; }).join('') +
-        (p.rest ? '<div class="about-row"><div class="lab">At rest</div>Forever loved and remembered. 🕊️</div>' : '') +
-        (p.crown ? '<div class="about-row"><div class="lab">Family role</div>' + esc(p.crown) + ' 👑</div>' : '');
+        (p.rest ? '<div class="about-row"><div class="lab">At rest</div>Forever loved and remembered.</div>' : '') +
+        (p.crown ? '<div class="about-row"><div class="lab">Family role</div>' + esc(p.crown) + '</div>' : '');
     } else if (tab === 'favs') {
       var f = p.fav;
       html = '<div class="favs">' +
         '<div class="fav"><span class="lab">Favorite color</span><strong style="color:' + esc(f.color[1]) + '">' + esc(f.color[0]) + '</strong></div>' +
-        '<div class="fav fav-song" id="songBox"><span class="lab">Favorite song</span>' + esc(f.song) + '<span class="hint">Hover to preview</span><button type="button" class="play" id="playBtn">▶ Play preview</button></div>' +
+        '<div class="fav fav-song" id="songBox"><span class="lab">Favorite song</span>' + esc(f.song) + '<span class="hint">Hover to preview</span><button type="button" class="play" id="playBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Play preview</button></div>' +
         '<div class="fav"><span class="lab">Favorite food</span>' + esc(f.food) + '</div>' +
         '<div class="fav"><span class="lab">Hobbies</span>' + esc(f.hobbies) + '</div></div>';
     } else if (tab === 'recipe') {
